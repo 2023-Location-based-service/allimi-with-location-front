@@ -20,9 +20,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(title: const Text('요양원 알리미')),
         body: ListView(
           children: [
-            Text('테스트'),
+            Text('이미지 잘 출력되는지 확인'),
             Container(
-              child: Image.asset('images/zudah.jpg'),
+              child: Image.asset('assets/images/zudah.jpg'),
             ),
           ],
         ),
