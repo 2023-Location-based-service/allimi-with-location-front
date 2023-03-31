@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             Text('테스트'),
             Container(
-              child: Image.asset('images/logo.png'),
+              child: Image.asset('images/zudah.jpg'),
             ),
           ],
         ),
