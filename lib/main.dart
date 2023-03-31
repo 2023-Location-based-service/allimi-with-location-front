@@ -21,6 +21,9 @@ class _MyAppState extends State<MyApp> {
         body: ListView(
           children: [
             Text('테스트'),
+            Container(
+              child: Image.asset('images/logo.png'),
+            ),
           ],
         ),
       ),
