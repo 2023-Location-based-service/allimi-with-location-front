@@ -1,3 +1,3 @@
-# test_data
+# care-allimi-front
 
-연습용으로 생성하였습니다.
+2023-1 창의설계프로젝트 클로버 팀 Frontend
