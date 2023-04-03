@@ -7,7 +7,7 @@ class UserSecondAllimPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('개인 알림장'),
+        title: const Text('개인알림장'),
       ),
     );
   }
