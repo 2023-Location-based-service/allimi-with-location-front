@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       builder: (context, child){
         final MediaQueryData data = MediaQuery.of(context);
-        return MediaQuery(data: data.copyWith(textScaleFactor: 1.15), child: child!);
+        return MediaQuery(data: data.copyWith(textScaleFactor: 1.2), child: child!);
       },
       title: '요양원 알리미',
       theme: ThemeData(
@@ -35,23 +35,26 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: getPage(),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) {
-            setState(() {
-              _curIndex = index;
-            });
-          },
-          currentIndex: _curIndex,
-          unselectedItemColor: Colors.grey,
-          selectedItemColor: themeColor.getColor(),
-          elevation: 0,
-          backgroundColor: Colors.white,
-          selectedFontSize: 12,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-            BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '내 소식'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-          ],
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+          child: BottomNavigationBar(
+            onTap: (index) {
+              setState(() {
+                _curIndex = index;
+              });
+            },
+            currentIndex: _curIndex,
+            unselectedItemColor: Colors.grey,
+            selectedItemColor: themeColor.getColor(),
+            elevation: 0,
+            backgroundColor: Colors.white,
+            selectedFontSize: 12,
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+              BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '내 소식'),
+              BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+            ],
+          ),
         ),
       ),
     );
