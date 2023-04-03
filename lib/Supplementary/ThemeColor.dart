@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// 초록색 5bb193 sdaasdsdsd
+// 초록색 5bb193
 
 class ThemeColor {
   Color _themeColor = Color(0xff5BB193);
