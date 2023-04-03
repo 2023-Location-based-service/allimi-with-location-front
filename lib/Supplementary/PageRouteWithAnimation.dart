@@ -51,3 +51,8 @@ class PageRouteWithAnimation {
     );
   }
 }
+
+void pageAnimation(BuildContext context, Widget page) {
+  PageRouteWithAnimation pageRouteWithAnimation = PageRouteWithAnimation(page);
+  Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
+}
