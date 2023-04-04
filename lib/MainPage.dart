@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
+import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'UserAllimPage.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -21,12 +20,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff8f8f8), //배경색
-      appBar: AppBar(
-        title: Text('요양원 알리미', textScaleFactor: 1.0, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text('요양원 알리미')),
       body: ListView(
         children: [
 
@@ -64,18 +58,21 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-
   //소속추가 화면
   Widget myGroupPage() {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('소속추가', textScaleFactor: 1.0, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text('요양원 검색')),
       body: ListView(
         children: [
-          Text('소속추가 테스트'),
+
+          Row(
+            children: [
+              Container(
+
+              ),
+            ],
+          ),
+
         ],
       ),
     );
@@ -101,7 +98,7 @@ class _MainPageState extends State<MainPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('금오요양원', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-              Text('삼족오 보호자님'), //TODO: 내 역할
+              Text('삼족오 보호자님', textScaleFactor: 1.2), //TODO: 내 역할
             ],
           ),
         ],
@@ -148,7 +145,7 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
                     SizedBox(height: 5),
-                    Text(textMenu[index], textScaleFactor: 1.05,),
+                    Text(textMenu[index]),
                   ],
                 ),
               ),

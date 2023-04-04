@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'ThemeColor.dart';
+
+ThemeColor themeColor = ThemeColor();
 
 class PageRouteWithAnimation {
   final Widget page;
@@ -55,4 +58,35 @@ class PageRouteWithAnimation {
 void pageAnimation(BuildContext context, Widget page) {
   PageRouteWithAnimation pageRouteWithAnimation = PageRouteWithAnimation(page);
   Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
+}
+
+//커스텀 페이지 위젯
+Widget customPage({
+  required String title,
+  required VoidCallback onPressed,
+  required Widget body,
+}) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('$title'), actions: [
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: SizedBox(
+          width: 50,
+          height: 10,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: themeColor.getColor(),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+            child: Text('완료', style: TextStyle(color: Colors.white), textScaleFactor: 1.0,),
+            onPressed: onPressed,
+          ),
+        ),
+      ),
+    ],),
+    body: body,
+  );
 }
