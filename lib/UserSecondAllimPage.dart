@@ -15,7 +15,7 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
-        title: const Text('개인 알림장'),
+        title: const Text('개인알림장'),
       ),
       body: eachuser(),
     );
