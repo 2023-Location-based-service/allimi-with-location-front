@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'UserAllimPage.dart';
+import 'ManagerAllimPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -146,7 +147,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, UserAllimPage());
+        pageAnimation(context, ManagerAllimPage());
         break;
       case 2:
         print('면회신청 Tap');
