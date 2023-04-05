@@ -102,7 +102,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     );
   }
 
-
   //알림장 안에 있는 어르신의 일일정보 함수
   Widget informdata(){
     return Row(
