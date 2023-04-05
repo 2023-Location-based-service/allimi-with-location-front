@@ -53,7 +53,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       body: managerlist(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          //글쓰기 화면으로 이동
         },
         child: const Icon(Icons.create),
       ),
@@ -64,7 +64,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
   Widget managerlist() {
     return Container(
         child: Container(
-          padding: EdgeInsets.all(10),
+          //padding: EdgeInsets.all(10),
           child: ListView.separated(
             itemCount: noticeData.length,
             shrinkWrap: true,
@@ -136,16 +136,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
               }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
           ),
         ),
-      // Container(
-      //   padding: EdgeInsets.all(10),
-      //   alignment: Alignment.bottomRight,
-      //   child: OutlinedButton(
-      //       onPressed: (){
-      //         //글쓰기 화면으로 넘어가기
-      //       },
-      //       child: Text('글쓰기')
-      //   ),
-      // ),
     );
   }
 }

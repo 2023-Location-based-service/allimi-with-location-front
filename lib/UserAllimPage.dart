@@ -52,7 +52,7 @@ class UserAllimPageState extends State<UserAllimPage>{
 
   Widget userlist() {
     return Container(
-      padding: EdgeInsets.all(10),
+      //padding: EdgeInsets.all(10),
       child: ListView.separated(
         itemCount: noticeData.length,
         shrinkWrap: true,
