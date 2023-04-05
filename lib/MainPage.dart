@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'UserAllimPage.dart';
+import 'Supplementary/PageRouteWithAnimation.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -20,12 +20,18 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('요양원 알리미')),
+      backgroundColor: Color(0xfff8f8f8), //배경색
+      appBar: AppBar(
+        title: Text('요양원 알리미', textScaleFactor: 1.0, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: ListView(
         children: [
 
           //TODO: 위젯 작성
-          myInfoCard(),
+          myCard(),
+          //Padding(padding: EdgeInsets.fromLTRB(15,10,15,5), child: Text('바로가기', style: TextStyle(fontWeight: FontWeight.bold))),
           menuList(context),
 
         ],
@@ -37,10 +43,7 @@ class _MainPageState extends State<MainPage> {
   //소속추가 버튼
   Widget addGroup() {
     return GestureDetector(
-      onTap: () {
-        print('소속추가 Tap');
-        pageAnimation(context, myGroupPage());
-      }, //TODO: 소속추가 클릭 시 이벤트
+      onTap: () { print('소속추가 Tap'); }, //TODO: 소속추가 클릭 시 이벤트
       child: Container(
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
@@ -54,26 +57,6 @@ class _MainPageState extends State<MainPage> {
             Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
           ],
         ),
-      ),
-    );
-  }
-
-  //소속추가 화면
-  Widget myGroupPage() {
-    return Scaffold(
-      appBar: AppBar(title: Text('요양원 검색')),
-      body: ListView(
-        children: [
-
-          Row(
-            children: [
-              Container(
-
-              ),
-            ],
-          ),
-
-        ],
       ),
     );
   }
@@ -98,7 +81,7 @@ class _MainPageState extends State<MainPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('금오요양원', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-              Text('삼족오 보호자님', textScaleFactor: 1.2), //TODO: 내 역할
+              Text('삼족오 보호자님'), //TODO: 내 역할
             ],
           ),
         ],
@@ -107,7 +90,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   //현재 선택된 요양원 출력
-  Widget myInfoCard() {
+  Widget myCard() {
     return Stack(
       children: [
         myInfo(),
@@ -145,7 +128,7 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
                     SizedBox(height: 5),
-                    Text(textMenu[index]),
+                    Text(textMenu[index], textScaleFactor: 1.05,),
                   ],
                 ),
               ),
@@ -154,7 +137,6 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-
 
   // TODO: 메뉴 Tap 시 실행
   void onButtonTap(int index) {

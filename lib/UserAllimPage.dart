@@ -52,15 +52,17 @@ class UserAllimPageState extends State<UserAllimPage>{
 
   Widget userlist() {
     return Container(
-      padding: EdgeInsets.all(10),
+      //padding: EdgeInsets.all(10),
       child: ListView.separated(
-
         itemCount: noticeData.length,
         shrinkWrap: true,
         itemBuilder: (context, index){
+
+          //목록누르면 다음 해당 목록의 페이지로 이동
           return InkWell(
               onTap: (){
                 pageAnimation(context, UserSecondAllimPage());
+                print(index);
               },
               child: Column(
                 children: [
@@ -82,16 +84,18 @@ class UserAllimPageState extends State<UserAllimPage>{
                                   noticeData[index].date,
                                 ),
                               ),
+                              Spacer(),
                               Container(
                                   padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
                                   child: Text(
                                     noticeData[index].detail,
-                                    style: TextStyle(fontSize: 15),
+                                    style: TextStyle(fontSize: 14),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                   )
-                              )
+                              ),
+                              Spacer(),
                             ],
                           ),
                         ),
@@ -110,7 +114,7 @@ class UserAllimPageState extends State<UserAllimPage>{
               )
 
           );
-        }, separatorBuilder: (BuildContext context, int index) => const Divider(color: Color(0xfff8f8f8),),
+        }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),
       ),
     );
   }
