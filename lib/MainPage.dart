@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'AddHomePage.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'UserAllimPage.dart';
@@ -44,7 +45,10 @@ class _MainPageState extends State<MainPage> {
   //소속추가 버튼
   Widget addGroup() {
     return GestureDetector(
-      onTap: () { print('소속추가 Tap'); }, //TODO: 소속추가 클릭 시 이벤트
+      onTap: () {
+        print('소속추가 Tap');
+        pageAnimation(context, AddHomePage());
+        }, //TODO: 소속추가 클릭 시 이벤트
       child: Container(
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
