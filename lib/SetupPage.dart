@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
+import 'Supplementary/DropdownWidget.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -34,7 +35,7 @@ class _SetupPageState extends State<SetupPage> {
           //TODO: 위젯 작성
           appProfile(),
           appNotification(),
-          Divider(thickness: 7, color: Colors.white),
+          //Divider(thickness: 7, color: Colors.white),
           appLogout(),
           appTest(),
 
@@ -100,24 +101,26 @@ class _SetupPageState extends State<SetupPage> {
   //알림장 글쓰기 페이지
   Widget writePage() {
     return customPage(
-        title: '알림장 작성',
-        onPressed: () {
-          print('알림장 작성 완료버튼 누름');
+      title: '알림장 작성',
+      onPressed: () {
+        print('알림장 작성 완료버튼 누름');
 
-          if(this.formKey.currentState!.validate()) {
+        if(this.formKey.currentState!.validate()) {
 
-            //TODO: 알림장 작성 완료버튼 누르면 실행되어야 하는 부분
+          //TODO: 알림장 작성 완료버튼 누르면 실행되어야 하는 부분
 
-            Navigator.pop(context);
-          }},
-        body: writePost(), //TODO: 위젯 작성해서 바꾸기
-    );
+          Navigator.pop(context);
+        }},
+      body: writePost(), //TODO: 위젯 작성해서 바꾸기기
+   );
   }
 
   Widget writePost() {
     return ListView(
 
       children: [
+
+
         //수급자 선택
         GestureDetector(
           child: Container(
@@ -155,100 +158,112 @@ class _SetupPageState extends State<SetupPage> {
         //TODO: 텍스트필드
         Form(
           key: formKey,
-          child: Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 350,
-                child: TextFormField(
-                  validator: (value) {
-                    if(value!.isEmpty) { return '내용을 입력하세요'; }
-                    else { return null; }
-                  },
-                  maxLines: 1000,
-                  decoration: const InputDecoration(
-                    hintText: '내용을 입력하세요',
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                  ),
-                ),
+          child: SizedBox(
+            width: double.infinity,
+            height: 350,
+            child: TextFormField(
+              validator: (value) {
+                if(value!.isEmpty) { return '내용을 입력하세요'; }
+                else { return null; }
+              },
+              maxLines: 1000,
+              decoration: const InputDecoration(
+                hintText: '내용을 입력하세요',
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
-              SizedBox(height: 8),
-              Container(
-                padding: EdgeInsets.fromLTRB(12,5,12,5),
-                color: Colors.black26,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    Text('data'),
-                    SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: TextFormField(
-                        validator: (value) {
-                          if(value!.isEmpty) { return '내용을 입력하세요'; }
-                          else { return null; }
-                        },
-                        maxLines: 1000,
-                        decoration: const InputDecoration(
-                          hintText: '내용을 입력하세요',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    
-                  ],
-                ),
-              ),
-            ],
-          )
+            ),
+          ),
         ),
         SizedBox(height: 8),
 
-        
+        //TODO: 아침, 점심, 저녁, 투약 드롭다운버튼
+        Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(8, 5, 8, 0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                      Text(' 식사 및 투약 기록 선택', style: TextStyle(color: themeColor.getColor())),
+                    ],
+                  ),
+                ),
+                dropList('아침', FirstDropdown()),
+                dropList('점심', FirstDropdown()),
+                dropList('저녁', FirstDropdown()),
+                dropList('투약', SecondDropdown()),
+              ],
+            )
+        ),
+        SizedBox(height: 8),
+
+
 
         //TODO: 사진
         Container(
-          height: 130,
+          height: 150,
           color: Colors.white,
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemCount: imgList.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                // width: 100,
-                // height: 100,
-                margin: EdgeInsets.all(3),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
-                      child: Image.asset(
-                        width: 80,
-                        height: 80,
-                        imgList[index], //TODO: 사진 리스트
-                        fit: BoxFit.cover,
+              if(index == 0) {    //TODO: 첫 번째 index에는 사진 추가하는 버튼 넣기
+                return Container(
+                  margin: EdgeInsets.fromLTRB(3,8,3,8),
+                  // width: 80,
+                  // height: 80,
+                  // color: Colors.green,
+                  child: ButtonTheme( //TODO: 버튼크기가 안 먹힘;; 수정해야 함
+                    height: 80,
+                    minWidth: 80,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
                       ),
+                      child: Icon(Icons.photo_camera_rounded, color: themeColor.getColor()),
+                      onPressed: () {  },
                     ),
+                  ),
+                );
+              }
+              else {           //TODO: 두 번째 index부터 사진 리스트 뜨기 (리스트에서 첫 번째 사진은 출력 안 됨)
+                return Container(
+                    margin: EdgeInsets.fromLTRB(3,8,3,8),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          child: Image.asset(
+                            width: 80,
+                            height: 80,
+                            imgList[index], //TODO: 사진 리스트
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          top: 3,
+                          right: 3,
+                          child: GestureDetector(
+                            child: Container(
+                              child: Icon(Icons.cancel_rounded, color: Colors.black54),
+                            ),
+                            onTap: () {
+                              print('사진삭제 Tap'); //TODO: 사진 삭제 기능
+                            },
+                          ),
+                        ),
 
-                    Positioned(
-                      top: 3,
-                      right: 3,
-                      child: Container(
-                        child: Icon(Icons.cancel_rounded, color: Colors.black54),
-                      ),
-                    ),
 
-                  ],
-                )
-              );
+                      ],
+                    )
+                );
+              }
             },
           ),
         ),
@@ -259,8 +274,18 @@ class _SetupPageState extends State<SetupPage> {
     );
   }
 
-
-
+  Widget dropList(String value, Widget page) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+        children: [
+          Text('$value'),
+          SizedBox(width: 30),
+          page,
+        ],
+      ),
+    );
+  }
 
   Widget selectedPerson() {
     return Scaffold(
@@ -355,7 +380,8 @@ class _SetupPageState extends State<SetupPage> {
     );
   }
 
-
-
-
 }
+
+
+
+
