@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'UserAllimPage.dart';
+import 'ManagerAllimPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
+import 'AddHomePage.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -43,7 +45,10 @@ class _MainPageState extends State<MainPage> {
   //소속추가 버튼
   Widget addGroup() {
     return GestureDetector(
-      onTap: () { print('소속추가 Tap'); }, //TODO: 소속추가 클릭 시 이벤트
+      onTap: () {
+        pageAnimation(context, AddHomePage());
+        print('소속추가 Tap');
+        }, //TODO: 소속추가 클릭 시 이벤트
       child: Container(
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
@@ -146,7 +151,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, UserAllimPage());
+        pageAnimation(context, ManagerAllimPage());
         break;
       case 2:
         print('면회신청 Tap');

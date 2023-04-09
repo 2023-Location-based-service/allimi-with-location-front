@@ -45,8 +45,8 @@ class _LoginPageState extends State<LoginPage> {
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(labelText: '비밀번호'),
-                //validator: (value) =>
-                //value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
+                validator: (value) =>
+                value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
                 onSaved: (value) => _password = value!,
               ),
               SizedBox(height: 20.0,),
