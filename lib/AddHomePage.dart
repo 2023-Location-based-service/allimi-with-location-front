@@ -153,7 +153,7 @@ class _AddHomePageState extends State<AddHomePage> {
               margin: EdgeInsets.all(10),
               child: TextField(
                 decoration: InputDecoration(
-                    helperText: '요양원 이름, 주소, 전화번호로 검색 가능',
+                    helperText: '요양원 이름, 주소로 검색 가능',
                     hintText: '입력해주세요.',  //글자를 입력하면 사라진다.
                     icon: Icon(Icons.search),
                     border: OutlineInputBorder(),
@@ -327,8 +327,7 @@ class _AddHomePageState extends State<AddHomePage> {
   
   //리스트
   Widget list() {
-    return Container(
-        child: ListView.builder(
+    return ListView.builder(
           itemCount: nursingHomeDistanceresult.length,
           shrinkWrap: true,
           itemBuilder: (context, index3){
@@ -369,8 +368,7 @@ class _AddHomePageState extends State<AddHomePage> {
               ),
             );
           }
-        )
-    );
+        );
   }
 
 //지역들 누르면 그 지역에 해당되는 요양원들 넣기
