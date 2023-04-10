@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'NoticeModel.dart';
-import 'UserAllimPage.dart';
 
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage({Key? key}) : super(key: key);
@@ -13,7 +11,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff8f8f8),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('개인알림장'),
       ),
@@ -24,13 +22,8 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
 
   //시설장 및 직원 알림장(각 목록)
   Widget eachmanager() {
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.white),
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(5),
-        child: ListView(
+    return ListView(
+          padding: EdgeInsets.all(15),
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,22 +91,21 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
               ],
             )
           ],
-        )
-    );
+        );
   }
 
   //알림장 안에 있는 어르신의 일일정보 함수
   Widget informdata(){
     return Row(
       children: [
-        inform('아침','점심','저녁','투약','특이사항'),
+        inform('아침','점심','저녁','투약'),
         VerticalDivider(),
-        inform('전량섭취','전량섭취','전량섭취','진통제','걷기 운동'),
+        inform('전량섭취','전량섭취','전량섭취','진통제'),
       ],
     );
   }
 
-  Widget inform(String text1, String text2,String text3, String text4,String text5){
+  Widget inform(String text1, String text2,String text3, String text4){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -121,8 +113,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         Text('$text2'),
         Text('$text3'),
         Text('$text4'),
-        Text('$text5'),
-
       ],
     );
   }
