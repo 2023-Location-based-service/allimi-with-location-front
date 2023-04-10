@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_data/Allim/WriteAllimPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
 import 'NoticeModel.dart';
@@ -46,7 +47,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff8f8f8),
+      //backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
         title: const Text('알림장'),
       ),
@@ -54,6 +55,8 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //글쓰기 화면으로 이동
+          pageAnimation(context, WriteAllimPage());
+
         },
         child: const Icon(Icons.create),
       ),

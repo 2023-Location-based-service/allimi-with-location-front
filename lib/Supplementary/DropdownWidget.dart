@@ -8,7 +8,7 @@ class FirstDropdown extends StatefulWidget {
 }
 
 class _FirstDropdownState extends State<FirstDropdown> {
-  final items = ['전량섭취', '반량섭취', '미음', '죽', '금식'];
+  final items = ['금식', '전량섭취', '반량섭취'];
   String? selectedValue;
 
   @override
@@ -25,7 +25,6 @@ class _FirstDropdownState extends State<FirstDropdown> {
       child:
       DropdownButton<String>(
         value: selectedValue,
-        //isExpanded: true,
         items: items.map((e) => DropdownMenuItem(
             value: e,
             child: Text(e))).toList(),
@@ -47,7 +46,7 @@ class SecondDropdown extends StatefulWidget {
 }
 
 class _SecondDropdownState extends State<SecondDropdown> {
-  final items = ['아침에만', '점심에만', '저녁에만', '아침&점심', '아침&저녁', '점심&저녁'];
+  final items = ['해당 사항 없음','아침', '점심', '저녁', '아침&점심', '아침&저녁', '점심&저녁', '아침&점심&저녁'];
   String? selectedValue;
 
   @override
@@ -64,7 +63,6 @@ class _SecondDropdownState extends State<SecondDropdown> {
       child:
       DropdownButton<String>(
         value: selectedValue,
-        //isExpanded: true,
         items: items.map((e) => DropdownMenuItem(
             value: e,
             child: Text(e))).toList(),
