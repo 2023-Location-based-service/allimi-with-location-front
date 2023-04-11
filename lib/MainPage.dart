@@ -4,12 +4,14 @@ import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Allim/UserAllimPage.dart';
 import 'Allim/ManagerAllimPage.dart';
+import 'VisitRequest/UserRequestPage.dart';
+import 'VisitRequest/ManagerRequestPage.dart';
 import 'AddHomePage.dart';
 
 ThemeColor themeColor = ThemeColor();
 
-List<String> textEmoji = ['📢', '✏', '🍀', '📷', '🍚', '🗓', '💌'];
-List<String> textMenu = ['공지사항', '알림장', '면회신청', '앨범', '식단표', '일정표', '한마디'];
+List<String> textEmoji = ['📢', '✏', '🍀', '📷', '💌', '🔧', '🍚', '🗓'];
+List<String> textMenu = ['공지사항', '알림장', '면회 신청', '앨범', '한마디', '시설 설정', '식단표', '일정표'];
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -33,7 +35,6 @@ class _MainPageState extends State<MainPage> {
 
           //TODO: 위젯 작성
           myCard(),
-          //Padding(padding: EdgeInsets.fromLTRB(15,10,15,5), child: Text('바로가기', style: TextStyle(fontWeight: FontWeight.bold))),
           menuList(context),
 
         ],
@@ -46,9 +47,9 @@ class _MainPageState extends State<MainPage> {
   Widget addGroup() {
     return GestureDetector(
       onTap: () {
-        pageAnimation(context, AddHomePage());
         print('소속추가 Tap');
-        }, //TODO: 소속추가 클릭 시 이벤트
+        pageAnimation(context, AddHomePage());
+        },
       child: Container(
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
@@ -151,22 +152,26 @@ class _MainPageState extends State<MainPage> {
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, ManagerAllimPage());
+        pageAnimation(context, ManagerAllimPage()); //일단은 요양 보호사 버전으로
         break;
       case 2:
         print('면회신청 Tap');
+        pageAnimation(context, UserRequestPage()); //일단은 보호자 버전으로
         break;
       case 3:
         print('앨범 Tap');
         break;
       case 4:
-        print('식단표 Tap');
+        print('한마디 Tap');
         break;
       case 5:
-        print('일정표 Tap');
+        print('시설설정 Tap');
         break;
       case 6:
-        print('한마디 Tap');
+        print('식단표 Tap');
+        break;
+      case 7:
+        print('일정표 Tap');
         break;
       default:
         break;

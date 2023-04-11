@@ -39,6 +39,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
           Navigator.pop(context);
         }},
       body: writePost(),
+      buttonName: '완료',
     );
   }
 
