@@ -55,6 +55,7 @@ class PageRouteWithAnimation {
   }
 }
 
+//페이지 이동 함수
 void pageAnimation(BuildContext context, Widget page) {
   PageRouteWithAnimation pageRouteWithAnimation = PageRouteWithAnimation(page);
   Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
@@ -65,28 +66,31 @@ Widget customPage({
   required String title,
   required VoidCallback onPressed,
   required Widget body,
+  required String buttonName,
 }) {
   return Scaffold(
+    backgroundColor: Colors.white,
     appBar: AppBar(
-      title: Text('$title'), actions: [
-      Padding(
-        padding: EdgeInsets.all(10),
-        child: SizedBox(
-          width: 50,
-          height: 10,
-          child: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: themeColor.getColor(),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100),
+      title: Text('$title'),
+      actions: [
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            width: 50,
+            height: 10,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: themeColor.getColor(),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
               ),
+              child: Text('$buttonName', style: TextStyle(color: Colors.white), textScaleFactor: 1.0,),
+              onPressed: onPressed,
             ),
-            child: Text('완료', style: TextStyle(color: Colors.white), textScaleFactor: 1.0,),
-            onPressed: onPressed,
           ),
         ),
-      ),
-    ],),
+      ],),
     body: body,
   );
 }
