@@ -22,7 +22,6 @@ class _SetupPageState extends State<SetupPage> {
           //TODO: 위젯 작성
           appProfile(),
           appNotification(),
-          //Divider(thickness: 7, color: Colors.white),
           appLogout(),
         ],
       ),

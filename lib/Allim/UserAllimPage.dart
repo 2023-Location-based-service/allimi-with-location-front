@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
+import '/Supplementary/PageRouteWithAnimation.dart';
 import 'UserSecondAllimPage.dart';
-import 'NoticeModel.dart';
+import '/NoticeModel.dart';
 
 class UserAllimPage extends StatefulWidget {
 

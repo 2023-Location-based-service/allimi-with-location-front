@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'UserAllimPage.dart';
-import 'ManagerAllimPage.dart';
+import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
+import 'Allim/UserAllimPage.dart';
+import 'Allim/ManagerAllimPage.dart';
 import 'AddHomePage.dart';
 
 ThemeColor themeColor = ThemeColor();

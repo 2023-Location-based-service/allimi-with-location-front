@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_data/Allim/WriteAllimPage.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
+import '/Allim/WriteAllimPage.dart';
+import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
-import 'NoticeModel.dart';
+import '/NoticeModel.dart';
 
 class ManagerAllimPage extends StatefulWidget {
 
