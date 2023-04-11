@@ -24,6 +24,7 @@ class WriteAllimPage extends StatefulWidget {
 class _WriteAllimPageState extends State<WriteAllimPage> {
 
   final formKey = GlobalKey<FormState>();
+  String selectedPerson = "수급자 선택";
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
                 //TODO: 수급자 선택하기 글자가 바뀌어야 함
                 // 수급자 선택시 ex. 삼족오 님
-                Text('수급자 선택', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500))
+                Text('$selectedPerson', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500))
               ],
             ),
             Icon(Icons.expand_more_rounded, color: Colors.grey),
@@ -127,14 +128,17 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                   leading: Icon(Icons.person_rounded, color: Colors.grey),
                   title: Row(
                     children: [
-                      Text(textPerson[index]), //TODO: 수급자 이름 리스트
-                      Text(' 님'),
+                      Text('${textPerson[index]} 님'), //TODO: 수급자 이름 리스트
                     ],
                   ),
                   onTap: () {
                     print('수급자 이름 ${textPerson[index]} Tap');
 
                     // TODO: 수급자 선택 시 처리할 이벤트
+                    setState(() {
+                      if(selectedPerson != null){ selectedPerson = '${textPerson[index]} 님'; }
+                      else { selectedPerson = '수급자 선택'; }
+                    });
 
                     Navigator.pop(context);
 

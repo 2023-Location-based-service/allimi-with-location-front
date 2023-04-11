@@ -47,7 +47,7 @@ class _UserRequestPageState extends State<UserRequestPage> {
       onPressed: () {},
       body: ListView(
         children: [
-          text('이름'),
+          text('예약자명'),
           textFormField(
             textInputType: TextInputType.text,
             inputFormatters: [LengthLimitingTextInputFormatter(15)]
@@ -62,6 +62,9 @@ class _UserRequestPageState extends State<UserRequestPage> {
               ]),
 
           //TODO: 날짜, 시간, 할말
+          text('날짜'),
+          text('시간'),
+          text('메모'),
 
 
         ],

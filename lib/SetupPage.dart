@@ -33,7 +33,7 @@ class _SetupPageState extends State<SetupPage> {
     return ListTile(
         title: Text('내 정보'),
         leading: Icon(Icons.person_rounded, color: Colors.grey),
-        onTap: (){
+        onTap: () {
           pageAnimation(context, myProfile());
         });
   }
@@ -42,7 +42,7 @@ class _SetupPageState extends State<SetupPage> {
     return ListTile(
         title: Text('알림 설정'),
         leading: Icon(Icons.notifications_active_rounded, color: Colors.grey),
-        onTap: (){
+        onTap: () {
           pageAnimation(context, myNotification());
         });
   }
@@ -51,8 +51,27 @@ class _SetupPageState extends State<SetupPage> {
     return ListTile(
         title: Text('로그아웃'),
         leading: Icon(Icons.logout_rounded, color: Colors.grey),
-        onTap: (){
-          pageAnimation(context, myLogout());
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) =>
+                AlertDialog(
+                  content: const Text('로그아웃하시겠습니까?'),
+                  actions: [
+                    TextButton(child: Text('아니오',
+                      style: TextStyle(color: themeColor.getMaterialColor())),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                    TextButton(child: Text('예',
+                      style: TextStyle(color: themeColor.getMaterialColor())),
+                        onPressed: () {
+                      Navigator.pop(context);
+                      //TODO: 로그아웃 실행
+                    }),
+                  ],
+                ),
+          );
         });
   }
 
@@ -64,11 +83,6 @@ class _SetupPageState extends State<SetupPage> {
   Widget myNotification() {
     return Scaffold(body: Text('테스트'));
   }
-
-  Widget myLogout() {
-    return Scaffold(body: Text('테스트'));
-  }
-
 }
 
 
