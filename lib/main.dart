@@ -9,6 +9,8 @@ import 'package:test_data/LoginPage.dart';
 import 'package:test_data/domain/ResidentInfo.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
+import 'Allim/ManagerAllimPage.dart';
+import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'NotificationPage.dart';
@@ -141,7 +143,7 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
 
   //더미 데이터
   String response = jsonEncode({
-    "count": 2,
+    "count": 0,
     "userListDTO": [
       {
         "resident_id": 1,
@@ -172,6 +174,7 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
   if(jsonResponse['count']==0){
     //시설 선택화면으로 이동
     print('시설 선택화면으로 이동');
+    pageAnimation(context, AddHomePage());
     return residentInfo;
   }
   else if(jsonResponse['count']>0){
