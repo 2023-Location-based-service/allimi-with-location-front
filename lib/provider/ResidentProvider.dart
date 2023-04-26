@@ -6,7 +6,7 @@ class ResidentProvider  with ChangeNotifier {
   String facility_name='';
   String resident_name='';
   String userRole='';
-  int approved = 0;
+  bool approved = false;
 
   //받아온 정보 전역에 저장
   void setInfo(resident_id, facility_id, facility_name, resident_name, userRole, approved) {

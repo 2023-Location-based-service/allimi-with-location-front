@@ -4,7 +4,7 @@ class ResidentInfo {
   final String facility_name;
   final String resident_name;
   final String userRole;
-  final int approved;
+  final bool approved;
 
   const ResidentInfo({
     required this.resident_id,

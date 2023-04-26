@@ -14,7 +14,7 @@ import 'MainPage.dart';
 import 'NotificationPage.dart';
 import 'SetupPage.dart';
 
-
+int approve_init = 1;
 ThemeColor themeColor = ThemeColor();
 
 void main() {
@@ -36,7 +36,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   var _curIndex = 0;
 
   @override
@@ -76,11 +75,11 @@ class _MyAppState extends State<MyApp> {
                 //입소자 정보 다 주세요
                   future: fetchResidentInfo(userProvider.uid, context),
                   builder: (context, snap) {
-                    if (residentProvider.approved == 2) {
-                      print('승인이 안돼ㅌㅌㅌㅌ');
+                    if (residentProvider.approved == false && approve_init == 0) {
+                      print('승인이 안돼');
                       return ApprovedPage();
-                    } else if (residentProvider.approved == 1){
-                      print('메인가자ㅌㅌㅌㅌ');
+                    } else if (residentProvider.approved == true){
+                      print('메인가자');
                       return Scaffold(
                         body: getPage(),
                         bottomNavigationBar: Container(
@@ -150,7 +149,7 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
         "facility_name": "금오요양원",
         "resident_name": "할머니",
         "userRole": "PROTECTOR",
-        "is_approved": 2, //2=falise
+        "is_approved": false,
       },
       {
         "resident_id": 3,
@@ -158,14 +157,14 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
         "facility_name": "금오요양원",
         "resident_name": "권태연",
         "userRole": "MANAGER",
-        "is_approved": 1,
+        "is_approved": true,
       }
     ]
   });
 
   final jsonResponse = jsonDecode(response);
 
-  ResidentInfo residentInfo = new ResidentInfo(resident_id: 0, facility_id: 0, facility_name: '', resident_name: '', userRole: '', approved: 0);
+  ResidentInfo residentInfo = new ResidentInfo(resident_id: 0, facility_id: 0, facility_name: '', resident_name: '', userRole: '', approved: false);
   // print(jsonResponse['count']);
   // print(jsonResponse['count'].toString());
   // print(jsonResponse['count'].runtimeType);
@@ -173,7 +172,6 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
   if(jsonResponse['count']==0){
     //시설 선택화면으로 이동
     print('시설 선택화면으로 이동');
-
     return residentInfo;
   }
   else if(jsonResponse['count']>0){
@@ -184,7 +182,7 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
       // print(jsonResponse['userListDTO'][i]['is_approved'].runtimeType);
 
       //승인된 입소자가 존재
-      if(jsonResponse['userListDTO'][i]['is_approved']==1){
+      if(jsonResponse['userListDTO'][i]['is_approved']==true){
         residentInfo = ResidentInfo.fromJson(jsonResponse['userListDTO'][i]);
         await setResidentProvider(context, residentInfo);
         //print('메인화면으로 이동');
@@ -193,8 +191,10 @@ Future<ResidentInfo> fetchResidentInfo(int user_id, context) async {
     }
   }
   //승인 대기 화면으로 이동
+  print('나오지마');
   print(residentInfo.approved);
 
+  approve_init = 0;
   residentInfo = ResidentInfo.fromJson(jsonResponse['userListDTO'][0]);
 
   print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
