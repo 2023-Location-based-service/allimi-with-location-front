@@ -1,4 +1,8 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
+import 'package:test_data/domain/ResidentInfo.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'MainPage.dart';
 
@@ -29,6 +33,7 @@ Future<String> postUserRequest(String id, String password) async {
     'tel':'0100000000',
     'user_name': '권태연'
   });
+
   return response;
 }
 
@@ -42,6 +47,14 @@ class _LoginPageState extends State<LoginPage> {
 
   String _id = '';
   String _password= '';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ResidentProvider>(context, listen: true).getData();
+    });
+  }
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -101,12 +114,17 @@ class _LoginPageState extends State<LoginPage> {
                       var data = await postUserRequest(_id, _password);
                       var json_data = json.decode(data);
 
-                      Provider.of<UserProvider>(context, listen:false)
-                          .setInfo(json_data['user_id'], json_data['userRole'], json_data['id'], json_data['tel'], json_data['user_name']);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => MainPage()),
-                      // );
+                      if(json_data['user_id'] != null){
+                        Provider.of<UserProvider>(context, listen:false)
+                            .setInfo(json_data['user_id'], json_data['userRole'], json_data['id'], json_data['tel'], json_data['user_name']);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => MainPage()),
+                        // );
+
+                      }
+
+                      //로그인실패 다이얼로그
                     }
 
                   }

@@ -6,14 +6,20 @@ class ResidentProvider  with ChangeNotifier {
   String facility_name='';
   String resident_name='';
   String userRole='';
+  int approved = 0;
 
   //받아온 정보 전역에 저장
-  void setInfo(resident_id, facility_id, facility_name, resident_name, userRole) {
+  void setInfo(resident_id, facility_id, facility_name, resident_name, userRole, approved) {
     this.resident_id = resident_id;
     this.facility_id = facility_id;
     this.facility_name = facility_name;
     this.resident_name = resident_name;
     this.userRole = userRole;
+    this.approved = approved;
+
+  }
+
+  void getData() {
 
     notifyListeners();
   }

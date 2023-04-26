@@ -106,45 +106,44 @@ class _MainPageState extends State<MainPage> {
           Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 50)),
           SizedBox(width: 10),
           Consumer<ResidentProvider>(
-              builder: (context, residentProvider, child)  {
-                return FutureBuilder(
-                    future: fetchResidentInfo(context),
-                    builder: (context, snap) {
-                      String userInfoTxt =
-                          '' + residentProvider.resident_name; // TODO
-                      String userRole = residentProvider.userRole;
+            builder: (context, residentProvider, child)  {
+              return Builder(
+                builder: (context) {
+                  String userInfoTxt =
+                      '' + residentProvider.resident_name; // TODO
+                  String userRole = residentProvider.userRole;
 
-                      if (userRole == 'PROTECTOR') {
-                        userInfoTxt += '보호자님';
-                      } else if (userRole == 'MANAGER') {
-                        userInfoTxt += '관리자님';
-                      } else {
-                        userInfoTxt += '요양보호사님';
-                      }
+                  if (userRole == 'PROTECTOR') {
+                    userInfoTxt += '보호자님';
+                  } else if (userRole == 'MANAGER') {
+                    userInfoTxt += '관리자님';
+                  } else {
+                    userInfoTxt += '요양보호사님';
+                  }
 
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //더미
-                          // Text('금오요양원',
-                          //     textScaleFactor: 1.4,
-                          //     style: TextStyle(
-                          //         fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-                          // Text('삼족오 보호자님'), //TODO: 내 역할
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //더미
+                      // Text('금오요양원',
+                      //     textScaleFactor: 1.4,
+                      //     style: TextStyle(
+                      //         fontWeight: FontWeight.bold)), //TODO: 요양원 이름
+                      // Text('삼족오 보호자님'), //TODO: 내 역할
 
-                          //연동용
-                          Text(residentProvider.facility_name,
-                              textScaleFactor: 1.4,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-                          Text(userInfoTxt), //TODO: 내 역할
-                        ],
-                      );
-                    }
-                );
+                      //연동용
+                      Text(residentProvider.facility_name,
+                          textScaleFactor: 1.4,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold)), //TODO: 요양원 이름
+                      Text(userInfoTxt), //TODO: 내 역할
+                    ],
+                  );
+                }
+              );
 
-              })
+            })
 
         ],
       ),
@@ -240,49 +239,3 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-Future<ResidentInfo> fetchResidentInfo(context) async {
-  // final response = await http.get(
-  //     Uri.parse('http://43.201.27.95:8080/v1/users/1'),
-  //     headers: {'Accept-Charset': 'utf-8'});
-  // final jsonResponse = jsonDecode(Utf8Decoder().convert(response.bodyBytes));
-
-  // if (response.statusCode == 200) {
-  //   return UserInfo.fromJson(jsonResponse);
-  // } else {
-  //   throw Exception('Failed to load UserInfo');
-  // }
-
-  //더미 데이터
-  String response = jsonEncode({
-    "count": 2,
-    "userListDTO": [
-      {
-        "resident_id": 1,
-        "facility_id": 1,
-        "facility_name": "금오요양원",
-        "resident_name": "할머니",
-        "userRole": "PROTECTOR",
-      },
-      {
-        "resident_id": 3,
-        "facility_id": 1,
-        "facility_name": "금오요양원",
-        "resident_name": "권태연",
-        "userRole": "MANAGER",
-      }
-    ]
-  });
-
-  final jsonResponse = jsonDecode(response);
-  ResidentInfo residentInfo = ResidentInfo.fromJson(jsonResponse['userListDTO'][1]);
-
-  await setResidentProvider(context, residentInfo);
-
-  return residentInfo;
-}
-
-Future<void> setResidentProvider(context, ResidentInfo residentInfo) async{
-  Provider.of<ResidentProvider>(context, listen:false)
-      .setInfo(residentInfo.resident_id, residentInfo.facility_id, residentInfo.facility_name, residentInfo.resident_name, residentInfo.userRole);
-
-}
