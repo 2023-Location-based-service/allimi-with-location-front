@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/LoginPage.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'NotificationPage.dart';
@@ -7,7 +11,14 @@ import 'SetupPage.dart';
 ThemeColor themeColor = ThemeColor();
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    //Provider 등록
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => ResidentProvider())
+      ],
+          child: const MyApp())
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -37,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.white, //앱바 배경색
           elevation: 0,
           iconTheme: IconThemeData(
-            color: Colors.black
+              color: Colors.black
           ),
         ),
         textTheme: TextTheme(
@@ -45,29 +56,36 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: getPage(),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
-          child: BottomNavigationBar(
-            onTap: (index) {
-              setState(() {
-                _curIndex = index;
-              });
-            },
-            currentIndex: _curIndex,
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: themeColor.getColor(),
-            elevation: 0,
-            backgroundColor: Colors.white,
-            selectedFontSize: 12,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '내 소식'),
-              BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-            ],
-          ),
-        ),
+      home: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            if (userProvider.uid == 0) {
+              return LoginPage();
+            }
+            return Scaffold(
+              body: getPage(),
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+                child: BottomNavigationBar(
+                  onTap: (index) {
+                    setState(() {
+                      _curIndex = index;
+                    });
+                  },
+                  currentIndex: _curIndex,
+                  unselectedItemColor: Colors.grey,
+                  selectedItemColor: themeColor.getColor(),
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  selectedFontSize: 12,
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+                    BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '내 소식'),
+                    BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+                  ],
+                ),
+              ),
+            );
+          }
       ),
     );
   }
