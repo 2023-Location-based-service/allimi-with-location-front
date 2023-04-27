@@ -58,8 +58,8 @@ class _UserRequestPageState extends State<UserRequestPage> {
         children: [
           text('예약자명'),
           textFormField(
-            textInputType: TextInputType.text,
-            inputFormatters: [LengthLimitingTextInputFormatter(15)]
+              textInputType: TextInputType.text,
+              inputFormatters: [LengthLimitingTextInputFormatter(15)]
           ),
           text('핸드폰 번호'),
           textFormField(
@@ -98,33 +98,33 @@ class _UserRequestPageState extends State<UserRequestPage> {
     List<TextInputFormatter>? inputFormatters,
   }) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: SizedBox(
-        child: TextFormField(
-          keyboardType: textInputType,
-          inputFormatters: inputFormatters, //선택 옵션
-          textAlignVertical: TextAlignVertical.top,
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        child: SizedBox(
+          child: TextFormField(
+            keyboardType: textInputType,
+            inputFormatters: inputFormatters, //선택 옵션
+            textAlignVertical: TextAlignVertical.top,
 
 
-          decoration: InputDecoration(
-            labelStyle: TextStyle(color: Colors.black54),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
+            decoration: InputDecoration(
+              labelStyle: TextStyle(color: Colors.black54),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(width: 1, color: Colors.transparent),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(width: 1, color: Colors.transparent),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              filled: true,
+              fillColor: Color(0xfff2f3f6),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            filled: true,
-            fillColor: Color(0xfff2f3f6),
           ),
-        ),
-        height: 50,
-      )
+          height: 50,
+        )
     );
   }
 
@@ -132,24 +132,24 @@ class _UserRequestPageState extends State<UserRequestPage> {
   Widget selectedClock() {
     return GestureDetector(
       child: Container(
-        width: double.infinity,
-        height: 50,
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        decoration: BoxDecoration(
-          color: Color(0xfff2f3f6),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('$selectedHour', textScaleFactor: 1.2),  //TODO: 글자가 바뀌어야 함
-              Icon(Icons.expand_more_rounded, color: Colors.black54),
-            ],
+          width: double.infinity,
+          height: 50,
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          decoration: BoxDecoration(
+            color: Color(0xfff2f3f6),
+            borderRadius: BorderRadius.circular(8),
           ),
-        )
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('$selectedHour', textScaleFactor: 1.2),
+                Icon(Icons.expand_more_rounded, color: Colors.black54),
+              ],
+            ),
+          )
       ),
       onTap: () {
         print('시간 Tap');
@@ -160,26 +160,26 @@ class _UserRequestPageState extends State<UserRequestPage> {
               AlertDialog(
                 title: Text('방문 시간 선택'),
                 content: Container(
-                    child: ListView.builder(
-                      itemCount: 24,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          title: Text('${hoursList[index]}'), //TODO: 시간 리스트
-                          onTap: () {
-                            print('${hoursList[index]} Tap');
+                  child: ListView.builder(
+                    itemCount: 24,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        title: Text('${hoursList[index]}'), //TODO: 시간 리스트
+                        onTap: () {
+                          print('${hoursList[index]} Tap');
 
-                            // TODO: 시간 선택 시 업데이트
-                            setState(() {
-                              if(selectedHour != null){ selectedHour = '${hoursList[index]}'; }
-                              else { selectedHour = '방문 시간 선택'; }
-                            });
 
-                            Navigator.pop(context);
 
-                          },
-                        );
-                      },
-                    ),
+                          Navigator.pop(context);
+                          // TODO: 시간 선택 시 업데이트
+                          setState(() {
+                            if(selectedHour != null){ selectedHour = '${hoursList[index]}'; }
+                            else { selectedHour = '방문 시간 선택'; }
+                          });
+                        },
+                      );
+                    },
+                  ),
                 ),
                 actions: [
                   TextButton(child: Text('취소',

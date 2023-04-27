@@ -24,7 +24,7 @@ class WriteAllimPage extends StatefulWidget {
 class _WriteAllimPageState extends State<WriteAllimPage> {
 
   final formKey = GlobalKey<FormState>();
-  String selectedPerson = '수급자 선택';
+  String selectedPerson = "수급자 선택";
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                 Icon(Icons.account_circle_rounded, color: Colors.grey, size: 50),
                 SizedBox(width: 8),
 
-                // TODO: 수급자 선택하기 글자가 바뀌어야 함 (수정완료)
+                //TODO: 수급자 선택하기 글자가 바뀌어야 함
                 // 수급자 선택시 ex. 삼족오 님
                 Text('$selectedPerson', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500))
               ],
