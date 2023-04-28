@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 
-class CommentPage extends StatefulWidget {
-  const CommentPage({Key? key}) : super(key: key);
+class ManagerCommentPage extends StatefulWidget {
+  const ManagerCommentPage({Key? key}) : super(key: key);
 
   @override
-  State<CommentPage> createState() => _CommentPageState();
+  State<ManagerCommentPage> createState() => _CommentPageState();
 }
 
-class _CommentPageState extends State<CommentPage> {
+class _CommentPageState extends State<ManagerCommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +31,6 @@ class _CommentPageState extends State<CommentPage> {
               return InkWell(
                 onTap: (){
                   print(index);
-                  showPopup();
                 },
                 child: Container(
                       decoration: BoxDecoration(
@@ -42,12 +41,7 @@ class _CommentPageState extends State<CommentPage> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Text(date[index]),
-                                Icon(Icons.check_box_outline_blank_outlined),
-                              ],
-                            ),
+                            Text(date[index]),
                             Text(
                               com[index],
                               style: TextStyle(fontSize: 15,),
@@ -58,74 +52,6 @@ class _CommentPageState extends State<CommentPage> {
               );
             }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
         ),
-    );
-  }
-  void showPopup(){
-    showDialog(
-        context: context,
-        builder: (context){
-          return Dialog(
-            child: Container(
-              width: 450,
-              height: 180,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.white
-              ),
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '읽음',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: 500,height: 20,),
-                    Text(
-                      '읽음 표시로 바꾸시겠습니까?',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 120,),
-                        TextButton(
-                          child: Text(
-                            "취소",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          onPressed: (){
-                            Navigator.of(context).pop();
-                            print('취소가 눌렸습니다.');
-                          }
-                        ),
-                        TextButton(
-                            child: Text(
-                              "확인",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              print('확인이 눌렸습니다.');
-                            }
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
     );
   }
 }

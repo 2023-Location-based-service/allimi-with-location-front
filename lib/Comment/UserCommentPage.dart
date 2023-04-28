@@ -52,35 +52,22 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   Row(
                     children: [
                       Text(date[index]),
-                      Icon(Icons.check_box_outline_blank_outlined),
+                      Spacer(),
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        child: OutlinedButton(
+                            onPressed: (){
+                              //삭제
+                            },
+                            child: Text('삭제')
+                        ),
+                      ),
                     ],
                   ),
                   Text(
                     com[index],
                     style: TextStyle(fontSize: 15,),
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        child: OutlinedButton(
-                            onPressed: (){
-                              //수정 화면으로 넘어가기
-                            },
-                            child: Text('수정')
-                        ),
-
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(4),
-                        child: OutlinedButton(
-                            onPressed: (){
-                              //삭제 화면으로 넘어가기
-                            },
-                            child: Text('삭제')
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),

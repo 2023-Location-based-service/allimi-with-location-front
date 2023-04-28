@@ -7,6 +7,7 @@ import 'Allim/ManagerAllimPage.dart';
 import 'VisitRequest/UserRequestPage.dart';
 import 'VisitRequest/ManagerRequestPage.dart';
 import 'AddHomePage.dart';
+import 'Comment/UserCommentPage.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -163,6 +164,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 4:
         print('한마디 Tap');
+        pageAnimation(context, UserCommentPage()); //일단은 보호자 버전으로
         break;
       case 5:
         print('시설설정 Tap');
@@ -177,6 +179,4 @@ class _MainPageState extends State<MainPage> {
         break;
     }
   }
-
-
 }
