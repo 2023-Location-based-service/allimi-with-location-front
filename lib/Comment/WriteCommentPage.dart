@@ -90,6 +90,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
             if(value!.isEmpty) { return '내용을 입력하세요'; }
             else { return null; }
           },
+          maxLines: 10,
           decoration: const InputDecoration(
             filled: true,
             fillColor: Color(0xfff2f3f6),
