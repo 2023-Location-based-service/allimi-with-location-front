@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../AddFacilities.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Setup/SetupHealthPage.dart';
@@ -27,11 +28,18 @@ class _SetupPageState extends State<SetupPage> {
           appProfile(),
           appInmateProfile(),
           appLogout(),
+          appTest(),
         ],
       ),
     );
   }
 
+  Widget appTest() {
+    return ListTile(
+        title: Text('시설 추가하기 - 화면 테스트'),
+        leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
+        onTap: () { pageAnimation(context, AddFacilities()); });
+  }
 
   Widget appProfile() {
     return ListTile(
