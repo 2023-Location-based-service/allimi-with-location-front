@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:test_data/Notice/NoticePage.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
@@ -152,6 +153,7 @@ class _MainPageState extends State<MainPage> {
     switch(index) {
       case 0:
         print('공지사항 Tap');
+        pageAnimation(context, NoticePage());
         break;
       case 1:
         print('알림장 Tap');
