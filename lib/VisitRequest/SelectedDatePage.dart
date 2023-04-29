@@ -27,7 +27,7 @@ class _SelectedDatePageState extends State<SelectedDatePage> {
       );
       if (picked != null) {
         setState(() {
-          selectedDate = '${picked.year}년 ${picked.month.toString().padLeft(2, '0')}월 ${picked.day.toString().padLeft(2, '0')}일';
+          selectedDate = '${picked.year}.${picked.month.toString().padLeft(2, '0')}.${picked.day.toString().padLeft(2, '0')}';
           // 선택한 날짜를 문자열로 변환하여 저장
         });
       }
