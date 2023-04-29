@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'MainPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
+
+//입소자 정보 입력 화면
 
 class ResidentInfoInputPage extends StatefulWidget {
   @override

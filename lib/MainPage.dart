@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:test_data/MainFacilitySettings/MainFacilitySetting.dart';
+import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Allim/UserAllimPage.dart';

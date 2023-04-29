@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_data/MainFacilitySettings/PeopleManagementPage.dart';
+import '/Invite/InviteListPage.dart';
+import 'PeopleManagementPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'UserPeopleManagementPage.dart';
 
@@ -42,8 +43,6 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
               Divider(thickness: 0.5,),
               appInvite(),
               Divider(thickness: 0.5,),
-              appAgreeWaitingList(),
-              Divider(thickness: 0.5,),
               appFacilityBasicSetting(),
               Divider(thickness: 0.5,),
             ],
@@ -79,18 +78,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         title: Text('초대하기'),
         trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
         onTap: () {
-
-        });
-  }
-
-
-  Widget appAgreeWaitingList() {
-    return ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-        title: Text('승인대기 목록'),
-        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-        onTap: () {
-          //pageAnimation(context, myNotification());
+          pageAnimation(context, InviteListPage());
         });
   }
 
