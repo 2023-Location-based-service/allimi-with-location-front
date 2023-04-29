@@ -10,6 +10,7 @@ List<String> dateList =['2022.12.23','2022.12.24','2022.12.25'];
 List<String> timeList =['16:00', '13:00', '11:00'];
 List<String> personList =['삼족오 보호자님', '사족오 보호자님', '오족오 보호자님'];
 List<String> textList =['면회 신청합니다.', '면회 신청합니다. 동생이 갑니다.', '면회 신청합니다.'];
+List<String> subtextList =[' ', '거절하였습니다. (면회 시간이 아님)', ' 수락하였습니다.'];
 
 class ManagerRequestPage extends StatefulWidget {
   const ManagerRequestPage({Key? key}) : super(key: key);
@@ -135,6 +136,8 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                   ),
                   Text(personList[index]),
                   Text(textList[index]),
+                  Divider(thickness: 0.5),
+                  Text(subtextList[index], style: TextStyle(color: themeColor.getColor())),
                 ],
               )
           ),
