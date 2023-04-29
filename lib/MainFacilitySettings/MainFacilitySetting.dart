@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/MainFacilitySettings/FacilityBasicInfoSettingPage.dart';
 import '/Invite/InviteListPage.dart';
 import 'PeopleManagementPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -89,7 +90,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         title: Text('시설 기본 정보 설정'),
         trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
         onTap: () {
-          //pageAnimation(context, myNotification());
+          pageAnimation(context, FacilityBasicInfoPage());
         });
   }
 
