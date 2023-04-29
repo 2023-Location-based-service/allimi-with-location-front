@@ -31,49 +31,53 @@ class _UserCommentPageState extends State<UserCommentPage> {
 
   // 한마디 목록
   Widget userCommentList(){
-    return Container(
-      child: ListView.separated(
-        itemCount: com.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index){
-          return InkWell(
-            onTap: (){
-              print(index);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.white),
-              height: 130,
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    return ListView(
+      children: [
+        Container(
+          child: ListView.separated(
+          itemCount: com.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index){
+              return InkWell(
+                onTap: (){
+                  print(index);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.white),
+                  height: 130,
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(date[index]),
-                      Spacer(),
-                      Container(
-                        padding: EdgeInsets.all(4),
-                        child: OutlinedButton(
-                            onPressed: (){
-                              //삭제
-                            },
-                            child: Text('삭제')
-                        ),
+                      Row(
+                        children: [
+                          Text(date[index]),
+                          Spacer(),
+                          Container(
+                            padding: EdgeInsets.all(4),
+                            child: OutlinedButton(
+                                onPressed: (){
+                                  //삭제
+                                },
+                                child: Text('삭제')
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        com[index],
+                        style: TextStyle(fontSize: 15,),
                       ),
                     ],
                   ),
-                  Text(
-                    com[index],
-                    style: TextStyle(fontSize: 15,),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
-      ),
+                ),
+              );
+            }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
+          ),
+        )
+      ],
     );
   }
 }
