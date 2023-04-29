@@ -6,6 +6,10 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'SelectedDatePage.dart';
 
 ThemeColor themeColor = ThemeColor();
+List<String> dateList =['2022.12.23','2022.12.24','2022.12.25'];
+List<String> timeList =['16:00', '13:00', '11:00'];
+List<String> personList =['삼족오 보호자님', '사족오 보호자님', '오족오 보호자님'];
+List<String> textList =['면회 신청합니다.', '면회 신청합니다. 동생이 갑니다.', '면회 신청합니다.'];
 
 class UserRequestPage extends StatefulWidget {
   const UserRequestPage({Key? key}) : super(key: key);
@@ -15,21 +19,54 @@ class UserRequestPage extends StatefulWidget {
 }
 
 class _UserRequestPageState extends State<UserRequestPage> {
-
+  final formKey = GlobalKey<FormState>();
   late final TextEditingController bodyController = TextEditingController(text: '면회 신청합니다.');
-  String selectedHour = '방문 시간 선택';
+  late final TextEditingController refusalController = TextEditingController();
+  String selectedHour = '시간 선택';
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('면회 목록')),
-      body: Text('d'),
+      body: RequestList(),
       floatingActionButton: writeButton(),
     );
   }
 
-
+  // 면회 리스트
+  Widget RequestList() {
+    return  ListView.separated(
+      itemCount: textList.length, //면회 목록 출력 개수
+      itemBuilder: (context, index) {
+        return Container(
+          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+          color: Colors.white,
+          child: ListTile(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(dateList[index]),
+                      SizedBox(width: 10),
+                      Icon(Icons.schedule_rounded, color: Colors.grey, size: 20),
+                      SizedBox(width: 2),
+                      Text(timeList[index]),
+                    ],
+                  ),
+                  Text(personList[index]),
+                  Text(textList[index]),
+                ],
+              )
+          ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 8);
+      },
+    );
+  }
 
   //글쓰기 버튼
   Widget writeButton(){
@@ -61,8 +98,9 @@ class _UserRequestPageState extends State<UserRequestPage> {
 
 
         //TODO: ------------------------
-        bodyController.text = '면회 신청합니다.'; //TextFormField 처음으로 초기화
-
+        Future.delayed(Duration(milliseconds: 300), () {
+          bodyController.text = '면회 신청합니다.'; //TextFormField 처음으로 초기화
+        });
       },
       body: ListView(
         children: [
@@ -75,7 +113,6 @@ class _UserRequestPageState extends State<UserRequestPage> {
           text('할 말'),
           textFormField(),
 
-
         ],
       ),
       buttonName: '접수',
@@ -87,21 +124,6 @@ class _UserRequestPageState extends State<UserRequestPage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 6),
       child: Text('$text'),
-    );
-  }
-
-  //달력 선택
-
-
-  //면회 시간 선택
-  Widget selectedClock() {
-    return display(
-        title: selectedHour,
-        onTap: () {
-
-          print('방문 시간 선택 Tap');
-
-        }
     );
   }
 
@@ -135,38 +157,6 @@ class _UserRequestPageState extends State<UserRequestPage> {
             ),
           ),
         )
-    );
-  }
-
-
-
-  //날짜, 시간 선택 틀
-  Widget display({
-    required String title,
-    required VoidCallback onTap,
-}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-          width: double.infinity,
-          height: 50,
-          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-          decoration: BoxDecoration(
-            color: Color(0xfff2f3f6),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('$title', textScaleFactor: 1.2),
-                Icon(Icons.expand_more_rounded, color: Colors.black54),
-              ],
-            ),
-          )
-      ),
     );
   }
 

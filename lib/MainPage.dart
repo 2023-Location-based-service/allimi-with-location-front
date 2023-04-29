@@ -155,14 +155,14 @@ class _MainPageState extends State<MainPage> {
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, ManagerAllimPage()); //일단은 요양 보호사 버전으로
+        pageAnimation(context, ManagerAllimPage()); //일단은 요양보호사 버전으로
         break;
       case 2:
         print('일정표 Tap');
         break;
       case 3:
         print('면회신청 Tap');
-        pageAnimation(context, UserRequestPage()); //일단은 보호자 버전으로
+        pageAnimation(context, ManagerRequestPage()); //일단은 요양보호사 버전으로
         break;
       case 4:
         print('한마디 Tap');
