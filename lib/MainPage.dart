@@ -12,8 +12,8 @@ import 'Comment/UserCommentPage.dart';
 
 ThemeColor themeColor = ThemeColor();
 
-List<String> textEmoji = ['📢', '✏', '🍀', '📷', '💌', '🔧', '🍚', '🗓'];
-List<String> textMenu = ['공지사항', '알림장', '면회 신청', '앨범', '한마디', '시설 설정', '식단표', '일정표'];
+List<String> textEmoji = ['📢', '✏', '🗓', '🍀', '💌', '🔧'];
+List<String> textMenu = ['공지사항', '알림장', '일정표', '면회 관리', '한마디', '시설 설정'];
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);

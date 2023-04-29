@@ -63,7 +63,6 @@ class _MyAppState extends State<MyApp> {
             selectedFontSize: 12,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '내 소식'),
               BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
             ],
           ),
@@ -76,8 +75,7 @@ class _MyAppState extends State<MyApp> {
     Widget page;
     switch(_curIndex) {
       case 0: page = MainPage(); break;
-      case 1: page = NotificationPage(); break;
-      case 2: page = SetupPage(); break;
+      case 1: page = SetupPage(); break;
       default: page = MainPage(); break;
     }
     return page;
