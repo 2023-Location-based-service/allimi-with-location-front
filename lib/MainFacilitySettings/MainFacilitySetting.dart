@@ -15,13 +15,14 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(title: Text('시설 설정')),
       body: ListView(
         children: [
           Column(
             children: [
               Container(
+                color: Color(0xfff8f8f8),
                 padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
                 child: Row(
                   children: [
@@ -36,7 +37,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
                   ],
                 ),
               ),
-              Divider(thickness: 0.5,),
+              SizedBox(height: 8,),
               appResidentManagement(),
               Divider(thickness: 0.5,),
               appEmployeeManagement(),

@@ -12,9 +12,16 @@ class InviteListPage extends StatefulWidget {
 }
 
 class _InviteListPageState extends State<InviteListPage> {
+  static List<String> invitelistDate = [
+    '보호자 구현진',
+    '관리자 권태연',
+    '관리자 정혜지',
+    '보호자 주효림',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: inviteButton(),
       
       //아래에 초대하기 버튼을 넣었을 때
@@ -40,7 +47,6 @@ class _InviteListPageState extends State<InviteListPage> {
       body: appInviteList(),
     );
   }
-
   //전체 구성
   Widget appInviteList(){
     return ListView(
@@ -50,6 +56,7 @@ class _InviteListPageState extends State<InviteListPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
+              color: Color(0xfff8f8f8),
               padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
               child: Row(
                 children: [
@@ -65,7 +72,6 @@ class _InviteListPageState extends State<InviteListPage> {
               ),
             ),
             Container(
-              color: Colors.white,
               padding: EdgeInsets.only(left: 18,top: 12),
               child: Text(
                 '초대 목록',
@@ -84,60 +90,33 @@ class _InviteListPageState extends State<InviteListPage> {
 
   //이름 나오는 부분
   Widget inviteList(){
-    return Column(
-      children: [
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        invitePeople(),
-        //아직 색이 안 바뀜
-        Container(
-          color: Colors.white,
-          child: SizedBox(
-            height: 80,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  //사람 한명
-  Widget invitePeople(){
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.only(left: 20, top: 10, right: 10),
-      child: Row(
-        children: [
-          Icon(Icons.person_rounded, color: Colors.grey),
-          SizedBox(width: 20,),
-          Text(
-            '보호자 홍길동',
-            style: TextStyle(
-                fontSize: 16
+      padding: EdgeInsets.only(left: 10, top: 10, right: 5),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: invitelistDate.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            leading: Icon(Icons.person_rounded, color: Colors.grey),
+            title: Row(
+              children: [
+                Text('${invitelistDate[index]}'), //초대 리스트
+                Spacer(),
+                Container(
+                  padding: EdgeInsets.all(3),
+                  child: OutlinedButton(
+                      onPressed: (){
+                        //취소
+                      },
+                      child: Text('취소하기')
+                  ),
+                ),
+              ],
             ),
-          ),
-          Spacer(),
-          Container(
-            padding: EdgeInsets.all(3),
-            child: OutlinedButton(
-                onPressed: (){
-                  //취소
-                },
-                child: Text('취소하기')
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
