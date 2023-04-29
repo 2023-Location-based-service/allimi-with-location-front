@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> {
     return GestureDetector(
       onTap: () {
         print('소속추가 Tap');
+        //TODO: 요양원 이름, 입소자 이름 나오는 페이지
         pageAnimation(context, AddHomePage());
         },
       child: Container(
@@ -61,7 +62,7 @@ class _MainPageState extends State<MainPage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.add_rounded, size: 16,color: themeColor.getColor()),
+            Icon(Icons.add, size: 16,color: themeColor.getColor()),
             Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
           ],
         ),
@@ -157,11 +158,11 @@ class _MainPageState extends State<MainPage> {
         pageAnimation(context, ManagerAllimPage()); //일단은 요양 보호사 버전으로
         break;
       case 2:
-        print('면회신청 Tap');
-        pageAnimation(context, UserRequestPage()); //일단은 보호자 버전으로
+        print('일정표 Tap');
         break;
       case 3:
-        print('앨범 Tap');
+        print('면회신청 Tap');
+        pageAnimation(context, UserRequestPage()); //일단은 보호자 버전으로
         break;
       case 4:
         print('한마디 Tap');
@@ -170,12 +171,6 @@ class _MainPageState extends State<MainPage> {
       case 5:
         print('시설설정 Tap');
         pageAnimation(context, MainFacilitySettingsPage());
-        break;
-      case 6:
-        print('식단표 Tap');
-        break;
-      case 7:
-        print('일정표 Tap');
         break;
       default:
         break;

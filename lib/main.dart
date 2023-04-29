@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
-import 'NotificationPage.dart';
 import 'SetupPage.dart';
 
 ThemeColor themeColor = ThemeColor();
