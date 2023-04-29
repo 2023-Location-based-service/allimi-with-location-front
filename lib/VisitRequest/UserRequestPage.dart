@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:test_data/VisitRequest/SelectedTimePage.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
+import 'SelectedDatePage.dart';
 
 ThemeColor themeColor = ThemeColor();
-
-List<String> hoursList = [];
 
 class UserRequestPage extends StatefulWidget {
   const UserRequestPage({Key? key}) : super(key: key);
@@ -17,15 +16,12 @@ class UserRequestPage extends StatefulWidget {
 
 class _UserRequestPageState extends State<UserRequestPage> {
 
+  late final TextEditingController bodyController = TextEditingController(text: '면회 신청합니다.');
   String selectedHour = '방문 시간 선택';
+
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i <= 23; i++) {
-      String hour = i.toString().padLeft(2, '0');
-      hoursList.add('$hour:00');
-    }
-
     return Scaffold(
       appBar: AppBar(title: Text('면회 목록')),
       body: Text('d'),
@@ -53,29 +49,31 @@ class _UserRequestPageState extends State<UserRequestPage> {
   Widget writePage() {
     return customPage(
       title: '면회 신청',
-      onPressed: () {},
+      onPressed: () {
+        String bodyTemp = bodyController.text.replaceAll(' ', '');
+        if(bodyTemp.isEmpty){
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('할 말 내용을 입력해주세요.')));
+          return;
+        }
+
+        //TODO: ------------------------ 면회신청 완료 누르면 실행되어야 할 부분
+        Navigator.pop(context);
+
+
+        //TODO: ------------------------
+        bodyController.text = '면회 신청합니다.'; //TextFormField 처음으로 초기화
+
+      },
       body: ListView(
         children: [
-          text('예약자명'),
-          textFormField(
-              textInputType: TextInputType.text,
-              inputFormatters: [LengthLimitingTextInputFormatter(15)]
-          ),
-          text('핸드폰 번호'),
-          textFormField(
-              textInputType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(11),
-                PhoneNumberFormatter()
-              ]),
 
           //TODO: 날짜, 할말(메모) 만들기
-          text('날짜\n나중에 추가'),
-          text('시간'),
-          // ※ 요양원마다 면회 가능 시간이 상이하므로 경우에 따라 면회 거절될 수도 있습니다.
-          selectedClock(),
-          text('메모\n나중에 추가'),
+          text('날짜'),
+          SelectedDatePage(),
+          text('방문 시간'),
+          SelectedTimePage(),
+          text('할 말'),
+          textFormField(),
 
 
         ],
@@ -92,21 +90,33 @@ class _UserRequestPageState extends State<UserRequestPage> {
     );
   }
 
-  //텍스트 입력 위젯
-  Widget textFormField({ //이름, 전번, 날짜, 시간, 할말
-    required TextInputType textInputType,
-    List<TextInputFormatter>? inputFormatters,
-  }) {
+  //달력 선택
+
+
+  //면회 시간 선택
+  Widget selectedClock() {
+    return display(
+        title: selectedHour,
+        onTap: () {
+
+          print('방문 시간 선택 Tap');
+
+        }
+    );
+  }
+
+  //할 말
+  Widget textFormField() {
     return Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: SizedBox(
+          height: 200,
           child: TextFormField(
-            keyboardType: textInputType,
-            inputFormatters: inputFormatters, //선택 옵션
-            textAlignVertical: TextAlignVertical.top,
-
-
-            decoration: InputDecoration(
+            controller: bodyController,
+            maxLines: 100,
+            inputFormatters: [LengthLimitingTextInputFormatter(500)], //최대 500글자까지 작성 가능
+            textAlignVertical: TextAlignVertical.center,
+            decoration: const InputDecoration(
               labelStyle: TextStyle(color: Colors.black54),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -121,16 +131,22 @@ class _UserRequestPageState extends State<UserRequestPage> {
               ),
               filled: true,
               fillColor: Color(0xfff2f3f6),
+              //fillColor: Colors.greenAccent,
             ),
           ),
-          height: 50,
         )
     );
   }
 
-  //면회 시간 선택하는 위젯
-  Widget selectedClock() {
+
+
+  //날짜, 시간 선택 틀
+  Widget display({
+    required String title,
+    required VoidCallback onTap,
+}) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
           width: double.infinity,
           height: 50,
@@ -145,70 +161,14 @@ class _UserRequestPageState extends State<UserRequestPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('$selectedHour', textScaleFactor: 1.2),
+                Text('$title', textScaleFactor: 1.2),
                 Icon(Icons.expand_more_rounded, color: Colors.black54),
               ],
             ),
           )
       ),
-      onTap: () {
-        print('시간 Tap');
-
-        showDialog(
-          context: context,
-          builder: (context) =>
-              AlertDialog(
-                title: Text('방문 시간 선택'),
-                content: Container(
-                  child: ListView.builder(
-                    itemCount: 24,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text('${hoursList[index]}'), //TODO: 시간 리스트
-                        onTap: () {
-                          print('${hoursList[index]} Tap');
-
-
-
-                          Navigator.pop(context);
-                          // TODO: 시간 선택 시 업데이트
-                          setState(() {
-                            if(selectedHour != null){ selectedHour = '${hoursList[index]}'; }
-                            else { selectedHour = '방문 시간 선택'; }
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ),
-                actions: [
-                  TextButton(child: Text('취소',
-                      style: TextStyle(color: themeColor.getMaterialColor())),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ],
-              ),
-        );
-
-      },
     );
   }
 
 }
 
-
-
-// 핸드폰 번호 하이픈(-) 자동으로 추가
-class PhoneNumberFormatter extends TextInputFormatter {
-  //입력값 변경 로직
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    //숫자만 추출하고 하이픈을 추가한 새로운 문자열을 생성
-    final number = newValue.text.replaceAllMapped(RegExp(r'(\d{3})(\d{4})(\d{4})'), (m) => '${m[1]}-${m[2]}-${m[3]}');
-    //새로운 문자열로 TextEditingValue 객체를 생성하여 반환
-    return TextEditingValue(
-      text: number,
-      selection: TextSelection.collapsed(offset: number.length),
-    );
-  }
-}
