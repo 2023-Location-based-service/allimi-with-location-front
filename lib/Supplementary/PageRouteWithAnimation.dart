@@ -94,3 +94,33 @@ Widget customPage({
     body: body,
   );
 }
+
+//화면 클릭할 수 있는 위젯
+Widget display({
+  required String title,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+        width: double.infinity,
+        height: 50,
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        decoration: BoxDecoration(
+          color: Color(0xfff2f3f6),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('$title', textScaleFactor: 1.2),
+              Icon(Icons.expand_more_rounded, color: Colors.black54),
+            ],
+          ),
+        )
+    ),
+  );
+}
