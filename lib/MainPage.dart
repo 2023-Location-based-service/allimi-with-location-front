@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:test_data/MainFacilitySettings/MainFacilitySetting.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Allim/UserAllimPage.dart';
@@ -168,6 +169,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 5:
         print('시설설정 Tap');
+        pageAnimation(context, MainFacilitySettingsPage());
         break;
       case 6:
         print('식단표 Tap');
