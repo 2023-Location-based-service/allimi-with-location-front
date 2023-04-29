@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontSize: 18.0),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
                     ),
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18.0, color: Colors.black),
                 ),
                 style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(10),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)
                   ),

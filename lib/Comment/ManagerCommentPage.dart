@@ -23,9 +23,11 @@ class _CommentPageState extends State<ManagerCommentPage> {
 
   // 한마디 목록
   Widget commentList(){
-    return Container(
-      child: ListView.separated(
-            itemCount: com.length,
+    return ListView(
+      children: [
+        Container(
+          child: ListView.separated(
+          itemCount: com.length,
             shrinkWrap: true,
             itemBuilder: (context, index){
               return InkWell(
@@ -33,25 +35,27 @@ class _CommentPageState extends State<ManagerCommentPage> {
                   print(index);
                 },
                 child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white),
-                      height: 130,
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(date[index]),
-                            Text(
-                              com[index],
-                              style: TextStyle(fontSize: 15,),
-                            ),
-                          ],
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.white),
+                  height: 130,
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(date[index]),
+                      Text(
+                        com[index],
+                        style: TextStyle(fontSize: 15,),
                       ),
+                    ],
+                  ),
                 ),
               );
             }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
-        ),
+          ),
+        )
+      ],
     );
   }
 }
