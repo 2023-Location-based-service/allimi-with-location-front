@@ -69,7 +69,7 @@ Widget customPage({
   required String buttonName,
 }) {
   return Scaffold(
-    backgroundColor: Colors.white,
+    //backgroundColor: Colors.white,
     appBar: AppBar(
       title: Text('$title'),
       actions: [
