@@ -10,8 +10,12 @@ class InvitePage extends StatefulWidget {
   @override
   State<InvitePage> createState() => _InvitePageState();
 }
+enum Answer {protect, employee}
 
 class _InvitePageState extends State<InvitePage> {
+
+  Map<int, Answer?> answerVal = {};
+
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -31,71 +35,131 @@ class _InvitePageState extends State<InvitePage> {
     );
   }
   Widget inviteFormat(){
-    return ListView(
-      children: [
-        Column(
-          children: [
-            Container(
-              color: Color(0xfff8f8f8),
-              padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.room,
-                    color: Colors.black,
-                  ),
-                  Text(
-                    "구미요양원",
-                    style: TextStyle(fontSize: 12.0),
-                  )
-                ],
-              ),
-            ),
-            Container(
-                padding: EdgeInsets.only(left: 18,top: 12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+    return ListView.builder(
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index){
+        return Container(
+          //color: Colors.white,
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
+                child: Row(
                   children: [
-                    Text(
-                      '초대하실 유형을 선택하세요',
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                    Icon(
+                      Icons.room,
+                      color: Colors.black,
                     ),
-                    SizedBox(height: 50,),
                     Text(
-                      '휴대폰 번호',
-                      style: TextStyle(
-                          fontSize: 15
-                      ),
-                    ),
-                    TextField(
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly, //숫자만!
-                        NumberFormatter(), // 자동하이픈
-                        LengthLimitingTextInputFormatter(13) //13자리만 입력받도록 하이픈 2개+숫자 11개
-                      ],
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'PhoneNumber',
-                        hintText: '010-123-4567 or 010-1234-5678'),
-                      ),
+                      "구미요양원",
+                      style: TextStyle(fontSize: 12.0),
+                    )
                   ],
-                )
-            ),
+                ),
+              ),
 
+              Container(
+                color: Colors.white,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16.0),
+                  title: const Text('초대하실 유형을 선택해주세요', textScaleFactor: 1.2,),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<Answer>(
+                            title: const Text('보호자'),
+                            value: Answer.protect,
+                            groupValue: answerVal[index],
+                            onChanged: (Answer? value){
+                              setState(() {
+                                answerVal[index] = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<Answer>(
+                            title: const Text('직원'),
+                            value: Answer.employee,
+                            groupValue: answerVal[index],
+                            onChanged: (Answer? value){
+                              setState(() {
+                                answerVal[index] = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
 
-          ],
-        )
-      ],
+              Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(left: 18,top: 12, right: 18),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      //Text('초대하실 유형을 선택하세요', textScaleFactor: 1.4,),
+                      SizedBox(height: 10,),
+                      Text('휴대폰 번호', textScaleFactor: 1.1,),
+                      SizedBox(height: 5,),
+                      Form(
+                        key: formKey,
+                        child: SizedBox(
+                          child: TextFormField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly, //숫자만 가능
+                              NumberFormatter(), // 자동으로 하이픈
+                              LengthLimitingTextInputFormatter(13) //13자리만 입력(하이픈 2+숫자 11)
+                            ],
+                            validator: (value) {
+                              if(value!.isEmpty) { return '내용을 입력하세요'; }
+                              else { return null; }
+                            },
+                            keyboardType: TextInputType.number, //키보드는 숫자
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Color(0xfff2f3f6),
+                              //fillColor: Colors.white,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                                borderSide: BorderSide(width: 1, color: Colors.transparent),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                                borderSide: BorderSide(width: 1, color: Colors.transparent),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              //focusedBorder: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 60,),
+
+                    ],
+                  )
+              ),
+            ],
+          ),
+        );
+
+      },
     );
   }
 }
+//자동 하이픈
 class NumberFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -124,4 +188,5 @@ class NumberFormatter extends TextInputFormatter {
         text: string,
         selection: TextSelection.collapsed(offset: string.length));
   }
+
 }

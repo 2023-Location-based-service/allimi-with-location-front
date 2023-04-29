@@ -48,28 +48,15 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
               //   ),
               // ),
               SizedBox(height: 5,),
-              TextFormField(
-                style: const TextStyle(
-                    color: Colors.black,
-                ),
-                enabled: false,
-                decoration: const InputDecoration(
-                  hintText: '2023.12.25',
-                  filled: true,
-                  fillColor: Color(0xfff2f3f6),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(width: 1, color: Colors.transparent),
+              Container(
+                  padding: EdgeInsets.all(15),
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Color(0xfff2f3f6),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(width: 1, color: Colors.transparent),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  //focusedBorder: InputBorder.none,
-                ),
+                  child: Text('2023.12.25', textScaleFactor: 1.3),
               ),
               SizedBox(height: 15,),
               Text('한마디 작성'),

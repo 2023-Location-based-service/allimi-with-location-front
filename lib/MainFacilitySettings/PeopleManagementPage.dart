@@ -10,6 +10,12 @@ class PeopleManagementPage extends StatefulWidget {
 class _PeopleManagementPageState extends State<PeopleManagementPage> with TickerProviderStateMixin {
 
   late TabController _tabController;
+  static List<String> employeeDate = [
+    '구현진',
+    '권태연',
+    '정혜지',
+    '주효림',
+  ];
 
   @override
   void initState() {
@@ -19,7 +25,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
     );
     super.initState();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,86 +88,60 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
   
   //승인완료
   Widget approveComplete(){
-    return ListView(
-      children: [
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-        peopleInfomation(),
-      ],
-    );
-  }
-  Widget peopleInfomation(){
-    return Container(
-      padding: EdgeInsets.only(left: 10, top: 10),
-      child: ListTile(
-          title: Text('직원들'),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: employeeDate.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
           leading: Icon(Icons.person_rounded, color: Colors.grey),
-          onTap: () {
-            //pageAnimation(context, myProfile());
-          }
-      ),
+          title: Row(
+            children: [
+              Text('${employeeDate[index]}'), //직원 이름 리스트
+            ],
+          ),
+        );
+      },
     );
   }
   
   //승인대기
   Widget approveWaiting(){
-    return ListView(
-      children: [
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-        peopleApprove(),
-      ],
-    );
-  }
-  Widget peopleApprove(){
     return Container(
       padding: EdgeInsets.only(left: 20, top: 10),
-      child: Row(
-        children: [
-          Icon(Icons.person_rounded, color: Colors.grey),
-          SizedBox(width: 30,),
-          Text(
-              '직원들',
-              style: TextStyle(
-                  fontSize: 16
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: employeeDate.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            leading: Icon(Icons.person_rounded, color: Colors.grey),
+            title: Row(
+              children: [
+                Text('${employeeDate[index]}'), //직원 이름 리스트
+                Spacer(),
+                Container(
+                  padding: EdgeInsets.all(3),
+                  child: OutlinedButton(
+                      onPressed: (){
+                        //승인
+                      },
+                      child: Text('승인')
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(3),
+                  child: OutlinedButton(
+                      onPressed: (){
+                        //거부
+                      },
+                      child: Text('거부')
+                  ),
+                ),
+              ],
             ),
-          ),
-          Spacer(),
-          Container(
-            padding: EdgeInsets.all(3),
-            child: OutlinedButton(
-                onPressed: (){
-                  //승인
-                },
-                child: Text('승인')
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(3),
-            child: OutlinedButton(
-                onPressed: (){
-                  //거부
-                },
-                child: Text('거부')
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
