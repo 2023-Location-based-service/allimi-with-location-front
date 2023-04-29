@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_data/ResidentInfoInputPage.dart';
-import '/MainPage.dart';
+import '/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
+
+//사용자의 초대대기 화면
 
 class InviteWaitPage extends StatefulWidget {
   @override
