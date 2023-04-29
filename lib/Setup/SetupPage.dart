@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Supplementary/ThemeColor.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
-import 'SetupHealthPage.dart';
+import '/Supplementary/ThemeColor.dart';
+import '/Supplementary/PageRouteWithAnimation.dart';
+import '/Setup/SetupHealthPage.dart';
 
 ThemeColor themeColor = ThemeColor();
 
