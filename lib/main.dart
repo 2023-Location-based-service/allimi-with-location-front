@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
-import 'SetupPage.dart';
+import 'Setup/SetupPage.dart';
 
 ThemeColor themeColor = ThemeColor();
 

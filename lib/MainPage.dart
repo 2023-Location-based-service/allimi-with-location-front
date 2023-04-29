@@ -7,7 +7,7 @@ import 'Allim/UserAllimPage.dart';
 import 'Allim/ManagerAllimPage.dart';
 import 'VisitRequest/UserRequestPage.dart';
 import 'VisitRequest/ManagerRequestPage.dart';
-import 'AddHomePage.dart';
+import 'AddPersonPage.dart';
 import 'Comment/UserCommentPage.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -48,11 +48,6 @@ class _MainPageState extends State<MainPage> {
   //소속추가 버튼
   Widget addGroup() {
     return GestureDetector(
-      onTap: () {
-        print('소속추가 Tap');
-        //TODO: 요양원 이름, 입소자 이름 나오는 페이지
-        pageAnimation(context, AddHomePage());
-        },
       child: Container(
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
@@ -62,11 +57,16 @@ class _MainPageState extends State<MainPage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.add, size: 16,color: themeColor.getColor()),
-            Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
+            Icon(Icons.menu_rounded, color: themeColor.getColor()),
+            //Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
           ],
         ),
       ),
+      onTap: () {
+        print('소속추가 Tap');
+        //TODO: 요양원 이름, 입소자 이름 나오는 페이지
+        pageAnimation(context, AddPersonPage());
+      },
     );
   }
 
