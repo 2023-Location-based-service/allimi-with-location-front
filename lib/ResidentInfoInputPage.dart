@@ -152,7 +152,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                             Text("기타"),
                           ],
                         ),
-                        TextField()
+                        TextField() //TODO: 기타 옆에 textfield를 넣고 싶음
                       ],
                     ),
                   ),

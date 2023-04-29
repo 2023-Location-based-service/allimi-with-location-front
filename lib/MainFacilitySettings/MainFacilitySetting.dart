@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test_data/MainFacilitySettings/PeopleManagementPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
+import 'UserPeopleManagementPage.dart';
 
 class MainFacilitySettingsPage extends StatefulWidget {
   const MainFacilitySettingsPage({Key? key}) : super(key: key);
@@ -57,7 +59,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         title: Text('입소자 관리'),
         trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
         onTap: () {
-          //pageAnimation(context, myProfile());
+          pageAnimation(context, userPeopleManagementPage());
         });
   }
 
@@ -67,7 +69,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         title: Text('직원 관리'),
         trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
         onTap: () {
-          //pageAnimation(context, myNotification());
+          pageAnimation(context, PeopleManagementPage());
         });
   }
 
