@@ -72,7 +72,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
     List<TextInputFormatter>? inputFormatters,
   }) {
     return SizedBox(
-      height: 50,
+      height: 60,
       child: TextFormField(
         keyboardType: textInputType,
         inputFormatters: inputFormatters,

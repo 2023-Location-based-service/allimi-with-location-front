@@ -83,7 +83,7 @@ class _SetupPageState extends State<SetupPage> {
         });
   }
 
-
+  //내 정보
   Widget myProfile() {
     return Scaffold(
         appBar: AppBar(title: Text('내 정보')),
@@ -102,7 +102,7 @@ class _SetupPageState extends State<SetupPage> {
         )
     );
   }
-  
+
   Widget myProfileBox(String text) {
     return Container(
         width: double.infinity,
@@ -125,6 +125,7 @@ class _SetupPageState extends State<SetupPage> {
     );
   }
 
+  //입소자 정보
   Widget myInmateProfile() {
     return Scaffold(
         appBar: AppBar(title: Text('입소자 정보')),
