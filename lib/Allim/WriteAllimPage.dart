@@ -31,6 +31,9 @@ class WriteAllimPage extends StatefulWidget {
 
 class _WriteAllimPageState extends State<WriteAllimPage> {
 
+  final formKey = GlobalKey<FormState>();
+  String selectedPerson = "수급자 선택";
+
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
 
@@ -77,8 +80,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     }
   }
 
-  final formKey = GlobalKey<FormState>();
-  String selectedPerson = "수급자 선택";
 
   @override
   Widget build(BuildContext context) {
