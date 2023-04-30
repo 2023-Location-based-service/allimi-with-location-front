@@ -16,6 +16,7 @@ dependencies:
   twemoji: ^0.4.3
   google_fonts: ^4.0.3
   table_calendar: ^3.0.9
+  flutter_calendar_carousel: ^2.4.2
 
 dev_dependencies:
   flutter_test:
