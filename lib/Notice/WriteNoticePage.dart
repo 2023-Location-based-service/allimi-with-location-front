@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:test_data/Supplementary/DropdownWidget.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 
@@ -107,6 +108,19 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
         body: ListView(
           children: [
 
+            Container(
+              padding: EdgeInsets.fromLTRB(8, 0, 10, 0),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Icon(Icons.info_rounded, size: 18, color: Colors.grey),
+                  Text(' 중요한 공지는 중요 태그를 사용하세요.', style: TextStyle(color: Colors.grey)),
+                ],
+              ),
+            ),
+            NoticeDropdown(),
+
+            SizedBox(height: 8),
             getTitle(),
             SizedBox(height: 8),
             getBody(),
@@ -118,6 +132,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
         buttonName: '완료'
     );
   }
+
 
   //제목
   Widget getTitle() {
@@ -155,11 +170,11 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   //사진
   Widget getPicture(BuildContext context) {
     return Container(
+      padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
       height: 115,
       color: Colors.white,
       child: ListView.builder(
         shrinkWrap: true,
-
         scrollDirection: Axis.horizontal,
         itemCount: _pickedImgs.length + 1,
         itemBuilder: (BuildContext context, int index) {

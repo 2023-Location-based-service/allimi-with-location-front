@@ -267,10 +267,10 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                 ],
               ),
             ),
-            dropList('아침', FirstDropdown()),
-            dropList('점심', FirstDropdown()),
-            dropList('저녁', FirstDropdown()),
-            dropList('투약', SecondDropdown()),
+            dropList('아침', AllimFirstDropdown()),
+            dropList('점심', AllimFirstDropdown()),
+            dropList('저녁', AllimFirstDropdown()),
+            dropList('투약', AllimSecondDropdown()),
           ],
         )
     );
@@ -370,6 +370,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   Widget getPicture(BuildContext context) {
     return Container(
+      padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
       height: 115,
       color: Colors.white,
       child: ListView.builder(
