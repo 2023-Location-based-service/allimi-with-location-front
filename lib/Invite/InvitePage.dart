@@ -62,14 +62,14 @@ class _InvitePageState extends State<InvitePage> {
                 color: Colors.white,
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
-                  title: const Text('초대하실 유형을 선택해주세요', textScaleFactor: 1.2,),
+                  title: const Text('초대하실 유형을 선택해주세요', textScaleFactor: 1.1,),
                   subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
+                    padding: const EdgeInsets.only(top: 10.0,),
                     child: Row(
                       children: [
                         Expanded(
                           child: RadioListTile<Answer>(
-                            title: const Text('보호자'),
+                            title: Text('보호자',textScaleFactor: 1.0,),
                             value: Answer.protect,
                             groupValue: answerVal[index],
                             onChanged: (Answer? value){
@@ -81,7 +81,7 @@ class _InvitePageState extends State<InvitePage> {
                         ),
                         Expanded(
                           child: RadioListTile<Answer>(
-                            title: const Text('직원'),
+                            title: Text('직원',textScaleFactor: 1.0,),
                             value: Answer.employee,
                             groupValue: answerVal[index],
                             onChanged: (Answer? value){
@@ -96,7 +96,6 @@ class _InvitePageState extends State<InvitePage> {
                   ),
                 ),
               ),
-
               Container(
                   color: Colors.white,
                   padding: EdgeInsets.only(left: 18,top: 12, right: 18),
@@ -172,7 +171,7 @@ class NumberFormatter extends TextInputFormatter {
       var nonZeroIndex = i + 1;
       if (nonZeroIndex <= 3) {
         if (nonZeroIndex % 3 == 0 && nonZeroIndex != text.length) {
-          buffer.write('-'); // Add double spaces.
+          buffer.write('-');
         }
       } else {
         if (nonZeroIndex % 7 == 0 &&
