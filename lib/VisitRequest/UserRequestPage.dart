@@ -30,7 +30,7 @@ class _UserRequestPageState extends State<UserRequestPage> {
     return Scaffold(
       appBar: AppBar(title: Text('면회 목록')),
       body: RequestList(),
-      floatingActionButton: writeButton(),
+      floatingActionButton: writeButton(context, writeRequestPage()),
     );
   }
 
@@ -68,22 +68,8 @@ class _UserRequestPageState extends State<UserRequestPage> {
     );
   }
 
-  //글쓰기 버튼
-  Widget writeButton(){
-    return FloatingActionButton(
-      focusColor: Colors.white54,
-      backgroundColor: themeColor.getColor(),
-      elevation: 0,
-      focusElevation: 0,
-      highlightElevation: 0,
-      hoverElevation: 0,
-      onPressed: () { pageAnimation(context, writePage()); },
-      child: Icon(Icons.create_rounded, color: Colors.white),
-    );
-  }
-
   //글쓰기 화면
-  Widget writePage() {
+  Widget writeRequestPage() {
     return customPage(
       title: '면회 신청',
       onPressed: () {
