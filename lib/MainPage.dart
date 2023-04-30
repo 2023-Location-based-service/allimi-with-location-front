@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:test_data/Calendar/ManagerCalendarPage.dart';
 import 'package:test_data/Notice/UserNoticePage.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Notice/ManagerNoticePage.dart';
@@ -162,6 +163,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 2:
         print('일정표 Tap');
+        pageAnimation(context, ManagerCalendarPage()); //일단은 요양보호사 버전으로
         break;
       case 3:
         print('면회신청 Tap');
