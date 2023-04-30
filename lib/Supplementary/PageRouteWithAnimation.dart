@@ -124,3 +124,17 @@ Widget display({
     ),
   );
 }
+
+//FloatingActionButton 커스텀
+Widget writeButton(BuildContext context, Widget widget){
+  return FloatingActionButton(
+    focusColor: Colors.white54,
+    backgroundColor: themeColor.getColor(),
+    elevation: 0,
+    focusElevation: 0,
+    highlightElevation: 0,
+    hoverElevation: 0,
+    onPressed: () { pageAnimation(context, widget); },
+    child: Icon(Icons.create_rounded, color: Colors.white),
+  );
+}

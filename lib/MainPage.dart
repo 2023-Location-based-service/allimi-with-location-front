@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:test_data/Notice/NoticePage.dart';
+import 'package:test_data/Notice/UserNoticePage.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';
+import 'Notice/ManagerNoticePage.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Allim/UserAllimPage.dart';
@@ -13,9 +14,6 @@ import 'Comment/UserCommentPage.dart';
 
 ThemeColor themeColor = ThemeColor();
 
-List<String> textEmoji = ['📢', '✏', '🗓', '🍀', '💌', '🔧'];
-List<String> textMenu = ['공지사항', '알림장', '일정표', '면회 관리', '한마디', '시설 설정'];
-
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -24,6 +22,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  List<String> textEmoji = ['📢', '✏', '🗓', '🍀', '💌', '🔧'];
+  List<String> textMenu = ['공지사항', '알림장', '일정표', '면회 관리', '한마디', '시설 설정'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +154,7 @@ class _MainPageState extends State<MainPage> {
     switch(index) {
       case 0:
         print('공지사항 Tap');
-        pageAnimation(context, NoticePage());
+        pageAnimation(context, ManagerNoticePage()); //일단은 요양보호사 버전으로
         break;
       case 1:
         print('알림장 Tap');
