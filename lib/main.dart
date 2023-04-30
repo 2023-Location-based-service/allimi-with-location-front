@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 
 ThemeColor themeColor = ThemeColor();
 
-void main() {
+void main() async {
+  await initializeDateFormatting();
   runApp(const MyApp());
 }
 
