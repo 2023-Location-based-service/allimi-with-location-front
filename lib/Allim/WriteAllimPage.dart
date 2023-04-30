@@ -1,7 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/DropdownWidget.dart';
+
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -23,52 +31,104 @@ class WriteAllimPage extends StatefulWidget {
 
 class _WriteAllimPageState extends State<WriteAllimPage> {
 
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> _pickedImgs = [];
+
+  // 앨범
+  Future<void> _pickImg() async {
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if (images != null) {
+      setState(() {
+        _pickedImgs.addAll(images);
+      });
+    }
+  }
+
+  // 카메라
+  Future<void> _takeImg() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _pickedImgs.add(image);
+      });
+    }
+  }
+
+  // 서버에 이미지 업로드
+  Future<void> imageUpload() async {
+    final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
+
+    var formData = FormData.fromMap({
+      "notice": MultipartFile.fromString(
+        jsonEncode({"user_id": 2, "target_id": 1, "facility_id": 1, "contents": "flutter test", "sub_contents": "test입니다."}),
+        contentType: MediaType.parse('application/json'),
+      ),
+      "file": _files
+    });
+
+    var dio = Dio();
+    dio.options.contentType = 'multipart/form-data';
+    final response = await dio.post('http://192.168.0.5:8080/v2/notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+
+    if (response.statusCode == 200) {
+      print("성공");
+    } else {
+      print("실패");
+    }
+  }
+
   final formKey = GlobalKey<FormState>();
   String selectedPerson = "수급자 선택";
 
   @override
   Widget build(BuildContext context) {
+
+
     return customPage(
       title: '알림장 작성',
       onPressed: () {
         print('알림장 작성 완료버튼 누름');
-
         if(this.formKey.currentState!.validate()) {
 
           //TODO: 알림장 작성 완료 버튼 누르면 실행되어야 하는 부분
 
           Navigator.pop(context);
+
+          //이미지 업로드
+          imageUpload();
+          _pickedImgs = [];
+          setState(() {});
+
+
         }},
       body: writePost(),
       buttonName: '완료',
     );
+
   }
 
   Widget writePost() {
     return ListView(
       children: [
-
-        //TODO: 수급자 선택
-        createPersonCard(),
+        //수급자 선택
+        getPersonCard(),
         SizedBox(height: 8),
-
-        //TODO: 텍스트필드
-        createTextField(),
+        //텍스트필드
+        getTextField(),
         SizedBox(height: 8),
-
-        //TODO: 아침, 점심, 저녁, 투약 드롭다운버튼
-        createDropdown(),
+        //아침, 점심, 저녁, 투약 드롭다운버튼
+        getDropdown(),
         SizedBox(height: 8),
-
-        //TODO: 사진
-        createPicture(),
-
+        //사진
+        //testpicture(),
+        getPicture(context),
+        SizedBox(height: 20)
       ],
     );
   }
 
-
-  Widget createPersonCard() {
+  //수급자 선택
+  Widget getPersonCard() {
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -152,7 +212,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     );
   }
 
-  Widget createTextField() {
+  //본문
+  Widget getTextField() {
     return Form(
       key: formKey,
       child: SizedBox(
@@ -176,6 +237,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     );
   }
 
+  //드롭다운 버튼
   Widget dropList(String value, Widget page) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -189,7 +251,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     );
   }
 
-  Widget createDropdown() {
+  Widget getDropdown() {
     return Container(
         color: Colors.white,
         child: Column(
@@ -213,7 +275,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     );
   }
 
-  Widget createPicture() {
+  //사진
+  Widget testpicture() {
     return Container(
       height: 130,
       color: Colors.white,
@@ -236,7 +299,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
               //TODO: 사진 추가 기능
               print('사진 추가하기 Tap');
-
               showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -305,6 +367,95 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     );
   }
 
+  Widget getPicture(BuildContext context) {
+    return Container(
+      height: 115,
+      color: Colors.white,
+      child: ListView.builder(
+        shrinkWrap: true,
 
+        scrollDirection: Axis.horizontal,
+        itemCount: _pickedImgs.length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          return Center(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(3, 8, 3, 8),
+              width: 100,
+              height: 100,
+              child: DottedBorder(
+                  color: Colors.grey,
+                  child: Container(
+                    child: (index == 0)? Center(child: addImages(context)) : Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: (index == 0)? null : DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(File(_pickedImgs[index - 1].path))
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                            top: 3,
+                            right: 3,
+                            child: GestureDetector(
+                              child: Container(
+                                child: Icon(Icons.cancel_rounded, color: Colors.black54,),
+                              ),
+                              onTap: () {
+                                _pickedImgs.removeAt(index - 1);
+                                setState(() {});
+                              },
+                            )
+                        ),
+                      ],
+                    ),
+                  )
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget addImages(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.camera_alt_rounded, color: Colors.grey), title: const Text('카메라'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        _takeImg();
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.photo_rounded, color: Colors.grey), title: const Text('갤러리'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        _pickImg();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+        );
+      },
+      icon: Container(
+        alignment: Alignment.center,
+        child: Icon(CupertinoIcons.plus, color: Colors.grey),
+      ),
+    );
+  }
 
 }
