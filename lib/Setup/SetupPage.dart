@@ -41,6 +41,7 @@ class _SetupPageState extends State<SetupPage> {
         onTap: () { pageAnimation(context, AddFacilities()); });
   }
 
+
   Widget appProfile() {
     return ListTile(
         title: Text('내 정보'),
