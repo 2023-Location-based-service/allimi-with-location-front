@@ -87,21 +87,16 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
           ),
           ..._listOfDayEvents(_selectedDate!).map((myEvents) =>
               ListTile(
-                leading: const Icon(Icons.done_rounded, color: Colors.teal),
-                title: Row(
-                  children: [
-                    Text('${myEvents['eventTitle']}'),
-                    const Spacer(),
-                    OutlinedButton(
-                      child: Text('삭제'),
-                      onPressed: (){
-                        //TODO: 삭제 이벤트
-                      },
-                    ),
-                  ],
-                )
+                  leading: const Icon(Icons.done_rounded, color: Colors.teal),
+                  title: Text('${myEvents['eventTitle']}'),
+                trailing: OutlinedButton(
+                  child: Text('삭제'),
+                  onPressed: (){
+                    //TODO: 삭제 이벤트
+                  },
+                ),
                 //subtitle: Text('Description:   ${myEvents['eventDescp']}'),
-            ),
+              ),
           ),
         ],
       ),
