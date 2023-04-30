@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '/Supplementary/ThemeColor.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -38,10 +39,26 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
       body: ListView(
         children: [
           TableCalendar(
+            locale: 'ko_KR', // 한국어
             firstDay: DateTime(2023),
             lastDay: DateTime(2100),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
+            headerStyle: HeaderStyle(
+              titleCentered: true,
+              titleTextFormatter: (date, locale) => DateFormat.yMMMMd(locale).format(date),
+              formatButtonVisible: false,
+              titleTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
+              headerPadding: const EdgeInsets.symmetric(vertical: 4),
+              leftChevronIcon: const Icon(Icons.arrow_left, size: 40),
+              rightChevronIcon: const Icon(Icons.arrow_right, size: 40),
+            ),
+            calendarStyle: CalendarStyle(
+              markerDecoration : const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(_selectedDate, selectedDay)) {
                 // Call `setState()` when updating the selected day
