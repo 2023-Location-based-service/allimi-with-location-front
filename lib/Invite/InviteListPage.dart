@@ -23,26 +23,6 @@ class _InviteListPageState extends State<InviteListPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: inviteButton(),
-      
-      //아래에 초대하기 버튼을 넣었을 때
-      // bottomNavigationBar: Padding(
-      //   padding: EdgeInsets.all(10),
-      //   child: ElevatedButton (
-      //       child: Text(
-      //         '초대하기',
-      //         style: TextStyle(fontSize: 18.0),
-      //       ),
-      //       style: ElevatedButton.styleFrom(
-      //         padding: EdgeInsets.all(7),
-      //         shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(10)
-      //         ),
-      //       ),
-      //       onPressed: (){
-      //         pageAnimation(context, InvitePage());
-      //       }
-      //   ),
-      // ),
       appBar: AppBar(title: Text('시설 설정')),
       body: appInviteList(),
     );
@@ -55,22 +35,6 @@ class _InviteListPageState extends State<InviteListPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              color: Color(0xfff8f8f8),
-              padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.room,
-                    color: Colors.black,
-                  ),
-                  Text(
-                    "구미요양원",
-                    style: TextStyle(fontSize: 12.0),
-                  )
-                ],
-              ),
-            ),
             Container(
               padding: EdgeInsets.only(left: 18,top: 12),
               child: Text(
@@ -91,7 +55,6 @@ class _InviteListPageState extends State<InviteListPage> {
   //이름 나오는 부분
   Widget inviteList(){
     return Container(
-      color: Colors.white,
       padding: EdgeInsets.only(left: 10, top: 10, right: 5),
       child: ListView.builder(
         shrinkWrap: true,

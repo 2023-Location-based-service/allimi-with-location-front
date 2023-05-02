@@ -22,23 +22,6 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         children: [
           Column(
             children: [
-              Container(
-                color: Color(0xfff8f8f8),
-                padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.room,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      "구미요양원",
-                      style: TextStyle(fontSize: 12.0),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(height: 8,),
               appResidentManagement(),
               Divider(thickness: 0.5,),
               appEmployeeManagement(),

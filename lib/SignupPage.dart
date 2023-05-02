@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'LoginPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 
@@ -52,14 +53,16 @@ class _SignupPageState extends State<SignupPage> {
                     onSaved: (value) => _password = value!,
                   ),
                   TextFormField(
-                    obscureText: true,
                     decoration: InputDecoration(labelText: '이름'),
                     validator: (value) =>
                     value!.isEmpty ? '이름을 입력해주세요.' : null,
                     onSaved: (value) => _username = value!,
                   ),
                   TextFormField(
-                    obscureText: true,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly, //숫자만 가능
+                    ],
+                    keyboardType: TextInputType.number, //키보드는 숫자
                     decoration: InputDecoration(labelText: '전화번호'),
                     validator: (value) =>
                     value!.isEmpty ? '전화번호를 입력해주세요.' : null,
