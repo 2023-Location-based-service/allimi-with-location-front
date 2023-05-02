@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/LoginPage.dart';
 import '/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 
@@ -18,21 +19,49 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(10),
-        child: ElevatedButton (
-            child: Text(
-              '시설 추가하기',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(7),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ElevatedButton (
+                  child: Text(
+                    '시설 추가하기',
+                    style: TextStyle(fontSize: 18.0,),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      primary: themeColor.getColor(),
+                      padding: EdgeInsets.all(7),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                  ),
+                  onPressed: (){
+                    //pageAnimation(context, 시설추가);
+                  }
               ),
             ),
-            onPressed: (){
-              //pageAnimation(context, 시설추가);
-            }
-        ),
+            SizedBox(width: 5,),
+            Expanded(
+              child: ElevatedButton (
+                  child: Text(
+                    '로그아웃',
+                    style: TextStyle(fontSize: 18.0, ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      primary: themeColor.getColor(),
+                      padding: EdgeInsets.all(7),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                  ),
+                  onPressed: (){
+                    pageAnimation(context, LoginPage());
+                  }
+              ),
+            ),
+          ],
+        )
       ),
       body: Scrollbar(
         child: ListView(
@@ -93,10 +122,13 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
               Container(
                 padding: EdgeInsets.all(2),
                 child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: themeColor.getColor(),)
+                    ),
                     onPressed: (){
                       pageAnimation(context, ResidentInfoInputPage());
                     },
-                    child: Text('초대받기')
+                    child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
                 ),
               ),
             ],
