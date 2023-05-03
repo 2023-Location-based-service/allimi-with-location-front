@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:test_data/Calendar/ManagerCalendarPage.dart';
 import 'package:test_data/Notice/UserNoticePage.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Notice/ManagerNoticePage.dart';
 import 'Supplementary/ThemeColor.dart';
@@ -88,13 +91,28 @@ class _MainPageState extends State<MainPage> {
         children: [
           Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 50)),
           SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('금오요양원', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-              Text('삼족오 보호자님'), //TODO: 내 역할
-            ],
+            Consumer2<UserProvider, ResidentProvider>(
+            builder: (context, userProvider, residentProvider, child) {
+
+              String userRoleString = '';
+              if (userProvider.urole == 'PROTECTOR')
+                userRoleString = '보호자님';
+              else if (userProvider.urole == 'WORKER')
+                userRoleString = '직원님';
+              else if (userProvider.urole == 'MANAGER')
+                userRoleString = '시설장님';
+              else if (userProvider.urole == 'ADMIN')
+                userRoleString = '관리자님';
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(residentProvider.facility_name, textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
+                  Text(userProvider.name + ' ' + userRoleString), //TODO: 내 역할
+                ],
+              );
+            }
           ),
         ],
       ),
