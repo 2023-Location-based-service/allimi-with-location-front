@@ -65,8 +65,8 @@ class _MyAppState extends State<MyApp> {
           if (userProvider.uid == 0)          //userProvider의 uid값이 0이면 로그인이 되지 않은 상태 -> 로그인 페이지로 감
             return LoginPage();
           else if (userProvider.urole == '')  //userProvider의 user role 역할이 없으면 입소자 등록이 안된 상태 -> 초대화면으로 감
-            return InviteWaitPage();
-                   
+            return InviteWaitPage(uid: userProvider.uid);
+                  //  return Container();
           //로그인도 되었고 입소자도 있을 때 화면
           return Scaffold(
             body: getPage(),
@@ -91,9 +91,6 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
           );
-        
-        
-        
         }
       ),
     );

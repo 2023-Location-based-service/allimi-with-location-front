@@ -9,7 +9,7 @@ import 'SignupPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
-String backendUrl = "http://13.125.155.244:8080/v2/";
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 class LoginPage extends StatefulWidget {
   @override
@@ -111,23 +111,17 @@ class _LoginPageState extends State<LoginPage> {
                           }
 
                           var json_data = json.decode(data);
-
                           debugPrint(json_data.toString());
-    
-
-                          //유저정보 받아오기
-                          var userData = await getUserInfo(json_data['user_id']);
-                          var jsonUserData = json.decode(userData);
 
                           var userRole = '';
-                          if (json_data['userRole'] != null) {
-                            userRole = json_data['userRole'];
+                          if (json_data['user_role'] != null) {
+                            userRole = json_data['user_role'];
                             var residentData = await getResidentInfo(json_data['user_id']);
                             var jsonResidentData = json.decode(residentData);
 
                             Provider.of<ResidentProvider>(context, listen:false)
                               .setInfo(jsonResidentData['nhr_id'], jsonResidentData['facility_id'], jsonResidentData['facility_name'], jsonResidentData['resident_name'],
-                                        json_data['userRole'],'', '');
+                                        json_data['user_role'],'', '');
 
                           }
                             
@@ -135,14 +129,11 @@ class _LoginPageState extends State<LoginPage> {
                           var jsonResidentData = json.decode(residentData);
 
                           Provider.of<UserProvider>(context, listen:false)
-                              .setInfo(json_data['user_id'], userRole, jsonUserData['login_id'], jsonUserData['phone_num'], jsonUserData['user_name']);
+                              .setInfo(json_data['user_id'], userRole, _id, json_data['phone_num'], json_data['user_name']);
 
                           Provider.of<UserProvider>(context, listen: false)
                             .getData();
-                          
                         }
-
-                  
                       }
                   ),
                   SizedBox(height: 10.0,),
@@ -173,18 +164,18 @@ class _LoginPageState extends State<LoginPage> {
 
 //-----------------------백엔드에 요청보내는 코드-----------------------//
 //유저 정보 받아오는 url
-Future<String> getUserInfo(int userId) async {
-  http.Response response = await http.get(
-    Uri.parse(backendUrl + "users/" + userId.toString()),
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-      'Accept-Charset': 'utf-8'
-    }
-  );
+// Future<String> getUserInfo(int userId) async {
+//   http.Response response = await http.get(
+//     Uri.parse(backendUrl + "users/" + userId.toString()),
+//     headers: <String, String>{
+//       'Content-Type': 'application/json',
+//       'Accept-Charset': 'utf-8'
+//     }
+//   );
 
-  // "user_name": "string", "phone_num": "string", "login_id": "string"
-  return utf8.decode(response.bodyBytes);
-}
+//   // "user_name": "string", "phone_num": "string", "login_id": "string"
+//   return utf8.decode(response.bodyBytes);
+// }
 
 //입소자 정보 받아오는 url
 Future<String> getResidentInfo(int userId) async {

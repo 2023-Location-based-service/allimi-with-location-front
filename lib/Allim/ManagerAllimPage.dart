@@ -9,7 +9,7 @@ import 'ManagerSecondAllimPage.dart';
 import '/AllimModel.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://13.125.155.244:8080/v2/";
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 class ManagerAllimPage extends StatefulWidget {
 

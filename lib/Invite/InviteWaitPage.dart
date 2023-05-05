@@ -8,20 +8,34 @@ import '/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
-String backendUrl = "http://13.125.155.244:8080/v2/";
-
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 //사용자의 초대대기 화면
 
 class InviteWaitPage extends StatefulWidget {
   @override
   _InviteWaitPageState createState() => _InviteWaitPageState();
+
+  const InviteWaitPage({
+    Key? key, 
+    required this.uid
+  }) : super(key: key);
+
+  final int uid;
 }
 
 class _InviteWaitPageState extends State<InviteWaitPage> {
-  int _count = 3;
+  late int _count ;
+  int uid = 0;
 
   List<Map<String, dynamic>> _residentList = [];
+
+  @override
+  void initState() {
+    this.uid = widget.uid;
+    getResidentList(uid);
+    
+  }
 
   Future<void> getResidentList(int userId) async {
     http.Response response = await http.get(
@@ -37,7 +51,8 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
 
     setState(() {
-      _residentList =  parsedJson;
+      _residentList = parsedJson;
+      this._count = parsedJson.length;
     });
   }
 
@@ -95,50 +110,42 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           children: [
             Container(
                 padding: EdgeInsets.all(15),
-                child: Consumer<UserProvider>(
-                  builder: (context, userProvider, child) {
-                    return FutureBuilder(
-                      future: getResidentList(userProvider.uid),
-                      builder: (context, snap) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '초대 대기목록',
-                                  style: TextStyle(fontSize: 18.0),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(5),
-                                  width: 37, height: 37,
-                                  child: CircleAvatar(
-                                    backgroundColor: Color(0xffF3959D),
-                                    child: Text(
-                                      '$_count',
-                                      style: TextStyle(fontSize: 13, color: Colors.white),
-                                    ),
-                                  ),
-                                )
-                              ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          '초대 대기목록',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          width: 37, height: 37,
+                          child: CircleAvatar(
+                            backgroundColor: Color(0xffF3959D),
+                            child: Text(
+                              '$_count',
+                              style: TextStyle(fontSize: 13, color: Colors.white),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(4),
-                              child: Column(
-                                children:[
-                                  for (var i=0; i< _residentList.length; i++)... [
-                                    addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facliity_name'], _residentList[i]['userRole'],_residentList[i]['date'])
-                                 ]
-                                ],
-                              )
-                            ),
-                          ],
-                        );
-                      }
-                    );
-                  }
+                          ),
+                        )
+                      ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(4),
+                      child: Column(
+                        children:[
+                          for (var i=0; i< _residentList.length; i++)... [
+                            addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date'])
+                          ]
+                        ],
+                      )
+                    ),
+                  ],
                 )
+                
             ),
           ],
         )
@@ -148,7 +155,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
 
 
   Card addList(int id, int facilityId, String name, String facility_name, String userRole, String date){
-
     String userRoleString = '';
 
     if (userRole == 'PROTECTOR')

@@ -8,7 +8,7 @@ import 'MainPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://13.125.155.244:8080/v2/";
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 //입소자 정보 입력 화면
 
@@ -290,6 +290,8 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
 
                                    Navigator.pop(context);
                                 }
+
+                                Provider.of<UserProvider>(context,listen:false).getData();
                               
                               } catch(e) {
                                 String errorMessage = '';
@@ -319,8 +321,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                                     }
                                   );
                               } 
-
-                            
                             
                             }
                           }
