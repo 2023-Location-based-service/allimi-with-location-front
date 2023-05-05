@@ -68,29 +68,31 @@ class _MyAppState extends State<MyApp> {
             return InviteWaitPage(uid: userProvider.uid);
                   //  return Container();
           //로그인도 되었고 입소자도 있을 때 화면
-          return Scaffold(
-            body: getPage(),
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
-              child: BottomNavigationBar(
-                onTap: (index) {
-                  setState(() {
-                    _curIndex = index;
-                  });
-                },
-                currentIndex: _curIndex,
-                unselectedItemColor: Colors.grey,
-                selectedItemColor: themeColor.getColor(),
-                elevation: 0,
-                backgroundColor: Colors.white,
-                selectedFontSize: 12,
-                items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-                  BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-                ],
+          else
+            return Scaffold(
+              body: getPage(),
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+                child: BottomNavigationBar(
+                  onTap: (index) {
+                    setState(() {
+                      _curIndex = index;
+                    });
+                  },
+                  currentIndex: _curIndex,
+                  unselectedItemColor: Colors.grey,
+                  selectedItemColor: themeColor.getColor(),
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  selectedFontSize: 12,
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+                    BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+        
         }
       ),
     );

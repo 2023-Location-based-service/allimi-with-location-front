@@ -98,7 +98,33 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                     ),
                   ),
                   onPressed: (){
-                    pageAnimation(context, LoginPage());
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AlertDialog(
+                            content: const Text('로그아웃하시겠습니까?'),
+                            actions: [
+                              TextButton(child: Text('아니오',
+                                style: TextStyle(color: themeColor.getMaterialColor())),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                              TextButton(child: Text('예',
+                                    style: TextStyle(color: themeColor.getMaterialColor())),
+                                      onPressed: () {
+                                      Provider.of<UserProvider>(context, listen:false) //로그아웃
+                                        .uid = 0;
+
+                                      Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
+                                       .getData();
+                                      Navigator.pop(context);
+                                  })
+                                
+                            ],
+                          ),
+                    );
+
+                     
                   }
               ),
             ),
@@ -130,7 +156,11 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                               style: TextStyle(fontSize: 13, color: Colors.white),
                             ),
                           ),
-                        )
+                        ),
+                        IconButton(onPressed: () {
+                          getResidentList(uid);
+                        }, icon: Icon(Icons.restart_alt))
+                        
                       ],
                     ),
                     Container(
@@ -172,7 +202,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           child: Row(
             children: [
               Text(
-                  '금오요양원: 보호자'
+                facility_name + ": " + userRoleString
               ),
               Spacer(),
               Container(
