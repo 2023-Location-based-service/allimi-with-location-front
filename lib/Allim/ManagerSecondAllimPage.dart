@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; //http 사용
+import 'package:http/http.dart' as http;
+import 'package:test_data/Allim/EditAllimPage.dart';
+import 'package:test_data/Supplementary/PageRouteWithAnimation.dart'; //http 사용
 
 String backendUrl = "http://52.78.62.115:8080/v2/";
 
@@ -66,7 +68,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     _noticeDetail = parsedJson;
 
     _imageUrls = List<String>.from(parsedJson['image_url']);
-
   }
 
   @override
@@ -102,11 +103,11 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '삼족오 보호자님',
+                          '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
                           style: TextStyle(fontSize: 13),
                         ),
                         Text(
-                          _noticeDetail['create_date'].toString().substring(0, 10), //TODO 2023-03-30으로 바꾸기
+                          _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
                           style: TextStyle(fontSize: 10),
                         ),
                       ],
@@ -116,7 +117,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                     Container(
                       child: OutlinedButton(
                           onPressed: (){
-                            //수정 화면으로 넘어가기
+                            pageAnimation(context, EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,));
                           },
                           child: Text('수정')
                       ),

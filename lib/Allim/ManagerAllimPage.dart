@@ -99,14 +99,14 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                             //어떤 보호자에게 썼는지
                                             Container(
                                               child: Text(
-                                                '어떤 보호자?',
+                                                _noticeList[index]['resident_name'] + " 입소자님",
                                                 style: TextStyle(fontSize: 12,),
                                               ),
                                             ),
                                             //언제 썼는지
                                             Container(
                                               child: Text(
-                                                _noticeList[index]['create_date'].toString().substring(0, 10),
+                                                _noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'),
                                                 style: TextStyle(fontSize: 10,)
                                                 
                                               ),
@@ -143,7 +143,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                             ),
                             onTap: (){
                               pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId']));
-                              print(index);
+                     
                             },
                           ),
                       );

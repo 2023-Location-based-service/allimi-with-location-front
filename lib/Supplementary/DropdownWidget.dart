@@ -5,10 +5,12 @@ import 'package:test_data/provider/AllimTempProvider.dart';
 class AllimFirstDropdown extends StatefulWidget {
   const AllimFirstDropdown({
     Key? key,
-    required this.menu
+    required this.menu,
+    this.initialVal = '금식'
   }) : super(key: key);
 
   final String menu;
+  final String initialVal;
 
   @override
   State<AllimFirstDropdown> createState() => _AllimFirstDropdownState();
@@ -17,6 +19,7 @@ class AllimFirstDropdown extends StatefulWidget {
 class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
   final items = ['금식', '전량섭취', '반량섭취'];
   String? selectedValue;
+  late String initialVal = '';
 
   String menu = '';
 
@@ -24,7 +27,8 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
   void initState() {
     super.initState();
     setState(() {
-      selectedValue = items[0];
+      initialVal = widget.initialVal;
+      selectedValue = items[items.indexOf(initialVal)];
       menu = widget.menu;
     });
   }
@@ -40,6 +44,7 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
             child: Text(e))).toList(),
         onChanged: (value) {
           setState(() => selectedValue = value!);
+
           if (menu == '아침') {
             Provider.of<AllimTempProvider>(context, listen: false)
               .setMorning(value);
@@ -61,7 +66,12 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
 
 
 class AllimSecondDropdown extends StatefulWidget {
-  const AllimSecondDropdown({Key? key}) : super(key: key);
+  const AllimSecondDropdown({
+    Key? key,
+    this.initialVal = '해당 사항 없음'
+  }) : super(key: key);
+  
+  final String initialVal;
 
   @override
   State<AllimSecondDropdown> createState() => _AllimSecondDropdownState();
@@ -70,12 +80,14 @@ class AllimSecondDropdown extends StatefulWidget {
 class _AllimSecondDropdownState extends State<AllimSecondDropdown> {
   final items = ['해당 사항 없음','아침', '점심', '저녁', '아침&점심', '아침&저녁', '점심&저녁', '아침&점심&저녁'];
   String? selectedValue;
+  String initialVal = '';
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      selectedValue = items[0];
+      initialVal = widget.initialVal;   
+      selectedValue = items[items.indexOf(initialVal)];
     });
   }
 

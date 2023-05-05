@@ -65,6 +65,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         _pickedImgs.addAll(images);
       });
     }
+
+    debugPrint("@@@"+ images.toString());
   }
 
   // 카메라
