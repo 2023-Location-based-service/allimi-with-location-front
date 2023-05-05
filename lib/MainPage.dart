@@ -9,7 +9,6 @@ import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Notice/ManagerNoticePage.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
-import 'Allim/UserAllimPage.dart';
 import 'Allim/ManagerAllimPage.dart';
 import 'VisitRequest/UserRequestPage.dart';
 import 'VisitRequest/ManagerRequestPage.dart';
@@ -28,6 +27,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   List<String> textEmoji = ['📢', '✏', '🗓', '🍀', '💌', '🔧'];
   List<String> textMenu = ['공지사항', '알림장', '일정표', '면회 관리', '한마디', '시설 설정'];
+  late String _userRole = '';
+  late int _resident_id = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +94,8 @@ class _MainPageState extends State<MainPage> {
           SizedBox(width: 10),
             Consumer2<UserProvider, ResidentProvider>(
             builder: (context, userProvider, residentProvider, child) {
+              _userRole = userProvider.urole;
+              _resident_id = residentProvider.resident_id;
 
               String userRoleString = '';
               if (userProvider.urole == 'PROTECTOR')
@@ -177,7 +180,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, ManagerAllimPage()); //일단은 요양보호사 버전으로
+        pageAnimation(context, ManagerAllimPage(userRole: _userRole, residentId: _resident_id)); //일단은 요양보호사 버전으로
         break;
       case 2:
         print('일정표 Tap');

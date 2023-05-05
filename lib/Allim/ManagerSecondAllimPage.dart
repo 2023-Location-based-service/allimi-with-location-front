@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_data/Allim/EditAllimPage.dart';
-import 'package:test_data/Supplementary/PageRouteWithAnimation.dart'; //http 사용
+import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
+import 'package:test_data/provider/UserProvider.dart'; //http 사용
 
 String backendUrl = "http://52.78.62.115:8080/v2/";
 
@@ -12,10 +13,12 @@ String backendUrl = "http://52.78.62.115:8080/v2/";
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage({
     Key? key,
-    required this.noticeId
+    required this.noticeId,
+    required this.userRole
   }) : super(key: key);
 
   final int noticeId;
+  final String userRole;
 
   @override
   State<ManagerSecondAllimPage> createState() => _ManagerSecondAllimPageState();
@@ -25,12 +28,17 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   late int _noticeId;
   late Map<String, dynamic> _noticeDetail = Map<String, dynamic>();
   late List<String> _imageUrls = [];
+  late String _userRole;
 
   void initState() {
     _noticeId = widget.noticeId;
+    _userRole = widget.userRole;
+    getNoticeDetail();
   }
 
   Future<void> deleteNotice(int noticeId) async {
+      debugPrint("@@@@@ 알림장삭제 백앤드 url 보냄");
+
     http.Response response = await http.delete(
       Uri.parse(backendUrl+ 'notices'),
       headers: <String, String>{
@@ -47,6 +55,8 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   }
 
   Future<void> getNoticeDetail() async {
+      debugPrint("@@@@@ 공지사항 상세정보 받아오는 백앤드 url 보냄");
+
     http.Response response = await http.get(
       Uri.parse(backendUrl+ 'notices/detail/' + _noticeId.toString()),
       headers: <String, String>{
@@ -68,6 +78,10 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     _noticeDetail = parsedJson;
 
     _imageUrls = List<String>.from(parsedJson['image_url']);
+
+    setState(() {
+      
+    });
   }
 
   @override
@@ -83,9 +97,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   }
   //시설장 및 직원 알림장(각 목록)
   Widget eachmanager() {
-    return FutureBuilder(
-      future: getNoticeDetail(),
-      builder: (context, snap) {
         if (_noticeDetail['notice_id'] == null)
           return Text("asdf");
 
@@ -114,68 +125,60 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
 
                     ),
                     Spacer(),
-                    Container(
-                      child: OutlinedButton(
-                          onPressed: (){
-                            pageAnimation(context, EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,));
-                          },
-                          child: Text('수정')
-                      ),
+                    
+                    if (_userRole != 'PROTECTOR')
+                      Container(
+                        child: OutlinedButton(
+                            onPressed: (){
+                              pageAnimation(context, EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,));
+                            },
+                            child: Text('수정')
+                        ),
 
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      //alignment: Alignment.centerRight,
-                      child: OutlinedButton(
-                          onPressed: () async {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Text("정말 삭제하시겠습니까>"),
-                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('삭제'),
-                                      onPressed: () async {
-                                        try {
-                                          await deleteNotice(_noticeId);
-                                        } catch(e) {
-                                        }
-
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: const Text('취소'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
-                          },
-                          child: Text('삭제')
                       ),
-                    ),
+                    if (_userRole != 'PROTECTOR')
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        //alignment: Alignment.centerRight,
+                        child: OutlinedButton(
+                            onPressed: () async {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Text("정말 삭제하시겠습니까>"),
+                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('삭제'),
+                                        onPressed: () async {
+                                          try {
+                                            await deleteNotice(_noticeId);
+                                          } catch(e) {
+                                          }
+
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('취소'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }
+                              );
+                            },
+                            child: Text('삭제')
+                        ),
+                      ),
+                    
                   ],
                 ),
               ),
-
-              // //알림장 사진
-              // Container(
-              //     margin: EdgeInsets.fromLTRB(0,10,0,0),
-              //     width: double.infinity,
-              //     color: Colors.white,
-              //     height: 300,
-              //     child: Container(
-              //       child: Image.asset('assets/images/tree.jpg', fit: BoxFit.fill,),
-              //     )
-              // ),
-
               Column(
                 children: [
                   for (int i =0; i< _imageUrls.length; i++ ) ...[
@@ -203,7 +206,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
           
         );
       }
-    );
+
   }
 
   //알림장 안에 있는 어르신의 일일정보 함수
@@ -242,7 +245,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         Text('$text2',style: TextStyle(fontSize: 15,color: Colors.black),),
       ],
     );
-  }
+  
 
 }
 

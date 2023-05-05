@@ -163,22 +163,10 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 //-----------------------백엔드에 요청보내는 코드-----------------------//
-//유저 정보 받아오는 url
-// Future<String> getUserInfo(int userId) async {
-//   http.Response response = await http.get(
-//     Uri.parse(backendUrl + "users/" + userId.toString()),
-//     headers: <String, String>{
-//       'Content-Type': 'application/json',
-//       'Accept-Charset': 'utf-8'
-//     }
-//   );
-
-//   // "user_name": "string", "phone_num": "string", "login_id": "string"
-//   return utf8.decode(response.bodyBytes);
-// }
 
 //입소자 정보 받아오는 url
 Future<String> getResidentInfo(int userId) async {
+  debugPrint("@@@@@ 입소자 정보 받아오는 백앤드 url 보냄");
   http.Response response = await http.get(
     Uri.parse(backendUrl+ 'users/nhrs/' + userId.toString()),
     headers: <String, String>{
@@ -192,6 +180,8 @@ Future<String> getResidentInfo(int userId) async {
 
 //로그인 요청 받는 request
 Future<String> loginRequest(String id, String password) async {
+    debugPrint("@@@@@ 로그인 백앤드 url 보냄");
+
   http.Response response = await http.post(
     Uri.parse(backendUrl+"login"),
     headers: <String, String>{

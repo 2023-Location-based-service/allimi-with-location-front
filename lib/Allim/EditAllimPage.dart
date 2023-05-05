@@ -9,6 +9,8 @@ import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/DropdownWidget.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as ppp;
+import 'package:path_provider/path_provider.dart' as pp;
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +22,23 @@ String backendUrl = "http://52.78.62.115:8080/v2/";
 
 ThemeColor themeColor = ThemeColor();
 
-class WriteAllimPage extends StatefulWidget {
-  const WriteAllimPage({Key? key}) : super(key: key);
+class EditAllimPage extends StatefulWidget {
+  const EditAllimPage({Key? key, 
+    required this.noticeId,
+    required this.noticeDetail,
+    required this.imageUrls
+  }) : super(key: key);
+
+  final Map<String, dynamic> noticeDetail;
+  final List<String> imageUrls;
+
+  final int noticeId;
 
   @override
-  State<WriteAllimPage> createState() => _WriteAllimPageState();
+  State<EditAllimPage> createState() => _EditAllimPageState();
 }
 
-class _WriteAllimPageState extends State<WriteAllimPage> {
+class _EditAllimPageState extends State<EditAllimPage> {
 
   final formKey = GlobalKey<FormState>();
   String selectedPerson = "수급자 선택";
@@ -37,7 +48,50 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
-    List<Map<String, dynamic>> _residents = []; // 수정된 부분
+  List<Map<String, dynamic>> _residents = []; // 수정된 부분
+
+  late int _noticeId;
+  late Map<String, dynamic> _noticeDetail;
+  late List<String> _imageUrls;
+
+  void initState() {
+    _noticeId = widget.noticeId;
+    _noticeDetail = widget.noticeDetail;
+    _imageUrls = widget.imageUrls;
+
+    _contents = _noticeDetail['content'];
+    
+
+    getFile();
+  }
+
+  Future<void> getFile() async {
+    List<XFile> filesList= await _fileFromImageUrl(_imageUrls);
+
+   
+      _pickedImgs.addAll(filesList);
+    
+    setState(() {
+      
+    });
+  }
+
+  Future<List<XFile>> _fileFromImageUrl(List<String> imageUrls) async {
+    List<XFile> xfileList  = [];
+
+    for (String url in imageUrls) {
+      debugPrint("@@@@" + url);
+      final response = await http.get(Uri.parse(url));
+      final documentDirectory = await pp.getApplicationDocumentsDirectory();
+      final file = File(ppp.join(documentDirectory.path, "a.png"));
+      file.writeAsBytesSync(response.bodyBytes);
+
+      final xfile = new XFile(file.path);
+      xfileList.add(xfile);
+    }
+
+    return xfileList;
+  }
 
   Future<void> getFacilityResident(int facilityId) async {
       debugPrint("@@@@@ 시설의 입소자 정보 받아오는 백앤드 url 보냄");
@@ -67,8 +121,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         _pickedImgs.addAll(images);
       });
     }
-
-    debugPrint("@@@"+ images.toString());
   }
 
   // 카메라
@@ -82,13 +134,13 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
   }
 
   // 서버에 알림장 업로드 + 사진 업로드
-  Future<void> addAllim(userId, facilityId) async {
+  Future<void> editAllim(userId, facilityId) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
     var formData = FormData.fromMap({
       "notice": MultipartFile.fromString(
         jsonEncode(
-          {"user_id": userId, "nhresident_id": selectedPersonId, "facility_id": facilityId, 
-           "contents": _contents, "sub_contents": _subContents}),
+          {"notice_id": _noticeId, "user_id": userId, "resident_id": selectedPersonId, 
+           "content": _contents, "sub_content": _subContents}),
         contentType: MediaType.parse('application/json'),
       ),
       "file": _files
@@ -96,7 +148,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
-    final response = await dio.post(backendUrl + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+    final response = await dio.patch(backendUrl + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+
 
     if (response.statusCode == 200) {
       print("성공");
@@ -111,9 +164,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     return Consumer3<UserProvider, ResidentProvider,AllimTempProvider> (
       builder: (context, userProvider, residentProvider,allimTempProvider, child) {
         return customPage(
-          title: '알림장 작성',
+          title: '알림장 수정',
           onPressed: () async {
-            print('알림장 작성 완료버튼 누름');
             //수급자 선택 안하면 다이얼로그 띄우기
             if (selectedPersonId == 0) {
               showDialog(
@@ -147,7 +199,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
               _subContents += allimTempProvider.medication;
 
               try {
-                await addAllim(userProvider.uid, residentProvider.facility_id);
+                await editAllim(userProvider.uid, residentProvider.facility_id);
                 _pickedImgs = [];
                 setState(() {});
                 Navigator.pop(context);
@@ -305,6 +357,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         width: double.infinity,
         height: 350,
         child: TextFormField(
+          initialValue: _contents,
           validator: (value) {
             if(value!.isEmpty) { return '내용을 입력하세요'; }
             else { return null; }
@@ -340,6 +393,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
   }
 
   Widget getDropdown() {
+    List<String> subContent = _noticeDetail['sub_content'].toString().split('\n');
     return Container(
         color: Colors.white,
         child: Column(
@@ -354,10 +408,10 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                 ],
               ),
             ),
-            dropList('아침', AllimFirstDropdown(menu: "아침")),
-            dropList('점심', AllimFirstDropdown(menu: "점심")),
-            dropList('저녁', AllimFirstDropdown(menu: "저녁")),
-            dropList('투약', AllimSecondDropdown()),
+            dropList('아침', AllimFirstDropdown(menu: "아침", initialVal: subContent[0])),
+            dropList('점심', AllimFirstDropdown(menu: "점심", initialVal: subContent[1])),
+            dropList('저녁', AllimFirstDropdown(menu: "저녁", initialVal: subContent[2])),
+            dropList('투약', AllimSecondDropdown(initialVal: subContent[3])),
           ],
         )
     );
@@ -408,47 +462,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
             },
           ),
-
-
-          //사진 리스트 출력
-          // Container(
-          //   height: 96,
-          //   color: Colors.white,
-          //   child: ListView.builder(
-          //       shrinkWrap: true,
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: imgList.length,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         return Container(
-          //             margin: EdgeInsets.fromLTRB(3,8,3,8),
-          //             child: Stack(
-          //               children: [
-          //                 ClipRRect(
-          //                   child: Image.asset(
-          //                     width: 80,
-          //                     height: 80,
-          //                     imgList[index], //TODO: 사진 리스트
-          //                     fit: BoxFit.cover,
-          //                   ),
-          //                 ),
-          //                 Positioned(
-          //                   top: 3,
-          //                   right: 3,
-          //                   child: GestureDetector(
-          //                     child: Container(
-          //                       child: Icon(Icons.cancel_rounded, color: Colors.black54),
-          //                     ),
-          //                     onTap: () {
-          //                       print('사진 삭제 Tap'); //TODO: 사진 삭제 기능
-          //                     },
-          //                   ),
-          //                 ),
-          //               ],
-          //             )
-          //         );
-          //       }
-          //   ),
-          // ),
         ],
       ),
     );

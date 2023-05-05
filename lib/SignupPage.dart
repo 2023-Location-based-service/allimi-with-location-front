@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http; //http 사용
 String backendUrl = "http://52.78.62.115:8080/v2/";
 
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
+    debugPrint("@@@@@ 회원가입 백앤드 url 보냄");
+
   http.Response response = await http.post(
     Uri.parse(backendUrl+"users"),
     headers: <String, String>{

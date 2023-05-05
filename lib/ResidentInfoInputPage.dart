@@ -83,10 +83,12 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
       healthInfo += "심장병";
     
      //TODO 기타저장 안됨
+  debugPrint("@@@@@ 입소자 추가하는 백앤드 url 보냄");
 
 
     //입소자추가 psot
     http.Response response1 = await http.post(
+      
       Uri.parse(backendUrl+ 'nhResidents'),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -105,6 +107,8 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     if (response1.statusCode != 200) {
         throw Exception('POST request failed');
     }
+      debugPrint("@@@@@ 초대 수락하는 백앤드 url 보냄");
+
 
     http.Response response2 = await http.post(
       Uri.parse(backendUrl+ 'invitations/approve'),

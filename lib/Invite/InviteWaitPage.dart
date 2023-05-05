@@ -38,6 +38,8 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
   }
 
   Future<void> getResidentList(int userId) async {
+      debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
+
     http.Response response = await http.get(
       Uri.parse(backendUrl + "users/invitations/" + userId.toString()),
       headers: <String, String>{
