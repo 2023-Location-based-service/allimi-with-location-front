@@ -1,6 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../provider/ResidentProvider.dart';
+import '../provider/UserProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
+import 'package:http/http.dart' as http; //http 사용
+
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 //초대하기 화면
 
@@ -10,37 +18,80 @@ class InvitePage extends StatefulWidget {
   @override
   State<InvitePage> createState() => _InvitePageState();
 }
-enum Answer {protect, employee}
+enum Answer {PROTECTOR, WORKER}
 
 class _InvitePageState extends State<InvitePage> {
   String result = '';
   bool isprotect = true;
   bool isemployee = false;
   late List<bool> isSelected;
-
   @override
   void initState() {
     isSelected = [isprotect, isemployee];
     super.initState();
   }
-
   final formKey = GlobalKey<FormState>();
+
+  // 서버에 초대하기 업로드
+  Future<void> addComment(userId, facilityId, userRole) async {
+    var url = Uri.parse(backendUrl + 'invitations');
+    var headers = {'Content-type': 'application/json'};
+    var body = json.encode({
+      "user_id": userId,
+      "facility_id": facilityId,
+      "user_role": userRole,
+    });
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print("성공");
+    } else {
+      throw Exception();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return customPage(
-      title: '초대하기',
-      onPressed: () {
-        print('초대하기 누름');
-
-        if(this.formKey.currentState!.validate()) {
-
-          //TODO: 확인 버튼 누르면 실행되어야 하는 부분
-
-          Navigator.pop(context);
-        }},
-      body: inviteFormat(),
-      buttonName: '확인',
+    return Consumer2<UserProvider, ResidentProvider> (
+        builder: (context, userProvider, residentProvider, child){
+          return customPage(
+            title: '초대하기',
+            onPressed: () async {
+              print('초대하기 누름');
+              if(this.formKey.currentState!.validate()) {
+                this.formKey.currentState!.save();
+                try {
+                  await addComment(userProvider.uid, residentProvider.facility_id, userProvider.urole);
+                  setState(() {});
+                  Navigator.pop(context);
+                } catch(e) {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text("초대 실패! 다시 시도해주세요"),
+                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          actions: [
+                            TextButton(
+                              child: const Text('확인'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                }
+              }},
+            body: inviteFormat(),
+            buttonName: '확인',
+          );
+        }
     );
+
   }
   Widget inviteFormat(){
     return ListView.builder(

@@ -93,7 +93,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
         })
     );
 
-    if (response != 200){
+    if (response.statusCode == 200){
       setState(() {
         _CommentList.removeWhere((comment) => comment['letter_id'] == letterid);
       });
@@ -122,7 +122,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   children: [
                     if (_userRole != 'PROTECTOR')
                       Container(
-                        child: Text(_CommentList[index]['nhr_name'] + " 입소자님", textScaleFactor: 1.0,),
+                        child: Text(_CommentList[index]['nhr_name'] + " 보호자님", textScaleFactor: 1.0,),
                       ),
                       Row(
                       children: [
