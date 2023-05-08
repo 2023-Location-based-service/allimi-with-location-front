@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Setup/MyProfilePage.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '../AddFacilities.dart';
 import '/Supplementary/ThemeColor.dart';
@@ -30,7 +31,7 @@ class _SetupPageState extends State<SetupPage> {
           appProfile(),
           appInmateProfile(),
           appLogout(),
-          appTest(),
+          //appTest(),
         ],
       ),
     );
@@ -48,7 +49,7 @@ class _SetupPageState extends State<SetupPage> {
     return ListTile(
         title: Text('내 정보'),
         leading: Icon(Icons.person_rounded, color: Colors.grey),
-        onTap: () { pageAnimation(context, myProfile()); });
+        onTap: () { pageAnimation(context, MyProfilePage()); });
   }
 
   Widget appInmateProfile() {
@@ -92,46 +93,9 @@ class _SetupPageState extends State<SetupPage> {
   }
 
   //내 정보
-  Widget myProfile() {
-    return Scaffold(
-        appBar: AppBar(title: Text('내 정보')),
-        backgroundColor: Colors.white,
-        body: ListView(
-          children: [
-            Text('아이디'),
-            myProfileBox('kumohtest'),
-            Text('역할'),
-            myProfileBox('보호자'),
-            Text('이름'),
-            myProfileBox('구현진'),
-            Text('전화번호'),
-            myProfileBox('010-1234-5678'),
-          ],
-        )
-    );
-  }
 
-  Widget myProfileBox(String text) {
-    return Container(
-        width: double.infinity,
-        height: 50,
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        decoration: BoxDecoration(
-          color: Color(0xfff2f3f6),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text('$text', textScaleFactor: 1.2),
-            ],
-          )
-        )
-    );
-  }
+
+
 
   //입소자 정보
   Widget myInmateProfile() {

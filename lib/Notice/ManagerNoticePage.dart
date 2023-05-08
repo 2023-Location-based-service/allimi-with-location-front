@@ -27,7 +27,7 @@ class ManagerNoticePage extends StatefulWidget {
 
 class _ManagerNoticePageState extends State<ManagerNoticePage> {
   String _userRole = '';
-  int _facilityId = 0;
+  late int _facilityId;
   List<Map<String, dynamic>> _noticeList = [];
 
   Future<void> getNotice(int residentId) async {
@@ -41,7 +41,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         }
     );
 
-    var data =  utf8.decode(response.bodyBytes);
+    var data = utf8.decode(response.bodyBytes);
     dynamic decodedJson = json.decode(data);
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
 
