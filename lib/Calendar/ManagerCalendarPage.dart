@@ -10,10 +10,11 @@ String backendUrl = "http://52.78.62.115:8080/v2/";
 ThemeColor themeColor = ThemeColor();
 
 class ManagerCalendarPage extends StatefulWidget {
-  const ManagerCalendarPage({Key? key, required this.userId, required this.facility_id}) : super(key: key);
+  const ManagerCalendarPage({Key? key, required this.userId, required this.userRole, required this.facility_id}) : super(key: key);
 
   final int facility_id;
-  final int userId;
+  final String userRole;
+    final int userId;
 
   @override
   State<ManagerCalendarPage> createState() => _ManagerCalendarPageState();
@@ -35,6 +36,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
 
   late int _facility_id;
   late int _userId;
+  late String _userRole;
 
   final titleController = TextEditingController();
   final descpController = TextEditingController();
@@ -47,6 +49,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
     _selectedDate = _focusedDay;
     _facility_id = widget.facility_id;
     _userId = widget.userId;
+    _userRole = widget.userRole;
     loadPreviousEvents();
     getSchedules();
   }
@@ -189,84 +192,102 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
             ListTile(
               leading: const Icon(Icons.done_rounded, color: Colors.teal),
               title: Text('${sc.eventName}'),
-                trailing: OutlinedButton(
-                  child: Text('삭제'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text("정말 삭제하시겠습니까?"),
-                          insetPadding:
-                              const EdgeInsets.fromLTRB(0, 80, 0, 80),
-                          actions: [
-                            TextButton(
-                              child: Text(
-                                '취소',
-                                style: TextStyle(
-                                  color: themeColor.getColor(),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text(
-                                '삭제',
-                                style: TextStyle(
-                                  color: themeColor.getColor(),
-                                ),
-                              ),
-                              onPressed: () async {
-                                try {
-                                  
-                                  await deleteSchedule(sc.scheduleId);
-                                  setState(() {
-                                    mySelectedEvents = {};
-                                    getSchedules();
-                                  });
-                                  
-
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible:
-                                        false, // 바깥 영역 터치시 닫을지 여부
-                                    builder: (BuildContext context3) {
-
-                                      return AlertDialog(
-                                        content: Text('삭제되었습니다'),
-                                        insetPadding:
-                                            const EdgeInsets.fromLTRB(
-                                                0, 80, 0, 80),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('확인'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    });
-                                } catch (e) {
-                                  debugPrint("@@@@@ososfdo");
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                  },
-                ),
-              //subtitle: Text('Description:   ${myEvents['eventDescp']}'),
+                trailing: _getFAB(sc)
             )
           ],
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _getFAB2()
+    );
+  }
+
+  Widget _getFAB(Schedule sc) {
+    if (_userRole == 'PROTECTOR') {
+      return Visibility(
+        visible: false,
+        child: Text('')
+      );
+    } else {
+      return OutlinedButton(
+        child: Text('삭제'),
+        onPressed: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text("정말 삭제하시겠습니까?"),
+                insetPadding:
+                    const EdgeInsets.fromLTRB(0, 80, 0, 80),
+                actions: [
+                  TextButton(
+                    child: Text(
+                      '취소',
+                      style: TextStyle(
+                        color: themeColor.getColor(),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      '삭제',
+                      style: TextStyle(
+                        color: themeColor.getColor(),
+                      ),
+                    ),
+                    onPressed: () async {
+                      try {
+                        await deleteSchedule(sc.scheduleId);
+                        setState(() {
+                          mySelectedEvents = {};
+                          getSchedules();
+                        });
+                        
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible:
+                              false, // 바깥 영역 터치시 닫을지 여부
+                          builder: (BuildContext context3) {
+
+                            return AlertDialog(
+                              content: Text('삭제되었습니다'),
+                              insetPadding:
+                                  const EdgeInsets.fromLTRB(
+                                      0, 80, 0, 80),
+                              actions: [
+                                TextButton(
+                                  child: const Text('확인'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                      } catch (e) {
+                        debugPrint("@@@@@ososfdo");
+                      }
+                    },
+                  ),
+                ],
+              );
+            });
+        },
+      );         
+    
+    }         
+  }
+
+  Widget _getFAB2() {
+    if (_userRole == 'PROTECTOR') {
+      return Container();
+    } else {
+      return FloatingActionButton(
         focusColor: Colors.white54,
         backgroundColor: themeColor.getColor(),
         elevation: 0,
@@ -275,10 +296,10 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
         hoverElevation: 0,
         onPressed: () { _showAddEventDialog(); },
         child: Icon(Icons.create_rounded, color: Colors.white),
-      )
-    );
-  }
+      );
+    }         
 
+  }
 
   loadPreviousEvents() {
     mySelectedEvents = {};

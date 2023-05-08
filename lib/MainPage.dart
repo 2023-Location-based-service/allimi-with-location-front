@@ -56,26 +56,30 @@ class _MainPageState extends State<MainPage> {
 
   //소속추가 버튼
   Widget addGroup() {
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.all(4),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.white,
-            border: Border.all(color: themeColor.getColor(), width: 0.5)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.menu_rounded, color: themeColor.getColor()),
-            //Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
-          ],
-        ),
-      ),
-      onTap: () {
-        print('소속추가 Tap');
-        //TODO: 요양원 이름, 입소자 이름 나오는 페이지
-        pageAnimation(context, AddPersonPage());
-      },
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return GestureDetector(
+          child: Container(
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white,
+                border: Border.all(color: themeColor.getColor(), width: 0.5)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.menu_rounded, color: themeColor.getColor()),
+                //Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
+              ],
+            ),
+          ),
+          onTap: () {
+            print('소속추가 Tap');
+            //TODO: 요양원 이름, 입소자 이름 나오는 페이지
+            pageAnimation(context, AddPersonPage(uid: userProvider.uid));
+          },
+        );
+      }
     );
   }
 
@@ -103,7 +107,7 @@ class _MainPageState extends State<MainPage> {
 
               String userRoleString = '';
               if (userProvider.urole == 'PROTECTOR')
-                userRoleString = '보호자님';
+                userRoleString = '보호자님' + '(' + residentProvider.resident_name + '님)';
               else if (userProvider.urole == 'WORKER')
                 userRoleString = '직원님';
               else if (userProvider.urole == 'MANAGER')
@@ -147,7 +151,7 @@ class _MainPageState extends State<MainPage> {
       child: GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: textMenu.length, //총 몇 개 출력할 건지
+          itemCount: (_userRole == 'PROTECTOR')? textMenu.length-1 : textMenu.length, //총 몇 개 출력할 건지
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, //한 행에 몇 개 출력할 건지
             childAspectRatio: 2/2.2, //가로세로 비율
@@ -187,7 +191,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 2:
         print('일정표 Tap');
-        pageAnimation(context, ManagerCalendarPage(userId: _userId, facility_id: _facility_id)); //일단은 요양보호사 버전으로
+        pageAnimation(context, ManagerCalendarPage(userId: _userId, userRole: _userRole,  facility_id: _facility_id)); //일단은 요양보호사 버전으로
         break;
       case 3:
         print('면회신청 Tap');
