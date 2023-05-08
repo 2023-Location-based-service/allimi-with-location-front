@@ -54,7 +54,6 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                 this.formKey.currentState!.save();
                 try {
                   await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
-                  setState(() {});
                   Navigator.pop(context);
                 } catch(e) {
                   showDialog(

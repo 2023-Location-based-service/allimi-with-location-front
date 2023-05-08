@@ -101,9 +101,9 @@ class _MyAppState extends State<MyApp> {
   Widget getPage() {
     Widget page;
     switch(_curIndex) {
-      case 0: page = MainPage(); break;
-      case 1: page = SetupPage(); break;
-      default: page = MainPage(); break;
+      case 0: page = new MainPage(); break;
+      case 1: page = new SetupPage(); break;
+      default: page = new MainPage(); break;
     }
     return page;
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/AddFacilities.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '/LoginPage.dart';
 import '/ResidentInfoInputPage.dart';
@@ -38,7 +39,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
   }
 
   Future<void> getResidentList(int userId) async {
-      debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
+    debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
       Uri.parse(backendUrl + "users/invitations/" + userId.toString()),
@@ -81,7 +82,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                     ),
                   ),
                   onPressed: (){
-                    //pageAnimation(context, 시설추가);
+                    pageAnimation(context, AddFacilities());
                   }
               ),
             ),
@@ -112,15 +113,15 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                                     Navigator.pop(context);
                                   }),
                               TextButton(child: Text('예',
-                                    style: TextStyle(color: themeColor.getMaterialColor())),
-                                      onPressed: () {
-                                      Provider.of<UserProvider>(context, listen:false) //로그아웃
-                                        .uid = 0;
+                                style: TextStyle(color: themeColor.getMaterialColor())),
+                                  onPressed: () {
+                                  Provider.of<UserProvider>(context, listen:false) //로그아웃
+                                    .uid = 0;
 
-                                      Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
-                                       .getData();
-                                      Navigator.pop(context);
-                                  })
+                                  Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
+                                    .getData();
+                                  Navigator.pop(context);
+                              })
                                 
                             ],
                           ),

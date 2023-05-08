@@ -69,7 +69,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     }
   }
 
-   Future<String> addResident(int uid) async {
+  Future<String> addResident(int uid) async {
     if (_isHighBloodPress) 
       healthInfo += "고혈압\n";
     
@@ -83,7 +83,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
       healthInfo += "심장병";
     
      //TODO 기타저장 안됨
-  debugPrint("@@@@@ 입소자 추가하는 백앤드 url 보냄");
+    debugPrint("@@@@@ 입소자 추가하는 백앤드 url 보냄");
 
 
     //입소자추가 psot

@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:test_data/provider/ResidentProvider.dart';
-import 'package:test_data/provider/UserProvider.dart';
 import '/Allim/WriteAllimPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
@@ -78,10 +75,15 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       return Container();
     else
       return FloatingActionButton(
-      onPressed: () {
+      onPressed: () async{
         //글쓰기 화면으로 이동
-        pageAnimation(context, WriteAllimPage());
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WriteAllimPage()),
+        );
 
+        getNotice(_residentId);
       },
       child: const Icon(Icons.create),
     );
@@ -166,7 +168,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                       ],
                     ),
                     onTap: (){
-                      pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole,));
+                      pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole));
               
                     },
                   ),

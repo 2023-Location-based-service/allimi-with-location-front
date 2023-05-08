@@ -1,14 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:test_data/Allim/EditAllimPage.dart';
 import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
-import 'package:test_data/provider/UserProvider.dart'; //http 사용
+import 'package:test_data/provider/ResidentProvider.dart';
 
 String backendUrl = "http://52.78.62.115:8080/v2/";
-
 
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage({
@@ -30,6 +29,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   late List<String> _imageUrls = [];
   late String _userRole;
 
+  @override
   void initState() {
     _noticeId = widget.noticeId;
     _userRole = widget.userRole;
@@ -37,7 +37,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   }
 
   Future<void> deleteNotice(int noticeId) async {
-      debugPrint("@@@@@ 알림장삭제 백앤드 url 보냄");
 
     http.Response response = await http.delete(
       Uri.parse(backendUrl+ 'notices'),
@@ -64,8 +63,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         'Accept-Charset': 'utf-8'
       }
     );
-
-    debugPrint(backendUrl+ 'notices/detail/' + _noticeId.toString());
 
     if (response.statusCode != 202) {
         throw Exception('POST request failed');
@@ -128,11 +125,15 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                     
                     if (_userRole != 'PROTECTOR')
                       Container(
-                        child: OutlinedButton(
-                            onPressed: (){
-                              pageAnimation(context, EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,));
-                            },
-                            child: Text('수정')
+                        child: Consumer<ResidentProvider>(
+                          builder: (context, residentProvider, child) {
+                            return OutlinedButton(
+                                onPressed: (){
+                                  pageAnimation(context, EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,));
+                                },
+                                child: Text('수정')
+                            );
+                          }
                         ),
 
                       ),
@@ -245,8 +246,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         Text('$text2',style: TextStyle(fontSize: 15,color: Colors.black),),
       ],
     );
-  
-
 }
 
 

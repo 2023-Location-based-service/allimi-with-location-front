@@ -1,6 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
+import 'package:test_data/provider/UserProvider.dart'; //http 사용
+
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 class AddFacilities extends StatefulWidget {
   const AddFacilities({Key? key}) : super(key: key);
@@ -10,12 +18,72 @@ class AddFacilities extends StatefulWidget {
 }
 
 class _AddFacilitiesState extends State<AddFacilities> {
-
   final formKey = GlobalKey<FormState>();
   TextEditingController facilityNameController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   TextEditingController personNameController = TextEditingController();
+
+  String _facilityName = '';
+  String _location = '';
+  String _number = '';
+  String _personName = '';
+  int _facilityId = 0;
+  int _resident_id = 0;
+
+  Future<void> facilityRequest(int uid) async {
+    //입소자추가 psot
+    http.Response response1 = await http.post(
+      
+      Uri.parse(backendUrl+ 'facilities'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      },
+      body: jsonEncode({
+        "name": _facilityName,
+        "address": _location,
+        "tel": _number,
+        "fm_name": _personName
+      })
+    );
+
+    if (response1.statusCode != 200) {
+        throw Exception('POST request failed');
+    }
+
+    var data =  utf8.decode(response1.bodyBytes);
+    dynamic decodedJson = json.decode(data);
+    Map<String, dynamic> parsedJson = Map<String, dynamic>.from(decodedJson);
+    _facilityId = parsedJson['facility_id'];
+
+    debugPrint("@@@@ 시설장 resident 추가하는 백엔드 url보냄");
+
+    http.Response response2 = await http.post(
+      Uri.parse(backendUrl+ 'nhResidents'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      },
+      body: jsonEncode({
+        "user_id": uid,
+        "facility_id": _facilityId,
+        "resident_name": '',
+        "birth": '',
+        "user_role": 'MANAGER',
+        "health_info": ''
+      })
+    );
+
+    if (response2.statusCode != 200) {
+        throw Exception('POST');
+    }
+
+    data =  utf8.decode(response2.bodyBytes);
+    decodedJson = json.decode(data);
+    parsedJson = Map<String, dynamic>.from(decodedJson);
+    _resident_id = parsedJson['resident_id'];
+  }
 
 
   @override
@@ -29,10 +97,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
         child: ListView(
           children: [
             Text('시설 정보를 입력해주세요.'),
-
-
-            //TODO: 시설명, 주소, 전번, 이름
-
             Form(
               key: formKey,
               child: Column(
@@ -43,14 +107,12 @@ class _AddFacilitiesState extends State<AddFacilities> {
                       hintText: '시설명',
                       controller: facilityNameController,
                       errormsg: '시설명을 입력하세요'),
-
                   getTextFormField(
                       textInputType: TextInputType.text,
                       icon: Icons.place_rounded,
                       hintText: '주소',
                       controller: locationController,
                       errormsg: '주소를 입력하세요'),
-
 
                   getTextFormField(
                       textInputType: TextInputType.number,
@@ -61,7 +123,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
                       hintText: '전화번호',
                       controller: numberController,
                       errormsg: '전화번호를 입력하세요'),
-
                   getTextFormField(
                       textInputType: TextInputType.text,
                       icon: Icons.person_rounded,
@@ -76,13 +137,93 @@ class _AddFacilitiesState extends State<AddFacilities> {
             OutlinedButton(
               child: Text('확인'),
               onPressed: (){
-                print('시설 추가 확인 Tap');
-
                 if(this.formKey.currentState!.validate()) {
-                  //TODO: 시설 추가 확인 버튼 누르면 실행되어야 할 부분
+                  this.formKey.currentState!.save();
+
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                    builder: (BuildContext context1) {
+                      return AlertDialog(
+                        content: Text("요양원을 등록하시겠습니까?"),
+                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                        actions: [
+                          Consumer<UserProvider>(
+                            builder: (context2, userProvider, child) {
+                              return TextButton(
+                                child: const Text('확인'),
+                                onPressed: () async {
+                                  try {
+                                    await facilityRequest(userProvider.uid);
+
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                      builder: (BuildContext context3) {
+                                        return AlertDialog(
+                                          content: Text('요양원 등록에 성공하였습니다'),
+                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('확인'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop(); 
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    );
+
+                                    Provider.of<ResidentProvider>(context, listen:false)
+                                                  .setInfo(_resident_id, _facilityId, _facilityName, '', 'MANAGER','', '');
+                                    
+                                    Provider.of<UserProvider>(context, listen: false)
+                                                  .setRole('MANAGER');
+
+                                    Provider.of<UserProvider>(context, listen: false)
+                                                  .getData();
+                                  
+                                  } catch(e) {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Text('시설 등록에 실패하였습니다'),
+                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('확인'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    );
+                                  }
+
+                                  // Navigator.of(context).pop();
+                                },
+                              );
+                            }
+                          ),
+                          TextButton(
+                            child: const Text('취소'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                  );
 
                 }
-
               },
             ),
           ],
@@ -90,7 +231,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
       ),
     );
   }
-
 
   Widget getTextFormField({
     TextInputType? textInputType,
@@ -125,6 +265,17 @@ class _AddFacilitiesState extends State<AddFacilities> {
         filled: true,
         fillColor: Color(0xfff2f3f6),
       ),
+      onSaved: (value) {
+        if (hintText == '시설명') {
+          _facilityName = value!;
+        } else if (hintText == '주소') {
+          _location = value!;
+        } else if (hintText == '전화번호') {
+          _location = value!;
+        } else if (hintText == '시설장 이름') {
+          _personName = value!;
+        } 
+      }
     );
   }
 }

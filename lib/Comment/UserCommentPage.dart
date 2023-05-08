@@ -32,6 +32,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
   List<Map<String, dynamic>> _CommentList = [];
 
   Future<void> getComment(int residentId) async {
+    debugPrint("한마디 목록 요청 보냄");
     http.Response response = await http.get(
         Uri.parse(backendUrl + "letters/" + residentId.toString()),
         headers: <String, String>{
@@ -45,7 +46,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
 
     setState(() {
-      _CommentList =  parsedJson;
+      _CommentList = parsedJson;
     });
   }
 
@@ -70,10 +71,16 @@ class _UserCommentPageState extends State<UserCommentPage> {
     if (_userRole == 'PROTECTOR')
       return FloatingActionButton(
         backgroundColor: themeColor.getColor(),
-        onPressed: () {
+        onPressed: () async {
           //글쓰기 화면으로 이동
-          pageAnimation(context, WriteCommentPage());
+          await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WriteCommentPage()),
+            );
 
+          getComment(_residentId);
+        
         },
         child: const Icon(Icons.create),
       );
@@ -97,6 +104,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
       setState(() {
         _CommentList.removeWhere((comment) => comment['letter_id'] == letterid);
       });
+      
     } else {
       throw Exception('Failed to delete comment');
     }
@@ -138,27 +146,50 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                 onPressed: () async {
                                   _letterId = _CommentList[index]['letter_id'];
                                   showDialog(
-                                      context: context,
-                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          content: Text("정말 삭제하시겠습니까?"),
-                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                          actions: [
-                                            TextButton(
-                                              child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
-                                              onPressed: () async {
-                                                try {
-                                                  await deleteComment(_letterId);
-                                                } catch(e) {
+                                    context: context,
+                                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text("정말 삭제하시겠습니까?"),
+                                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                                            onPressed: () async {
+                                              try {
+                                                await deleteComment(_letterId);
+
+                                                showDialog(
+                                                context: context,
+                                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                builder: (BuildContext context3) {
+                                                  return AlertDialog(
+                                                    content: Text('삭제되었습니다'),
+                                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: const Text('확인'),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          Navigator.of(context).pop();
+
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
                                                 }
-                                                Navigator.of(context).pop();
+                                              );
+                                              } catch(e) {
+                                              }
+
+                                              
+                                              
                                               },
                                             ),
                                           ],

@@ -40,7 +40,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     List<Map<String, dynamic>> _residents = []; // 수정된 부분
 
   Future<void> getFacilityResident(int facilityId) async {
-      debugPrint("@@@@@ 시설의 입소자 정보 받아오는 백앤드 url 보냄");
+    debugPrint("@@@@@ 시설의 입소자 정보 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
       Uri.parse(backendUrl + "nhResidents/protectors/" + facilityId.toString()),
@@ -67,8 +67,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         _pickedImgs.addAll(images);
       });
     }
-
-    debugPrint("@@@"+ images.toString());
   }
 
   // 카메라
@@ -112,8 +110,9 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
       builder: (context, userProvider, residentProvider,allimTempProvider, child) {
         return customPage(
           title: '알림장 작성',
+          buttonName: '완료',
           onPressed: () async {
-            print('알림장 작성 완료버튼 누름');
+
             //수급자 선택 안하면 다이얼로그 띄우기
             if (selectedPersonId == 0) {
               showDialog(
@@ -140,41 +139,84 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
             if(this.formKey.currentState!.validate()) {
               this.formKey.currentState!.save();
 
-              _subContents = '';
-              _subContents += allimTempProvider.morning + '\n';
-              _subContents += allimTempProvider.launch + '\n';
-              _subContents += allimTempProvider.dinner + '\n';
-              _subContents += allimTempProvider.medication;
+              showDialog(
+                context: context,
+                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text("알림장을 업로드하시겠습니까?"),
+                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                    actions: [
+                      TextButton(
+                        child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                        onPressed: () async {
+                          _subContents = '';
+                          _subContents += allimTempProvider.morning + '\n';
+                          _subContents += allimTempProvider.launch + '\n';
+                          _subContents += allimTempProvider.dinner + '\n';
+                          _subContents += allimTempProvider.medication;
 
-              try {
-                await addAllim(userProvider.uid, residentProvider.facility_id);
-                _pickedImgs = [];
-                setState(() {});
-                Navigator.pop(context);
-              } catch(e) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Text("알림장 업로드 실패! 다시 시도해주세요"),
-                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                      actions: [
-                        TextButton(
-                          child: const Text('확인'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
+                          try {
+                            await addAllim(userProvider.uid, residentProvider.facility_id);
+                            _pickedImgs = [];
+
+                            showDialog(
+                            context: context,
+                            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                            builder: (BuildContext context3) {
+                              return AlertDialog(
+                                content: Text('작성 완료'),
+                                insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('확인'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            }
+                          );
+                          } catch(e) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Text("알림장 업로드 실패! 다시 시도해주세요"),
+                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
+                          }
                           },
                         ),
                       ],
                     );
                   }
-                );
-              }
+              );
+
             }
           },
           body: writePost(),
-          buttonName: '완료',
+          
         );
       }
     );
@@ -194,7 +236,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         getDropdown(),
         SizedBox(height: 8),
         //사진
-        //testpicture(),
         getPicture(context),
         SizedBox(height: 20)
       ],
@@ -363,96 +404,96 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     );
   }
 
-  //사진
-  Widget testpicture() {
-    return Container(
-      height: 130,
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //사진 추가하는 버튼
-          GestureDetector(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(8, 8, 8, 3),
-              child: Row(
-                children: [
-                  Icon(Icons.camera_alt_rounded, size: 18, color: themeColor.getColor()),
-                  Text(' 사진 추가', style: TextStyle(color: themeColor.getColor())),
-                ],
-              ),
-            ),
-            onTap: () {
+  // //사진
+  // Widget testpicture() {
+  //   return Container(
+  //     height: 130,
+  //     color: Colors.white,
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         //사진 추가하는 버튼
+  //         GestureDetector(
+  //           child: Padding(
+  //             padding: EdgeInsets.fromLTRB(8, 8, 8, 3),
+  //             child: Row(
+  //               children: [
+  //                 Icon(Icons.camera_alt_rounded, size: 18, color: themeColor.getColor()),
+  //                 Text(' 사진 추가', style: TextStyle(color: themeColor.getColor())),
+  //               ],
+  //             ),
+  //           ),
+  //           onTap: () {
 
-              //TODO: 사진 추가 기능
-              print('사진 추가하기 Tap');
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Wrap(
-                      children: [
-                        ListTile(leading: Icon(Icons.camera_alt, color: Colors.grey), title: Text('카메라'),
-                          onTap: () {
-                            //TODO: 카메라 누르면 실행되어야 할 부분
-                          },
-                        ),
-                        ListTile(leading: Icon(Icons.photo_library, color: Colors.grey), title: Text('갤러리'),
-                          onTap: () {
-                            //TODO: 갤러리 누르면 실행되어야 할 부분
-                          },
-                        ),
-                      ],
-                    );
-                  }
-              );
+  //             //TODO: 사진 추가 기능
+  //             print('사진 추가하기 Tap');
+  //             showModalBottomSheet(
+  //                 context: context,
+  //                 builder: (context) {
+  //                   return Wrap(
+  //                     children: [
+  //                       ListTile(leading: Icon(Icons.camera_alt, color: Colors.grey), title: Text('카메라'),
+  //                         onTap: () {
+  //                           //TODO: 카메라 누르면 실행되어야 할 부분
+  //                         },
+  //                       ),
+  //                       ListTile(leading: Icon(Icons.photo_library, color: Colors.grey), title: Text('갤러리'),
+  //                         onTap: () {
+  //                           //TODO: 갤러리 누르면 실행되어야 할 부분
+  //                         },
+  //                       ),
+  //                     ],
+  //                   );
+  //                 }
+  //             );
 
-            },
-          ),
+  //           },
+  //         ),
 
 
-          //사진 리스트 출력
-          // Container(
-          //   height: 96,
-          //   color: Colors.white,
-          //   child: ListView.builder(
-          //       shrinkWrap: true,
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: imgList.length,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         return Container(
-          //             margin: EdgeInsets.fromLTRB(3,8,3,8),
-          //             child: Stack(
-          //               children: [
-          //                 ClipRRect(
-          //                   child: Image.asset(
-          //                     width: 80,
-          //                     height: 80,
-          //                     imgList[index], //TODO: 사진 리스트
-          //                     fit: BoxFit.cover,
-          //                   ),
-          //                 ),
-          //                 Positioned(
-          //                   top: 3,
-          //                   right: 3,
-          //                   child: GestureDetector(
-          //                     child: Container(
-          //                       child: Icon(Icons.cancel_rounded, color: Colors.black54),
-          //                     ),
-          //                     onTap: () {
-          //                       print('사진 삭제 Tap'); //TODO: 사진 삭제 기능
-          //                     },
-          //                   ),
-          //                 ),
-          //               ],
-          //             )
-          //         );
-          //       }
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
+  //         //사진 리스트 출력
+  //         // Container(
+  //         //   height: 96,
+  //         //   color: Colors.white,
+  //         //   child: ListView.builder(
+  //         //       shrinkWrap: true,
+  //         //       scrollDirection: Axis.horizontal,
+  //         //       itemCount: imgList.length,
+  //         //       itemBuilder: (BuildContext context, int index) {
+  //         //         return Container(
+  //         //             margin: EdgeInsets.fromLTRB(3,8,3,8),
+  //         //             child: Stack(
+  //         //               children: [
+  //         //                 ClipRRect(
+  //         //                   child: Image.asset(
+  //         //                     width: 80,
+  //         //                     height: 80,
+  //         //                     imgList[index], //TODO: 사진 리스트
+  //         //                     fit: BoxFit.cover,
+  //         //                   ),
+  //         //                 ),
+  //         //                 Positioned(
+  //         //                   top: 3,
+  //         //                   right: 3,
+  //         //                   child: GestureDetector(
+  //         //                     child: Container(
+  //         //                       child: Icon(Icons.cancel_rounded, color: Colors.black54),
+  //         //                     ),
+  //         //                     onTap: () {
+  //         //                       print('사진 삭제 Tap'); //TODO: 사진 삭제 기능
+  //         //                     },
+  //         //                   ),
+  //         //                 ),
+  //         //               ],
+  //         //             )
+  //         //         );
+  //         //       }
+  //         //   ),
+  //         // ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget getPicture(BuildContext context) {
     return Container(

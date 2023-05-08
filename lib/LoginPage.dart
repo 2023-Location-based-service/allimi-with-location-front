@@ -111,7 +111,6 @@ class _LoginPageState extends State<LoginPage> {
                           }
 
                           var json_data = json.decode(data);
-                          debugPrint(json_data.toString());
 
                           var userRole = '';
                           if (json_data['user_role'] != null) {

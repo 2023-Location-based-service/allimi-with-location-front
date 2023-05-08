@@ -26,23 +26,25 @@ class EditAllimPage extends StatefulWidget {
   const EditAllimPage({Key? key, 
     required this.noticeId,
     required this.noticeDetail,
-    required this.imageUrls
+    required this.imageUrls,
+    required this.facility_id
   }) : super(key: key);
 
   final Map<String, dynamic> noticeDetail;
   final List<String> imageUrls;
 
   final int noticeId;
+  final int facility_id;
 
   @override
   State<EditAllimPage> createState() => _EditAllimPageState();
 }
 
 class _EditAllimPageState extends State<EditAllimPage> {
-
   final formKey = GlobalKey<FormState>();
   String selectedPerson = "수급자 선택";
   int selectedPersonId = 0;
+  late int _facility_id;
   String _contents = '';
   String _subContents = '';
 
@@ -58,9 +60,10 @@ class _EditAllimPageState extends State<EditAllimPage> {
     _noticeId = widget.noticeId;
     _noticeDetail = widget.noticeDetail;
     _imageUrls = widget.imageUrls;
+    _facility_id = widget.facility_id;
 
     _contents = _noticeDetail['content'];
-    
+    getFacilityResident(_facility_id);
 
     getFile();
   }
@@ -305,44 +308,31 @@ class _EditAllimPageState extends State<EditAllimPage> {
           ),
           Container(
             color: Colors.white,
-            child: Consumer<ResidentProvider>(
-              builder: (context, residentProvider, child) {
-                return Consumer<ResidentProvider>(
-                  builder: (context, residentProvider, child) {
-                    return FutureBuilder(
-                      future: getFacilityResident(residentProvider.facility_id),
-                      builder: (context, snapshot) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _residents.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              leading: Icon(Icons.person_rounded, color: Colors.grey),
-                              title: Row(
-                                children: [
-                                  Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
-                                ],
-                              ),
-                              onTap: () {
-                                // TODO: 수급자 선택 시 처리할 이벤트
-                                setState(() {
-                                  selectedPerson = '${_residents[index]['name']} 님'; 
-                                  selectedPersonId = _residents[index]['id'];
-                                });
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: _residents.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Icon(Icons.person_rounded, color: Colors.grey),
+                  title: Row(
+                    children: [
+                      Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
+                    ],
+                  ),
+                  onTap: () {
+                    // TODO: 수급자 선택 시 처리할 이벤트
+                    setState(() {
+                      selectedPerson = '${_residents[index]['name']} 님'; 
+                      selectedPersonId = _residents[index]['id'];
+                    });
 
-                                Navigator.pop(context);
+                    Navigator.pop(context);
 
-                              },
-                            );
-                          },
-                        );
-                      }
-                    );
-                  }
+                  },
                 );
-              }
-            ),
+              },
+            ) 
           ),
         ],
       ),
