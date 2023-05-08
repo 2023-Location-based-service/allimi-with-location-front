@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage> {
   List<String> textMenu = ['공지사항', '알림장', '일정표', '면회 관리', '한마디', '시설 설정'];
   late String _userRole = '';
   late int _resident_id = 0;
+  late int _facility_id = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +97,7 @@ class _MainPageState extends State<MainPage> {
             builder: (context, userProvider, residentProvider, child) {
               _userRole = userProvider.urole;
               _resident_id = residentProvider.resident_id;
+              _facility_id = residentProvider.facility_id;
 
               String userRoleString = '';
               if (userProvider.urole == 'PROTECTOR')
@@ -176,7 +178,7 @@ class _MainPageState extends State<MainPage> {
     switch(index) {
       case 0:
         print('공지사항 Tap');
-        pageAnimation(context, ManagerNoticePage()); //일단은 요양보호사 버전으로
+        pageAnimation(context, ManagerNoticePage(userRole: _userRole, facilityId: _facility_id,)); //일단은 요양보호사 버전으로
         break;
       case 1:
         print('알림장 Tap');
