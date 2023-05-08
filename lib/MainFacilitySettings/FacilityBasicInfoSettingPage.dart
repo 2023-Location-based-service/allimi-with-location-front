@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
+import 'package:http/http.dart' as http;
+
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 //시설 기본정보 설정 화면
 
@@ -10,6 +13,9 @@ class FacilityBasicInfoPage extends StatefulWidget {
   State<FacilityBasicInfoPage> createState() => _FacilityBasicInfoPageState();
 }
 class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
+  late Future<List<dynamic>> _facilityListFuture;
+  List<dynamic> _facilityList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
