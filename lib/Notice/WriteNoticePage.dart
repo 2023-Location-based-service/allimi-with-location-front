@@ -13,13 +13,7 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 
 ThemeColor themeColor = ThemeColor();
 
-List<String> imgList = [
-  'assets/images/tree.jpg',
-  'assets/images/tree.jpg',
-  'assets/images/cake.jpg',
-  'assets/images/cake.jpg',
-  'assets/images/tree.jpg'
-];
+String backendUrl = "http://52.78.62.115:8080/v2/";
 
 
 class WriteNoticePage extends StatefulWidget {
@@ -33,6 +27,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController bodyController = TextEditingController();
+
 
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];

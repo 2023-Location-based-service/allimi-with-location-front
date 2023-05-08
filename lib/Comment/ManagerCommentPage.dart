@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 
+
+// 필요없는 파일
+
 class ManagerCommentPage extends StatefulWidget {
   const ManagerCommentPage({Key? key}) : super(key: key);
 

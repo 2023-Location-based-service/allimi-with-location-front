@@ -179,7 +179,7 @@ class _MainPageState extends State<MainPage> {
     switch(index) {
       case 0:
         print('공지사항 Tap');
-        pageAnimation(context, ManagerNoticePage()); //일단은 요양보호사 버전으로
+        pageAnimation(context, ManagerNoticePage(userRole: _userRole, facilityId: _facility_id,)); //일단은 요양보호사 버전으로
         break;
       case 1:
         print('알림장 Tap');

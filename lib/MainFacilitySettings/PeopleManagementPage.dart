@@ -50,8 +50,10 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
           "nhresident_id": nhresidentId
         })
     );
-
-    if (response != 200)
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    print(response.statusCode);
+    print(response);
+    if (response.statusCode == 200)
       // 화면 다시 그리기
       setState(() {
         _employee.removeWhere((resident) => resident['user_id'] == userId);
