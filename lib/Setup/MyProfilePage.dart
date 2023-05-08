@@ -60,19 +60,21 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return Container(
         width: double.infinity,
         height: 50,
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
         decoration: BoxDecoration(
           color: Color(0xfff2f3f6),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-            padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+            padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text('$text', textScaleFactor: 1.2),
               ],
-            )));
+            )
+        )
+    );
   }
 }
