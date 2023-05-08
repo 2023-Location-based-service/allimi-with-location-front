@@ -192,7 +192,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 4:
         print('한마디 Tap');
-        pageAnimation(context, UserCommentPage()); //일단은 보호자 버전으로
+        pageAnimation(context, UserCommentPage(userRole: _userRole, residentId: _resident_id)); //일단은 보호자 버전으로
         break;
       case 5:
         print('시설설정 Tap');
