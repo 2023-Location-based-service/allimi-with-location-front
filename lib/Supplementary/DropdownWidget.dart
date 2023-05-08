@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
+import 'package:test_data/provider/NoticeTempProvider.dart';
 
 class AllimFirstDropdown extends StatefulWidget {
   const AllimFirstDropdown({
@@ -114,7 +115,12 @@ class _AllimSecondDropdownState extends State<AllimSecondDropdown> {
 /* ---------------------------------------------------------------------------------- */
 
 class NoticeDropdown extends StatefulWidget {
-  const NoticeDropdown({Key? key}) : super(key: key);
+  const NoticeDropdown({
+    Key? key,
+    this.initialVal = '공지사항'
+  }) : super(key: key);
+
+  final String initialVal;
 
   @override
   State<NoticeDropdown> createState() => _NoticeDropdownState();
@@ -123,12 +129,14 @@ class NoticeDropdown extends StatefulWidget {
 class _NoticeDropdownState extends State<NoticeDropdown> {
   final items = ['공지사항', '중요'];
   String? selectedValue;
+  String initialVal = '';
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      selectedValue = items[0];
+      initialVal = widget.initialVal;
+      selectedValue = items[items.indexOf(initialVal)];
     });
   }
 
@@ -145,7 +153,11 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
         items: items.map((e) => DropdownMenuItem(
             value: e,
             child: Text(e))).toList(),
-        onChanged: (value) {setState(() => selectedValue = value!);},
+        onChanged: (value) {
+          setState(() => selectedValue = value!);
+          Provider.of<NoticeTempProvider>(context, listen: false)  //TODO: 프로바이더 수정
+              .setTag(value);
+        },
       ),
     );
   }
