@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../provider/ResidentProvider.dart';
-import '../provider/UserProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
@@ -21,17 +20,21 @@ class InvitePage extends StatefulWidget {
 enum Answer {PROTECTOR, WORKER}
 
 class _InvitePageState extends State<InvitePage> {
+  final _contentEditController = TextEditingController();
+
   String result = '';
   bool isprotect = true;
   bool isemployee = false;
   late List<bool> isSelected;
   List<Map<String, dynamic>> _phoneNumUsers = [];
+  late String _phone_num;
 
   @override
   void initState() {
     isSelected = [isprotect, isemployee];
     super.initState();
   }
+
   final formKey = GlobalKey<FormState>();
 
   // 전화번호 받아오기
@@ -56,11 +59,11 @@ class _InvitePageState extends State<InvitePage> {
   }
 
   // 서버에 초대하기 업로드
-  Future<void> addComment(userId, facilityId, userRole) async {
+  Future<void> addInvite(phone_userId, facilityId, userRole) async {
     var url = Uri.parse(backendUrl + 'invitations');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
-      "user_id": userId,
+      "user_id": phone_userId,
       "facility_id": facilityId,
       "user_role": userRole,
     });
@@ -76,8 +79,8 @@ class _InvitePageState extends State<InvitePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, ResidentProvider> (
-        builder: (context, userProvider, residentProvider, child){
+    return Consumer<ResidentProvider> (
+        builder: (context, residentProvider, child){
           return customPage(
             title: '초대하기',
             onPressed: () async {
@@ -85,13 +88,45 @@ class _InvitePageState extends State<InvitePage> {
               if(this.formKey.currentState!.validate()) {
                 this.formKey.currentState!.save();
 
+                if(_phoneNumUsers.length != 0){
 
-                //전화번호 리스트 출력@@@TODO
+                  //전화번호 리스트 출력
+                  showDialog(
+                      context: context,
+                      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("초대할 사람을 선택해주세요"),
+                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          content: Container(
+                            height: 500,
+                            width: 300,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _phoneNumUsers.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                        title: Text(_phoneNumUsers[index]['user_name']),
+                                        onTap: () async {
+                                          await addInvite(_phoneNumUsers[index]['user_id'], residentProvider.facility_id, result);
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                        })
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                  );
+                }
 
                 try {
-                  await addComment(userProvider.uid, residentProvider.facility_id, userProvider.urole);
+                  await getUserByPhoneNum(_phone_num);
                   setState(() {});
-                  Navigator.pop(context);
+                  //Navigator.pop(context);
                 } catch(e) {
                   showDialog(
                       context: context,
@@ -166,14 +201,18 @@ class _InvitePageState extends State<InvitePage> {
                         key: formKey,
                         child: SizedBox(
                           child: TextFormField(
+                            controller: _contentEditController,
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly, //숫자만 가능
-                              NumberFormatter(), // 자동으로 하이픈
-                              LengthLimitingTextInputFormatter(13) //13자리만 입력(하이픈 2+숫자 11)
+                              LengthLimitingTextInputFormatter(11) //11자리만 입력(숫자 11)
                             ],
+
                             validator: (value) {
-                              if(value!.isEmpty||value.length!=13) { return '번호를 입력해주세요'; }
+                              if(value!.isEmpty) { return '전화번호를 입력해주세요'; }
                               else { return null; }
+                            },
+                            onSaved: (value){
+                              _phone_num = value!;
                             },
                             keyboardType: TextInputType.number, //키보드는 숫자
                             maxLines: 1,
@@ -213,46 +252,14 @@ class _InvitePageState extends State<InvitePage> {
     if (value == 0) {
       isprotect = true;
       isemployee = false;
+      result = 'PROTECTOR';
     } else {
       isprotect = false;
       isemployee = true;
+      result = 'WORKER';
     }
     setState(() {
       isSelected = [isprotect, isemployee];
     });
   }
-}
-//자동 하이픈
-class NumberFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    var text = newValue.text;
-
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
-    }
-
-    var buffer = StringBuffer();
-    for (int i = 0; i < text.length; i++) {
-      buffer.write(text[i]);
-      var nonZeroIndex = i + 1;
-      if (nonZeroIndex <= 3) {
-        if (nonZeroIndex % 3 == 0 && nonZeroIndex != text.length) {
-          buffer.write('-');
-        }
-      } else {
-        if (nonZeroIndex % 7 == 0 &&
-            nonZeroIndex != text.length &&
-            nonZeroIndex > 4) {
-          buffer.write('-');
-        }
-      }
-    }
-
-    var string = buffer.toString();
-    return newValue.copyWith(
-        text: string,
-        selection: TextSelection.collapsed(offset: string.length));
-  }
-
 }
