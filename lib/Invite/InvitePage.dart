@@ -25,12 +25,35 @@ class _InvitePageState extends State<InvitePage> {
   bool isprotect = true;
   bool isemployee = false;
   late List<bool> isSelected;
+  List<Map<String, dynamic>> _phoneNumUsers = [];
+
   @override
   void initState() {
     isSelected = [isprotect, isemployee];
     super.initState();
   }
   final formKey = GlobalKey<FormState>();
+
+  // 전화번호 받아오기
+  Future<void> getUserByPhoneNum(String phoneNum) async {
+    debugPrint("@@@@@ 전화번호로 user목록 받아오는 백앤드 url 보냄");
+
+    http.Response response = await http.get(
+      Uri.parse(backendUrl + "users/phone-num/" + phoneNum),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      }
+    );
+
+    var data =  utf8.decode(response.bodyBytes);
+    dynamic decodedJson = json.decode(data);
+    List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
+
+    setState(() {
+      _phoneNumUsers =  parsedJson;
+    });
+  }
 
   // 서버에 초대하기 업로드
   Future<void> addComment(userId, facilityId, userRole) async {
@@ -58,9 +81,13 @@ class _InvitePageState extends State<InvitePage> {
           return customPage(
             title: '초대하기',
             onPressed: () async {
-              print('초대하기 누름');
+              
               if(this.formKey.currentState!.validate()) {
                 this.formKey.currentState!.save();
+
+
+                //전화번호 리스트 출력@@@TODO
+
                 try {
                   await addComment(userProvider.uid, residentProvider.facility_id, userProvider.urole);
                   setState(() {});

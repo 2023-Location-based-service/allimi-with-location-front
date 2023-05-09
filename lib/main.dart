@@ -5,6 +5,7 @@ import 'package:test_data/LoginPage.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
+import 'package:test_data/provider/VisitTempProvider.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
@@ -20,7 +21,8 @@ void main() async {
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ResidentProvider()),
-        ChangeNotifierProvider(create: (_) => AllimTempProvider())
+        ChangeNotifierProvider(create: (_) => AllimTempProvider()),
+        ChangeNotifierProvider(create: (_) => VisitTempProvider())
       ],
       child: const MyApp())
   );

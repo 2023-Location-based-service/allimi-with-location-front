@@ -183,27 +183,27 @@ class _MainPageState extends State<MainPage> {
     switch(index) {
       case 0:
         print('공지사항 Tap');
-        pageAnimation(context, ManagerNoticePage(userRole: _userRole, facilityId: _facility_id,)); //일단은 요양보호사 버전으로
+        pageAnimation(context, new ManagerNoticePage(userRole: _userRole, facilityId: _facility_id,)); //일단은 요양보호사 버전으로
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, ManagerAllimPage(userRole: _userRole, residentId: _resident_id)); //일단은 요양보호사 버전으로
+        pageAnimation(context, new ManagerAllimPage(userRole: _userRole, residentId: _resident_id)); //일단은 요양보호사 버전으로
         break;
       case 2:
         print('일정표 Tap');
-        pageAnimation(context, ManagerCalendarPage(userId: _userId, userRole: _userRole,  facility_id: _facility_id)); //일단은 요양보호사 버전으로
+        pageAnimation(context, new ManagerCalendarPage(userId: _userId, userRole: _userRole,  facility_id: _facility_id)); //일단은 요양보호사 버전으로
         break;
       case 3:
         print('면회신청 Tap');
-        pageAnimation(context, ManagerRequestPage()); //일단은 요양보호사 버전으로
+        pageAnimation(context, new ManagerRequestPage(userId: _userId, userRole: _userRole, residentId: _resident_id, facilityId: _facility_id)); //일단은 요양보호사 버전으로
         break;
       case 4:
         print('한마디 Tap');
-        pageAnimation(context, UserCommentPage(userRole: _userRole, residentId: _resident_id)); //일단은 보호자 버전으로
+        pageAnimation(context, new UserCommentPage(userRole: _userRole, residentId: _resident_id)); //일단은 보호자 버전으로
         break;
       case 5:
         print('시설설정 Tap');
-        pageAnimation(context, MainFacilitySettingsPage());
+        pageAnimation(context, new MainFacilitySettingsPage());
         break;
       default:
         break;

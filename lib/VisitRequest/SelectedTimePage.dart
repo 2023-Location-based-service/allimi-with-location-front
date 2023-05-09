@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/provider/VisitTempProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 
 class SelectedTimePage extends StatefulWidget {
@@ -16,48 +18,51 @@ class _SelectedTimePageState extends State<SelectedTimePage> {
     return selectedCalendar();
   }
 
-  void _showTimePicker(BuildContext context) {
+  Future<void> _showTimePicker(BuildContext context_) async {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('방문 시간 선택'),
-            content: Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: ListView.builder(
-                itemCount: 24,
-                itemBuilder: (BuildContext context, int index) {
-                  String hour = index < 10 ? '0$index' : '$index';
-                  return ListTile(
-                    title: Text('$hour:00'),
-                    onTap: () {
-                      setState(() {
-                        selectedTime = '$hour:00';
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  );
-                },
-              ),
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('방문 시간 선택'),
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: ListView.builder(
+              itemCount: 24,
+              itemBuilder: (BuildContext context, int index) {
+                String hour = index < 10 ? '0$index' : '$index';
+                return ListTile(
+                  title: Text('$hour:00'),
+                  onTap: () {
+                    setState(() {
+                      selectedTime = '$hour:00';
+                      Provider.of<VisitTempProvider>(context, listen: false).setTime(selectedTime);
+                      //04:00
+                    });
+                    
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
             ),
-            actions: [
-              TextButton(child: Text('취소',
-                  style: TextStyle(color: themeColor.getMaterialColor())),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-            ],
-          );
-        });
+          ),
+          actions: [
+            TextButton(child: Text('취소',
+                style: TextStyle(color: themeColor.getMaterialColor())),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        );
+      });
   }
 
   Widget selectedCalendar() {
     return display(
         title: selectedTime,
-        onTap: () {
-          _showTimePicker(context);
-          print('날짜 선택 Tap');
+        onTap: () async {
+          await _showTimePicker(context);
+          
         }
     );
   }
