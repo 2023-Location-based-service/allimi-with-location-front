@@ -19,9 +19,9 @@ class FacilityBasicInfoPage extends StatefulWidget {
 class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
   static List<Map<String, dynamic>> _facilityList = [];
 
-  Future<void> getFacilityInfo(int facilityId) async {
+  Future<void> getFacilityInfo() async {
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "facilities/admin/" + facilityId.toString()),
+        Uri.parse(backendUrl + "facilities/admin/"),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -40,8 +40,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
   @override
   void initState() {
     super.initState();
-    final residentProvider = context.read<ResidentProvider>();
-    getFacilityInfo(residentProvider.facility_id);
+    getFacilityInfo();
   }
 
   @override
@@ -65,65 +64,67 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                      padding: EdgeInsets.all(18),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            child: Text('시설 정보'),
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                color: Color(0xfff2f3f6),
-                                border: Border.all(color: Color(0xfff2f3f6),width: 3)
-                            ),
-                          ),
-                          Container(  //시설 이름
-                            child: Text(_facilityList[index]['name'], textScaleFactor: 1.2,),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                            ),
-                          ),
-                          Container(  //전화번호
-                            child: Text(_facilityList[index]['tel'], textScaleFactor: 1.2,),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                            ),
-                          ),
 
-                        ],
-                      )
-                  ),
-                  Container(
-                      padding: EdgeInsets.all(18),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            child: Text('시설 주소'),
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                color: Color(0xfff2f3f6),
-                                border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                  if(_facilityList[index]['id']==residentProvider.facility_id)
+                    Container(
+                        padding: EdgeInsets.all(18),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              child: Text('시설 정보'),
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  color: Color(0xfff2f3f6),
+                                  border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                              ),
                             ),
-                          ),
-                          Container(
-                            child: Text(_facilityList[index]['address'], textScaleFactor: 1.2,),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                            Container(  //시설 이름
+                              child: Text(_facilityList[index]['name'], textScaleFactor: 1.2,),
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                  ),
+                            Container(  //전화번호
+                              child: Text(_facilityList[index]['tel'], textScaleFactor: 1.2,),
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                              ),
+                            ),
+
+                          ],
+                        )
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(18),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              child: Text('시설 주소'),
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  color: Color(0xfff2f3f6),
+                                  border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                              ),
+                            ),
+                            Container(
+                              child: Text(_facilityList[index]['address'], textScaleFactor: 1.2,),
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
                 ],
               );
             }

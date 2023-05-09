@@ -95,9 +95,9 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                 return Container();
               }
               return ListTile(
+                leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Icon(Icons.person_rounded, color: Colors.grey),
                     Text('${_employee[index]['name']} 님'),
                     Spacer(),
                     Container(
