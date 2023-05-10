@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:test_data/LoginPage.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
+import 'package:test_data/provider/NoticeTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
@@ -22,7 +23,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ResidentProvider()),
         ChangeNotifierProvider(create: (_) => AllimTempProvider()),
-        ChangeNotifierProvider(create: (_) => VisitTempProvider())
+        ChangeNotifierProvider(create: (_) => VisitTempProvider()),
+        ChangeNotifierProvider(create: (_) => NoticeTempProvider())
       ],
       child: const MyApp())
   );

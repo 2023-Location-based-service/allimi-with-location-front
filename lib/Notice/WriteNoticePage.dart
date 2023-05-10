@@ -31,7 +31,6 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   final formKey = GlobalKey<FormState>();
   String _title = '';
   String _contents = '';
-  final bool _importantTest = true;
 
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
@@ -58,7 +57,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   }
 
   // 서버에 이미지 업로드
-  Future<void> addNotice(userId, facilityId) async {
+  Future<void> addNotice(userId, facilityId, bool _importantTest) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path,
         contentType: MediaType("image", "jpg"))).toList();
 
@@ -124,7 +123,8 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                                 //_importantTest = NoticeTempProvider().trueTag;
 
                                 try {
-                                  await addNotice(userProvider.uid, residentProvider.facility_id);
+                                  bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
+                                  await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);
                                   _pickedImgs = [];
 
                                   showDialog(
@@ -216,52 +216,52 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   //제목 및 내용
   Widget getBody() {
     return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: TextFormField(
-              validator: (value) {
-                if(value!.isEmpty) { return '제목을 입력하세요'; }
-                else { return null; }
-              },
-              decoration: const InputDecoration(
-                hintText: '제목',
-                filled: true,
-                fillColor: Colors.white,
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
+        key: formKey,
+        child: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: TextFormField(
+                validator: (value) {
+                  if(value!.isEmpty) { return '제목을 입력하세요'; }
+                  else { return null; }
+                },
+                decoration: const InputDecoration(
+                  hintText: '제목',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
+                onSaved: (value) {
+                  _title = value!;
+                },
               ),
-              onSaved: (value) {
-                _title = value!;
-              },
             ),
-          ),
-          SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            height: 430,
-            child: TextFormField(
-              validator: (value) {
-                if(value!.isEmpty) { return '내용을 입력하세요'; }
-                else { return null; }
-              },
-              maxLines: 1000,
-              decoration: const InputDecoration(
-                hintText: '내용을 입력하세요',
-                filled: true,
-                fillColor: Colors.white,
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
+            SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              height: 430,
+              child: TextFormField(
+                validator: (value) {
+                  if(value!.isEmpty) { return '내용을 입력하세요'; }
+                  else { return null; }
+                },
+                maxLines: 1000,
+                decoration: const InputDecoration(
+                  hintText: '내용을 입력하세요',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
+                onSaved: (value) {
+                  _contents = value!;
+                },
               ),
-              onSaved: (value) {
-                _contents = value!;
-              },
             ),
-          ),
-        ],
-      )
+          ],
+        )
 
     );
   }
@@ -357,7 +357,4 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
       ),
     );
   }
-
-
-
 }

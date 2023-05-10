@@ -1,7 +1,9 @@
 //ManagerNoticePage
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
+import '../provider/NoticeTempProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'WriteNoticePage.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -30,11 +32,11 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   String _userRole = '';
   List<Map<String, dynamic>> _noticeList = [];
 
-  Future<void> getNotice(int residentId) async {
+  Future<void> getNotice(int facility_id) async {
     debugPrint("@@@@@ 공지사항 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "all-notices/" + residentId.toString()),
+        Uri.parse(backendUrl + "all-notices/" + facility_id.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -44,6 +46,12 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     var data =  utf8.decode(response.bodyBytes);
     dynamic decodedJson = json.decode(data);
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
+
+    parsedJson.sort((a, b) {
+      DateTime aDate = DateTime.parse(a['create_date']);
+      DateTime bDate = DateTime.parse(b['create_date']);
+      return bDate.compareTo(aDate);
+    });
 
     setState(() {
       _noticeList =  parsedJson;
@@ -63,13 +71,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
       appBar: AppBar(title: Text('공지사항')),
       body: ListView(
         children: [
-
-
-          //importantNotice(),
-          //SizedBox(height: 15),
           noticeList(),
-
-
         ],
       ),
       floatingActionButton: _getFAB(),
@@ -107,6 +109,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         if(_noticeList != null && _noticeList.length != 0) {
           List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
 
+          bool isImportant = _noticeList[index]['important']; // 각 게시물의 중요 여부 가져오기
 
           return Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -118,7 +121,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getGreyTag(),  //TODO: 태그 수정하기
+                      isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시  //TODO: 태그 수정하기
                       SizedBox(height: 5),
                       Container(
                           child: Text(_noticeList[index]['title'], overflow: TextOverflow.ellipsis), //공지사항 제목
@@ -158,6 +161,16 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
 
   //태그 선택
+
+  Widget getTag(BuildContext context) {
+    if (Provider.of<NoticeTempProvider>(context).isImportant) {
+      return getRedTag(); // 중요
+    } else {
+      return getGreyTag(); // 공지사항
+    }
+  }
+
+
   Widget getRedTag() {
     return Container(
       padding: EdgeInsets.fromLTRB(7, 3, 7, 3),

@@ -150,8 +150,7 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       color: Colors.white,
-      child:
-      DropdownButton<String>(
+      child: DropdownButton<String>(
         isExpanded: true,
         value: selectedValue,
         underline: SizedBox.shrink(),
@@ -160,14 +159,11 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
             child: Text(e))).toList(),
         onChanged: (value) {
           setState(() => selectedValue = value!);
-          if (menu == '공지사항') {
-            Provider.of<NoticeTempProvider>(context, listen: false)
-                .setFalseTag(value);
-          }
-          else if(menu == '중요') {
-            Provider.of<NoticeTempProvider>(context, listen: false)
-                .setTrueTag(value);
-          }
+          var isImportant = selectedValue == '중요';
+          Provider.of<NoticeTempProvider>(context, listen: false)
+              .setIsImportant(isImportant);
+          Provider.of<NoticeTempProvider>(context, listen: false)
+              .setSelectedTag(selectedValue!);
         },
       ),
     );
