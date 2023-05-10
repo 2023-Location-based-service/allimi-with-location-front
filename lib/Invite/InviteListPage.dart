@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Invite/InvitePage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -10,6 +11,8 @@ import 'package:http/http.dart' as http; //http 사용
 String backendUrl = "http://52.78.62.115:8080/v2/";
 
 //초대목록화면
+
+ThemeColor themeColor = ThemeColor();
 
 class InviteListPage extends StatefulWidget {
   const InviteListPage({Key? key}) : super(key: key);
