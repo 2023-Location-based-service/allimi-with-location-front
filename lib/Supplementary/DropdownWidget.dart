@@ -117,9 +117,11 @@ class _AllimSecondDropdownState extends State<AllimSecondDropdown> {
 class NoticeDropdown extends StatefulWidget {
   const NoticeDropdown({
     Key? key,
+    required this.menu,
     this.initialVal = '공지사항'
   }) : super(key: key);
 
+  final String menu;
   final String initialVal;
 
   @override
@@ -131,12 +133,15 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
   String? selectedValue;
   String initialVal = '';
 
+  String menu = '';
+
   @override
   void initState() {
     super.initState();
     setState(() {
       initialVal = widget.initialVal;
       selectedValue = items[items.indexOf(initialVal)];
+      menu = widget.menu;
     });
   }
 
@@ -155,8 +160,14 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
             child: Text(e))).toList(),
         onChanged: (value) {
           setState(() => selectedValue = value!);
-          Provider.of<NoticeTempProvider>(context, listen: false)  //TODO: 프로바이더 수정
-              .setTag(value);
+          if (menu == '공지사항') {
+            Provider.of<NoticeTempProvider>(context, listen: false)
+                .setFalseTag(value);
+          }
+          else if(menu == '중요') {
+            Provider.of<NoticeTempProvider>(context, listen: false)
+                .setTrueTag(value);
+          }
         },
       ),
     );

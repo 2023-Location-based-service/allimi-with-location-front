@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Calendar/ManagerCalendarPage.dart';
-import 'package:test_data/Notice/UserNoticePage.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';

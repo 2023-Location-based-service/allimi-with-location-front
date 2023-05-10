@@ -9,16 +9,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/DropdownWidget.dart';
-import '/Supplementary/ThemeColor.dart';
-import '/Supplementary/PageRouteWithAnimation.dart';
+import 'package:test_data/provider/NoticeTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-import 'package:http/http.dart' as http; //http 사용
+import '/Supplementary/ThemeColor.dart';
+import '/Supplementary/PageRouteWithAnimation.dart';
 
 ThemeColor themeColor = ThemeColor();
 
 String backendUrl = "http://52.78.62.115:8080/v2/";
-
 
 class WriteNoticePage extends StatefulWidget {
   const WriteNoticePage({Key? key}) : super(key: key);
@@ -29,14 +28,14 @@ class WriteNoticePage extends StatefulWidget {
 
 class _WriteNoticePageState extends State<WriteNoticePage> {
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController bodyController = TextEditingController();
-
+  final formKey = GlobalKey<FormState>();
   String _title = '';
   String _contents = '';
+  final bool _importantTest = true;
 
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
+
 
   // 앨범
   Future<void> _pickImg() async {
@@ -46,7 +45,6 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
         _pickedImgs.addAll(images);
       });
     }
-    debugPrint("@@@"+ images.toString());
   }
 
   // 카메라
@@ -59,27 +57,26 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
     }
   }
 
-  // 서버에 공지사항 업로드 + 사진 업로드
-  Future<void> addAllim(userId, facilityId) async {
-    final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
-
-    _title = titleController.text;
-    _contents = bodyController.text;
+  // 서버에 이미지 업로드
+  Future<void> addNotice(userId, facilityId) async {
+    final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path,
+        contentType: MediaType("image", "jpg"))).toList();
 
     var formData = FormData.fromMap({
-      "notice": MultipartFile.fromString(
-        jsonEncode(
-            {
-              "user_id": userId,
-              "facility_id": facilityId,
-              "title": _title,
-              "contents": _contents,
-            }
-        ),
+      "allnotice": MultipartFile.fromString(
+        jsonEncode({
+          "user_id": userId,
+          "facility_id": facilityId,
+          "title": _title,
+          "contents": _contents,
+          "important": _importantTest}),
         contentType: MediaType.parse('application/json'),
       ),
       "file": _files
     });
+
+
+
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
@@ -92,153 +89,180 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
     }
   }
 
-  //서버에 이미지 업로드
-  // Future<void> imageUpload() async {
-  //   final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
-  //
-  //   var formData = FormData.fromMap({
-  //     "notice": MultipartFile.fromString(
-  //       jsonEncode({"user_id": 2, "target_id": 1, "facility_id": 1, "contents": "flutter test", "sub_contents": "test입니다."}),
-  //       contentType: MediaType.parse('application/json'),
-  //     ),
-  //     "file": _files
-  //   });
-  //
-  //   var dio = Dio();
-  //   dio.options.contentType = 'multipart/form-data';
-  //   final response = await dio.post('http://192.168.0.5:8080/v2/notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
-  //
-  //   if (response.statusCode == 200) {
-  //     print("성공");
-  //   } else {
-  //     print("실패");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Consumer2<UserProvider, ResidentProvider> (
-      builder: (context, userProvider, residentProvider, child) {
-        return customPage(
-            title: '공지사항 작성',
-            onPressed: () async {
-              print('공지사항 작성 완료버튼 누름');
-              String titleTemp = titleController.text.replaceAll(' ', '');
-              String bodyTemp = bodyController.text.replaceAll(' ', '');
-              if(titleTemp.isEmpty){
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("제목을 입력해주세요.")));
-                return;
-              }
-              if(bodyTemp.isEmpty){
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("내용을 입력해주세요.")));
-                return;
-              }
+        builder: (context, userProvider, residentProvider, child) {
+          return customPage(
+              title: '공지사항 작성',
+              onPressed: () async {
+                print('공지사항 작성 완료버튼 누름');
 
-              //이미지 업로드
-              // imageUpload();
-              // _pickedImgs = [];
-              // setState(() {});
 
-              //TODO: 공지 작성 완료버튼 누르면 실행되어야 할 부분
+                if(this.formKey.currentState!.validate()) {
+                  this.formKey.currentState!.save();
 
-              try {
-                await addAllim(userProvider.uid, residentProvider.facility_id);
-                _pickedImgs = [];
-                setState(() {});
-                Navigator.pop(context);
-              } catch(e) {
-                showDialog( //공지 업로드 실패
-                    context: context,
-                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Text("공지사항 업로드 실패! 다시 시도해주세요"),
-                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                        actions: [
-                          TextButton(
-                            child: const Text('확인'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                );
-                print('업로드 실패 ERROR@@@@@@@@@@@@@@@@@@@@@@@@@@');
-                print(e);
-              }
 
-            },
-            body: ListView(
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(8, 0, 10, 0),
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_rounded, size: 18, color: Colors.grey),
-                      Text(' 중요한 공지는 중요 태그를 사용하세요.', style: TextStyle(color: Colors.grey)),
-                    ],
+
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text("공지사항을 업로드하시겠습니까?"),
+                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          actions: [
+                            TextButton(
+                              child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                              onPressed: () async {
+                                //_importantTest = NoticeTempProvider().trueTag;
+
+                                try {
+                                  await addNotice(userProvider.uid, residentProvider.facility_id);
+                                  _pickedImgs = [];
+
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                      builder: (BuildContext context3) {
+                                        return AlertDialog(
+                                          content: Text('작성 완료'),
+                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('확인'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                  );
+                                } catch(e) {
+
+                                  print(e);
+
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Text("공지사항 업로드 실패! 다시 시도해주세요"),
+                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('확인'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                  );
+
+
+
+                }
+
+
+              },
+              body: ListView(
+                children: [
+
+                  Container(
+                    padding: EdgeInsets.fromLTRB(8, 0, 10, 0),
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_rounded, size: 18, color: Colors.grey),
+                        Text(' 중요한 공지는 중요 태그를 사용하세요.', style: TextStyle(color: Colors.grey)),
+                      ],
+                    ),
                   ),
-                ),
+                  NoticeDropdown(menu: '공지사항'),
 
+                  SizedBox(height: 8),
+                  //getTitle(),
+                  //SizedBox(height: 8),
+                  getBody(),
 
+                  getPicture(context),
 
-                NoticeDropdown(),
-                SizedBox(height: 8),
-                getTitle(),
-                SizedBox(height: 8),
-                getBody(),
-                SizedBox(height: 8),
-                getPicture(context),
-
-              ],
-            ),
-            buttonName: '완료'
-        );
-      },
-    );
-  }
-
-
-  //제목
-  Widget getTitle() {
-    return TextFormField(
-      controller: titleController,
-      decoration: const InputDecoration(
-        hintText: '제목',
-        filled: true,
-        fillColor: Colors.white,
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-      ),
-        onSaved: (value) {
-          _title = value!;
+                ],
+              ),
+              buttonName: '완료'
+          );
         }
-
     );
   }
 
-  //내용
+  //제목 및 내용
   Widget getBody() {
-    return SizedBox(
-      width: double.infinity,
-      height: 430,
-      child: TextFormField(
-        maxLines: 1000,
-        controller: bodyController,
-        decoration: const InputDecoration(
-          hintText: '내용을 입력하세요',
-          filled: true,
-          fillColor: Colors.white,
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-        ),
-          onSaved: (value) {
-            _contents = value!;
-          }
-      ),
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: TextFormField(
+              validator: (value) {
+                if(value!.isEmpty) { return '제목을 입력하세요'; }
+                else { return null; }
+              },
+              decoration: const InputDecoration(
+                hintText: '제목',
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+              ),
+              onSaved: (value) {
+                _title = value!;
+              },
+            ),
+          ),
+          SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            height: 430,
+            child: TextFormField(
+              validator: (value) {
+                if(value!.isEmpty) { return '내용을 입력하세요'; }
+                else { return null; }
+              },
+              maxLines: 1000,
+              decoration: const InputDecoration(
+                hintText: '내용을 입력하세요',
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+              ),
+              onSaved: (value) {
+                _contents = value!;
+              },
+            ),
+          ),
+        ],
+      )
+
     );
   }
 

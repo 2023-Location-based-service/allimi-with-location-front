@@ -1,11 +1,11 @@
+//ManagerNoticePage
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'WriteNoticePage.dart';
-import '/Allim/WriteAllimPage.dart';
 import 'package:http/http.dart' as http; //http 사용
+
 
 ThemeColor themeColor = ThemeColor();
 
@@ -26,8 +26,8 @@ class ManagerNoticePage extends StatefulWidget {
 }
 
 class _ManagerNoticePageState extends State<ManagerNoticePage> {
-  String _userRole = '';
   late int _facilityId;
+  String _userRole = '';
   List<Map<String, dynamic>> _noticeList = [];
 
   Future<void> getNotice(int residentId) async {
@@ -41,7 +41,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         }
     );
 
-    var data = utf8.decode(response.bodyBytes);
+    var data =  utf8.decode(response.bodyBytes);
     dynamic decodedJson = json.decode(data);
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
 
@@ -63,28 +63,36 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
       appBar: AppBar(title: Text('공지사항')),
       body: ListView(
         children: [
+
+
+          //importantNotice(),
+          //SizedBox(height: 15),
           noticeList(),
+
+
         ],
       ),
       floatingActionButton: _getFAB(),
     );
   }
 
-  //플로팅 버튼
+  //플로팅액션버튼
   Widget _getFAB() {
     if (_userRole == 'PROTECTOR')
       return Container();
     else
       return FloatingActionButton(
-        onPressed: () {
+        onPressed: () async{
           //글쓰기 화면으로 이동
-          pageAnimation(context, WriteNoticePage());
-
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WriteNoticePage()),
+          );
+          getNotice(_facilityId);
         },
         child: const Icon(Icons.create),
       );
-
-        //writeButton(context, WriteNoticePage());
   }
 
   //공지사항 목록
@@ -98,6 +106,8 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
         if(_noticeList != null && _noticeList.length != 0) {
           List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
+
+
           return Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
             color: Colors.white,
@@ -108,7 +118,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getGreyTag(),  //TODO: 태그
+                      getGreyTag(),  //TODO: 태그 수정하기
                       SizedBox(height: 5),
                       Container(
                           child: Text(_noticeList[index]['title'], overflow: TextOverflow.ellipsis), //공지사항 제목
@@ -116,6 +126,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                       Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //공지사항 날짜
                     ],
                   ),
+                  //이미지
                   if (imgList.length != 0)
                     Container(
                         width: 100,
@@ -128,24 +139,15 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
               ),
               onTap: () {
                 print('공지 목록: ${_noticeList[index]['title']} Tap');
-                //pageAnimation(context, noticeManagerPage(index)); // TODO: 공지사항 내용으로 이동
+                pageAnimation(context, noticeManagerPage(index)); //공지사항 내용으로 이동
               },
             ),
           );
         }
 
+
         else
           return Container();
-
-
-
-
-
-
-
-
-
-
 
       },
       separatorBuilder: (context, index) {
@@ -154,6 +156,8 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     );
   }
 
+
+  //태그 선택
   Widget getRedTag() {
     return Container(
       padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
@@ -168,103 +172,101 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   Widget getGreyTag() {
     return Container(
       padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          color: Color(0xfff2f3f5),
-        ),
-        child: Text('공지사항', textScaleFactor: 0.85, style: TextStyle(color: Color(0xff6d767f))),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: Color(0xfff2f3f5),
+      ),
+      child: Text('공지사항', textScaleFactor: 0.85, style: TextStyle(color: Color(0xff6d767f))),
     );
   }
 
+  //공지 상세 내용
+  Widget noticeManagerPage(int index) {
+    return Scaffold(
+      appBar: AppBar(title: Text('공지사항 내용')),
+      body: ListView(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+                width: double.infinity,
+                color: Colors.white,
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_noticeList[index]['title']), //공지 제목
+                        Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //공지 게시한 날짜
+                      ],
+                    ),
+                    const Spacer(),
+                    OutlinedButton(
+                      child: Text('수정'),
+                      onPressed: (){
+                        //TODO: 수정 화면으로 넘어가기
+                      },
+                    ),
+                    OutlinedButton(
+                      child: Text('삭제'),
+                      onPressed: (){
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              AlertDialog(
+                                content: const Text('삭제하시겠습니까?'),
+                                actions: [
+                                  TextButton(child: Text('취소',
+                                      style: TextStyle(color: themeColor.getMaterialColor())),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                  TextButton(child: Text('예',
+                                      style: TextStyle(color: themeColor.getMaterialColor())),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        //TODO: 공지 삭제 이벤트
+                                      }),
+                                ],
+                              ),
+                        );
+                      },
 
-  //TODO: 공지사항 상세 내용
-  //요양보호사 버전 - 공지 상세 내용
-  // Widget noticeManagerPage(int index) {
-  //   return Scaffold(
-  //     appBar: AppBar(title: Text('공지사항 내용')),
-  //     body: ListView(
-  //       children: [
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Container(
-  //               padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
-  //               width: double.infinity,
-  //               color: Colors.white,
-  //               child: Row(
-  //                 children: [
-  //                   Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       Text(titleList[index]), //공지 제목
-  //                       Text(dateList[index]), //공지 게시한 날짜
-  //                     ],
-  //                   ),
-  //                   const Spacer(),
-  //                   OutlinedButton(
-  //                     child: Text('수정'),
-  //                     onPressed: (){
-  //                       //TODO: 수정 화면으로 넘어가기
-  //                     },
-  //                   ),
-  //                   OutlinedButton(
-  //                     child: Text('삭제'),
-  //                     onPressed: (){
-  //                       showDialog(
-  //                         context: context,
-  //                         builder: (context) =>
-  //                             AlertDialog(
-  //                               content: const Text('삭제하시겠습니까?'),
-  //                               actions: [
-  //                                 TextButton(child: Text('취소',
-  //                                     style: TextStyle(color: themeColor.getMaterialColor())),
-  //                                     onPressed: () {
-  //                                       Navigator.pop(context);
-  //                                     }),
-  //                                 TextButton(child: Text('예',
-  //                                     style: TextStyle(color: themeColor.getMaterialColor())),
-  //                                     onPressed: () {
-  //                                       Navigator.pop(context);
-  //                                       //TODO: 공지 삭제 이벤트
-  //                                     }),
-  //                               ],
-  //                             ),
-  //                       );
-  //                     },
-  //
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //
-  //             //공지사항 사진
-  //             Container(
-  //                 margin: EdgeInsets.fromLTRB(0,10,0,0),
-  //                 width: double.infinity,
-  //                 color: Colors.white,
-  //                 height: imgList[index].isNotEmpty ? 300 : null,
-  //                 child: Container(
-  //                     child: imgList[index].isNotEmpty
-  //                         ? Container(
-  //                       child: Image.asset(imgList[index], fit: BoxFit.fill,),
-  //                     )
-  //                         : null
-  //                 )
-  //             ),
-  //
-  //             //공지사항 세부 내용
-  //             Container(
-  //               width: double.infinity,
-  //               color: Colors.white,
-  //               padding: EdgeInsets.fromLTRB(7,7,7,7),
-  //
-  //               child: Text('공지사항 내용: ${titleList[index]} ${titleList[index]} ${titleList[index]} ${titleList[index]} ${titleList[index]}'),
-  //             ),
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+                    ),
+                  ],
+                ),
+              ),
+
+              //공지사항 사진
+              // Container(
+              //     margin: EdgeInsets.fromLTRB(0,10,0,0),
+              //     width: double.infinity,
+              //     color: Colors.white,
+              //     height: img[index].isNotEmpty ? 300 : null,
+              //     child: Column(
+              //         children: [
+              //           for (int i =0; i< imgList.length; i++ ) ...[
+              //             Image.network(imgList[i], fit: BoxFit.fill,),
+              //           ]
+              //         ]
+              //     ),
+              // ),
+
+              //공지사항 세부 내용
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                padding: EdgeInsets.fromLTRB(7,7,7,7),
+
+                child: Text('공지사항 내용: ${_noticeList[index]['content']}'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
 }

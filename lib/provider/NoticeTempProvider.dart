@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class NoticeTempProvider with ChangeNotifier {
-  String tag = '공지사항';
+  bool trueTag = true;
+  bool falseTag = false;
 
-  void setTag(medication) {
-    this.tag = tag;
+  void setTrueTag(tag) {
+    this.trueTag = tag;
+  }
+
+  void setFalseTag(tag) {
+    this.falseTag = tag;
   }
 
   void getData() {
