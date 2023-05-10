@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -10,6 +11,8 @@ import 'package:http/http.dart' as http; //http 사용
 String backendUrl = "http://52.78.62.115:8080/v2/";
 
 //초대하기 화면
+
+ThemeColor themeColor = ThemeColor();
 
 class InvitePage extends StatefulWidget {
   const InvitePage({Key? key}) : super(key: key);
@@ -22,7 +25,7 @@ enum Answer {PROTECTOR, WORKER}
 class _InvitePageState extends State<InvitePage> {
   final _contentEditController = TextEditingController();
 
-  String result = '';
+  String result = 'PROTECTOR';
   bool isprotect = true;
   bool isemployee = false;
   late List<bool> isSelected;
@@ -93,11 +96,20 @@ class _InvitePageState extends State<InvitePage> {
                   //전화번호 리스트 출력
                   showDialog(
                       context: context,
-                      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("초대할 사람을 선택해주세요"),
                           insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          actions: [
+                            TextButton(
+                              child: Text('다시 작성하기',style: TextStyle(color: themeColor.getColor(),),),
+                              onPressed: () {
+                                _phoneNumUsers = [];
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
                           content: Container(
                             height: 500,
                             width: 300,
@@ -112,6 +124,26 @@ class _InvitePageState extends State<InvitePage> {
                                         onTap: () async {
                                           await addInvite(_phoneNumUsers[index]['user_id'], residentProvider.facility_id, result);
                                           Navigator.of(context, rootNavigator: true).pop();
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: Text("초대하기를 완료하였습니다."),
+                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                          );
+
                                         })
                                   ],
                                 );
@@ -126,7 +158,26 @@ class _InvitePageState extends State<InvitePage> {
                 try {
                   await getUserByPhoneNum(_phone_num);
                   setState(() {});
-                  //Navigator.pop(context);
+                  if(_phoneNumUsers.length == 0){
+                    return showDialog(
+                        context: context,
+                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text("회원가입을 하지 않은 전화번호입니다. \n다시 확인해주세요."),
+                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                            actions: [
+                              TextButton(
+                                child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                    );
+                  }
                 } catch(e) {
                   showDialog(
                       context: context,
@@ -137,7 +188,7 @@ class _InvitePageState extends State<InvitePage> {
                           insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                           actions: [
                             TextButton(
-                              child: const Text('확인'),
+                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -182,6 +233,11 @@ class _InvitePageState extends State<InvitePage> {
                         ],
                         isSelected: isSelected,
                         onPressed: toggleSelect,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        selectedBorderColor: themeColor.getColor(),
+                        selectedColor: Colors.white,
+                        fillColor: themeColor.getColor(),
+                        color: themeColor.getColor(),
                       ),
                     ],
                   ),
@@ -209,6 +265,7 @@ class _InvitePageState extends State<InvitePage> {
 
                             validator: (value) {
                               if(value!.isEmpty) { return '전화번호를 입력해주세요'; }
+                              if(value.length!=11){ return '전화번호를 알맞게 입력해주세요';}
                               else { return null; }
                             },
                             onSaved: (value){
