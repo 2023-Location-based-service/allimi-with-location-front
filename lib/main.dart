@@ -39,6 +39,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _curIndex = 0;
+  late MainPage mainPage;
+  late SetupPage setupPage;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,37 +70,45 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Consumer<UserProvider>(
         builder: (context, userProvider, child) {
-          if (userProvider.uid == 0)          //userProvider의 uid값이 0이면 로그인이 되지 않은 상태 -> 로그인 페이지로 감
+          if (userProvider.uid == 0) {          //userProvider의 uid값이 0이면 로그인이 되지 않은 상태 -> 로그인 페이지로 감
             return LoginPage();
-          else if (userProvider.urole == '')  //userProvider의 user role 역할이 없으면 입소자 등록이 안된 상태 -> 초대화면으로 감
+          }
+          else if (userProvider.urole == '') {  //userProvider의 user role 역할이 없으면 입소자 등록이 안된 상태 -> 초대화면으로 감
             return InviteWaitPage(uid: userProvider.uid);
-                  //  return Container();
+          }       
           //로그인도 되었고 입소자도 있을 때 화면
-          else
-            return Scaffold(
-              body: getPage(),
-              bottomNavigationBar: Container(
-                decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
-                child: BottomNavigationBar(
-                  onTap: (index) {
-                    setState(() {
-                      _curIndex = index;
-                    });
-                  },
-                  currentIndex: _curIndex,
-                  unselectedItemColor: Colors.grey,
-                  selectedItemColor: themeColor.getColor(),
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  selectedFontSize: 12,
-                  items: [
-                    BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-                    BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-                  ],
-                ),
-              ),
+          else {
+            mainPage = new MainPage(userRole: userProvider.urole);
+            setupPage = new SetupPage(userRole: userProvider.urole);
+
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Scaffold(
+                  body: getPage(),
+                  bottomNavigationBar: Container(
+                    decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+                    child: BottomNavigationBar(
+                      onTap: (index) {
+                        setState(() {
+                          _curIndex = index;
+                        });
+                      },
+                      currentIndex: _curIndex,
+                      unselectedItemColor: Colors.grey,
+                      selectedItemColor: themeColor.getColor(),
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                      selectedFontSize: 12,
+                      items: [
+                        BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+                        BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+                      ],
+                    ),
+                  ),
+                );
+              }
             );
-        
+          }
         }
       ),
     );
@@ -105,9 +117,9 @@ class _MyAppState extends State<MyApp> {
   Widget getPage() {
     Widget page;
     switch(_curIndex) {
-      case 0: page = new MainPage(); break;
-      case 1: page = new SetupPage(); break;
-      default: page = new MainPage(); break;
+      case 0: page = mainPage; break;
+      case 1: page = setupPage; break;
+      default: page = mainPage; break;
     }
     return page;
   }

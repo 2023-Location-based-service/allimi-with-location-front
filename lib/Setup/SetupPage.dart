@@ -14,13 +14,26 @@ List<String> personList = ['구현진', '권태연', '정혜지', '주효림'];
 
 
 class SetupPage extends StatefulWidget {
-  const SetupPage({Key? key}) : super(key: key);
+  const SetupPage({Key? key, required this.userRole}) : super(key: key);
+
+  final String userRole;
 
   @override
   State<SetupPage> createState() => _SetupPageState();
 }
 
 class _SetupPageState extends State<SetupPage> {
+
+  late String _userRole;
+
+  @override
+  void initState() {
+    debugPrint("@@@setuppage initState!");
+    super.initState();
+    _userRole = widget.userRole;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

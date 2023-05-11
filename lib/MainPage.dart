@@ -17,7 +17,8 @@ import 'Comment/UserCommentPage.dart';
 ThemeColor themeColor = ThemeColor();
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({Key? key, required this.userRole}) : super(key: key);
+  final String userRole;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -26,10 +27,16 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   List<String> textEmoji = ['📢', '✏', '🗓', '🍀', '💌', '🔧'];
   List<String> textMenu = ['공지사항', '알림장', '일정표', '면회 관리', '한마디', '시설 설정'];
-  late String _userRole = '';
+  late String _userRole;
   late int _resident_id = 0;
   late int _facility_id = 0;
   late int _userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _userRole = widget.userRole;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +49,6 @@ class _MainPageState extends State<MainPage> {
       ),
       body: ListView(
         children: [
-
           //TODO: 위젯 작성
           myCard(),
           menuList(context),
@@ -51,7 +57,6 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-
 
   //소속추가 버튼
   Widget addGroup() {
@@ -99,7 +104,6 @@ class _MainPageState extends State<MainPage> {
           SizedBox(width: 10),
             Consumer2<UserProvider, ResidentProvider>(
             builder: (context, userProvider, residentProvider, child) {
-              _userRole = userProvider.urole;
               _resident_id = residentProvider.resident_id;
               _facility_id = residentProvider.facility_id;
               _userId = userProvider.uid;
@@ -145,35 +149,36 @@ class _MainPageState extends State<MainPage> {
 
   //메뉴 리스트 출력
   Widget menuList(BuildContext context) {
+    debugPrint("@@userRole: " + _userRole);
     return Container(
       padding: EdgeInsets.fromLTRB(11,0,11,0),
       child: GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: (_userRole == 'PROTECTOR')? textMenu.length-1 : textMenu.length, //총 몇 개 출력할 건지
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, //한 행에 몇 개 출력할 건지
-            childAspectRatio: 2/2.2, //가로세로 비율
-            mainAxisSpacing: 1,
-            crossAxisSpacing: 1,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () { onButtonTap(index); },
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
-                    SizedBox(height: 5),
-                    Text(textMenu[index], textScaleFactor: 1.05,),
-                  ],
-                ),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: (_userRole != 'PROTECTOR')? textMenu.length : textMenu.length -1, //총 몇 개 출력할 건지
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, //한 행에 몇 개 출력할 건지
+          childAspectRatio: 2/2.2, //가로세로 비율
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 1,
+        ),
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () { onButtonTap(index); },
+            child: Card(
+              elevation: 0,
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
+                  SizedBox(height: 5),
+                  Text(textMenu[index], textScaleFactor: 1.05,),
+                ],
               ),
-            );
-          }
+            ),
+          );
+        }
       ),
     );
   }

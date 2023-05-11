@@ -117,7 +117,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
       },
       body: jsonEncode({
         "invite_id": invitationId
-      })
+      })//66000000
     );
 
     // 응답 코드가 200 OK가 아닐 경우 예외 처리
