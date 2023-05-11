@@ -48,8 +48,10 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         "notice_id": noticeId
       })
     );
+    
+    debugPrint("@@@statusCode= " + response.statusCode.toString());
 
-    if (response != 200)
+    if (response.statusCode != 200)
       throw Exception();
   }
 
@@ -95,7 +97,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   //시설장 및 직원 알림장(각 목록)
   Widget eachmanager() {
         if (_noticeDetail['notice_id'] == null)
-          return Text("asdf");
+          return Center(child: CircularProgressIndicator());
 
         return SingleChildScrollView(
           child: Column(
@@ -148,18 +150,56 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    content: Text("정말 삭제하시겠습니까>"),
+                                    content: Text("정말 삭제하시겠습니까?"),
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
                                         child: const Text('삭제'),
                                         onPressed: () async {
+                                          debugPrint("@@@love");
+
                                           try {
                                             await deleteNotice(_noticeId);
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                              builder: (BuildContext context3) {
+                                                return AlertDialog(
+                                                  content: Text('작성 완료'),
+                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text('확인'),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                            );
                                           } catch(e) {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: Text("알림장 업로드 실패! 다시 시도해주세요"),
+                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text('확인'),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                            );
                                           }
-
-                                          Navigator.of(context).pop();
                                         },
                                       ),
                                       TextButton(

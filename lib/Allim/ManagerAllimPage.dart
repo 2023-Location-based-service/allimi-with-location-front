@@ -167,9 +167,15 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                         ),
                       ],
                     ),
-                    onTap: (){
-                      pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole));
-              
+                    onTap: () async {
+
+                      //상세보기 화면으로 이동
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole)),
+                      );
+                      getNotice(_residentId);
                     },
                   ),
               );
