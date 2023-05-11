@@ -109,14 +109,15 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     }
       debugPrint("@@@@@ 초대 수락하는 백앤드 url 보냄");
 
-
     http.Response response2 = await http.post(
       Uri.parse(backendUrl+ 'invitations/approve'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
       },
-      body: jsonEncode(invitationId)
+      body: jsonEncode({
+        "invite_id": invitationId
+      })
     );
 
     // 응답 코드가 200 OK가 아닐 경우 예외 처리
