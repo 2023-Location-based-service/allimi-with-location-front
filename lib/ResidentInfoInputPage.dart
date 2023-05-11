@@ -142,18 +142,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.room,
-                        color: Colors.black,
-                      ),
-                      Text(
-                        "구미요양원",
-                        style: TextStyle(fontSize: 10.0),
-                      )
-                    ],
-                  ),
                   SizedBox(height: 15.0,),
                   Text(
                     "입소자 정보를 입력해주세요",
@@ -179,87 +167,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                           validator: (value) =>
                           value!.isEmpty ? '생년월일을 입력해주세요.' : null,
                           onSaved: (value) => _birthdate = value!,
-                        ),
-                        SizedBox(height: 35.0,),
-                        Text(
-                          '건강 정보(중복선택 가능)',
-                        ),
-                        SizedBox(height: 12.0,),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _isHighBloodPress,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isHighBloodPress = value!;
-                                });
-                              },
-                            ),
-                            Text("고혈압")
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _isDiabetes,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isDiabetes = value!;
-                                });
-                              },
-                            ),
-                            Text("당뇨")
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _isHeartAttack,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isHeartAttack = value!;
-                                });
-                              },
-                            ),
-                            Text("심근경색")
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _isHeartDisease,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isHeartDisease = value!;
-                                });
-                              },
-                            ),
-                            Text("심장병")
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Checkbox(
-                              value: _isEtc,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isEtc = value!;
-                                });
-                              },
-                            ),
-                            Text("기타", textAlign: TextAlign.left),
-                            SizedBox(width: 10,),
-                            Container(
-                              child: Flexible(
-                                child: TextFormField(
-                                  //enabled: !_isDisabled,
-                                  decoration: InputDecoration(
-                                    isDense: true
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
