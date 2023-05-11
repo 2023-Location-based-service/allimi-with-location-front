@@ -129,8 +129,13 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                         child: Consumer<ResidentProvider>(
                           builder: (context, residentProvider, child) {
                             return OutlinedButton(
-                                onPressed: (){
-                                  pageAnimation(context, EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,));
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
+                                  );
+                                  getNoticeDetail();
                                 },
                                 child: Text('수정')
                             );

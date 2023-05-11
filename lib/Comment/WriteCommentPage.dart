@@ -57,22 +57,22 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                   Navigator.pop(context);
                 } catch(e) {
                   showDialog(
-                      context: context,
-                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text("한마디 업로드 실패! 다시 시도해주세요"),
-                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                          actions: [
-                            TextButton(
-                              child: const Text('확인'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      }
+                    context: context,
+                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text("한마디 업로드 실패! 다시 시도해주세요"),
+                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                        actions: [
+                          TextButton(
+                            child: const Text('확인'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
                   );
                 }
               }},

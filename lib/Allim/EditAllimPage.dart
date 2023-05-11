@@ -71,22 +71,20 @@ class _EditAllimPageState extends State<EditAllimPage> {
   Future<void> getFile() async {
     List<XFile> filesList= await _fileFromImageUrl(_imageUrls);
 
-   
-      _pickedImgs.addAll(filesList);
-    
-    setState(() {
-      
-    });
+    if (filesList != null) {
+      setState(() {
+        _pickedImgs.addAll(filesList);
+      });
+    }
   }
 
   Future<List<XFile>> _fileFromImageUrl(List<String> imageUrls) async {
     List<XFile> xfileList  = [];
 
-    for (String url in imageUrls) {
-      debugPrint("@@@@" + url);
-      final response = await http.get(Uri.parse(url));
+    for (int i = 0; i<imageUrls.length; i++) {
+      final response = await http.get(Uri.parse(imageUrls[i]));
       final documentDirectory = await pp.getApplicationDocumentsDirectory();
-      final file = File(ppp.join(documentDirectory.path, "a.png"));
+      final file = File(ppp.join(documentDirectory.path, i.toString() + ".jpg"));
       file.writeAsBytesSync(response.bodyBytes);
 
       final xfile = new XFile(file.path);
@@ -97,7 +95,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
   }
 
   Future<void> getFacilityResident(int facilityId) async {
-      debugPrint("@@@@@ 시설의 입소자 정보 받아오는 백앤드 url 보냄");
+    debugPrint("@@@@@ 시설의 입소자 정보 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
       Uri.parse(backendUrl + "nhResidents/protectors/" + facilityId.toString()),
@@ -468,41 +466,44 @@ class _EditAllimPageState extends State<EditAllimPage> {
         scrollDirection: Axis.horizontal,
         itemCount: _pickedImgs.length + 1,
         itemBuilder: (BuildContext context, int index) {
+          if (index != 0)
+            debugPrint("@@img: " + _pickedImgs[index-1].path.toString());
+
           return Center(
             child: Container(
               margin: EdgeInsets.fromLTRB(3, 8, 3, 8),
               width: 100,
               height: 100,
               child: DottedBorder(
-                  color: Colors.grey,
-                  child: Container(
-                    child: (index == 0)? Center(child: addImages(context)) : Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: (index == 0)? null : DecorationImage(
-                                fit: BoxFit.cover,
-                                image: FileImage(File(_pickedImgs[index - 1].path))
-                            ),
+                color: Colors.grey,
+                child: Container(
+                  child: (index == 0)? Center(child: addImages(context)) : Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: (index == 0)? null : DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(File(_pickedImgs[index - 1].path))
                           ),
                         ),
-                        Positioned(
-                            top: 3,
-                            right: 3,
-                            child: GestureDetector(
-                              child: Container(
-                                child: Icon(Icons.cancel_rounded, color: Colors.black54,),
-                              ),
-                              onTap: () {
-                                _pickedImgs.removeAt(index - 1);
-                                setState(() {});
-                              },
-                            )
-                        ),
-                      ],
-                    ),
-                  )
+                      ),
+                      Positioned(
+                          top: 3,
+                          right: 3,
+                          child: GestureDetector(
+                            child: Container(
+                              child: Icon(Icons.cancel_rounded, color: Colors.black54,),
+                            ),
+                            onTap: () {
+                              _pickedImgs.removeAt(index - 1);
+                              setState(() {});
+                            },
+                          )
+                      ),
+                    ],
+                  ),
+                )
               ),
             ),
           );
