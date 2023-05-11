@@ -102,7 +102,6 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                   this.formKey.currentState!.save();
 
 
-
                   showDialog(
                       context: context,
                       barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
@@ -120,8 +119,6 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                             TextButton(
                               child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                               onPressed: () async {
-                                //_importantTest = NoticeTempProvider().trueTag;
-
                                 try {
                                   bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
                                   await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);

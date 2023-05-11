@@ -121,7 +121,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시  //TODO: 태그 수정하기
+                      isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시
                       SizedBox(height: 5),
                       Container(
                           child: Text(_noticeList[index]['title'], overflow: TextOverflow.ellipsis), //공지사항 제목
@@ -195,6 +195,8 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
   //공지 상세 내용
   Widget noticeManagerPage(int index) {
+    List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
+
     return Scaffold(
       appBar: AppBar(title: Text('공지사항 내용')),
       body: ListView(
@@ -253,19 +255,18 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
               ),
 
               //공지사항 사진
-              // Container(
-              //     margin: EdgeInsets.fromLTRB(0,10,0,0),
-              //     width: double.infinity,
-              //     color: Colors.white,
-              //     height: img[index].isNotEmpty ? 300 : null,
-              //     child: Column(
-              //         children: [
-              //           for (int i =0; i< imgList.length; i++ ) ...[
-              //             Image.network(imgList[i], fit: BoxFit.fill,),
-              //           ]
-              //         ]
-              //     ),
-              // ),
+              Container(
+                  margin: EdgeInsets.fromLTRB(0,10,0,0),
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Column(
+                      children: [
+                        for (int i =0; i< imgList.length; i++ ) ...[
+                          Image.network(imgList[i], fit: BoxFit.fill,),
+                        ]
+                      ]
+                  ),
+              ),
 
               //공지사항 세부 내용
               Container(
