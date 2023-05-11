@@ -427,7 +427,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                       
                   ],
                 ),
-                Text(_visitList[index]['resident_id'].toString() + " 보호자님"), //TODO: ㅇㅇㅇ 보호자님 출력
+                Text(_visitList[index]['residentName'].toString() + " 보호자님"), //TODO: ㅇㅇㅇ 보호자님 출력
                 Text(_visitList[index]['texts']), //TODO: 할 말 출력
                 Divider(thickness: 0.5),
                 if (_visitList[index]['state'] == 'REJECTED')
