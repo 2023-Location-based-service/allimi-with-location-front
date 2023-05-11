@@ -34,8 +34,8 @@ class ResidentInfoInputPage extends StatefulWidget {
 class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   final formKey = new GlobalKey<FormState>();
 
-  late String _residentname;
-  late String _birthdate;
+  String _residentname = '';
+  String _birthdate = '';
   late int invitationId;
   late String invitationUserRole;
   late int invitationFacilityId;
@@ -85,7 +85,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
      //TODO 기타저장 안됨
     debugPrint("@@@@@ 입소자 추가하는 백앤드 url 보냄");
 
-
     //입소자추가 psot
     http.Response response1 = await http.post(
       
@@ -130,121 +129,151 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.all(30),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  SizedBox(height: 15.0,),
-                  Text(
-                    "입소자 정보를 입력해주세요",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
-                  SizedBox(height: 10.0,),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(labelText: '이름'),
-                          validator: (value) =>
-                          value!.isEmpty ? '이름을 입력해주세요.' : null,
-                          onSaved: (value) => _residentname = value!,
-                        ),
-                        TextFormField(
-                          obscureText: true,
-                          decoration: InputDecoration(labelText: '생년월일'),
-                          validator: (value) =>
-                          value!.isEmpty ? '생년월일을 입력해주세요.' : null,
-                          onSaved: (value) => _birthdate = value!,
-                        ),
-                      ],
+    if(invitationUserRole == 'PROTECTOR')
+      return Scaffold(
+        body: ListView(
+          children: [
+            Container(
+              padding: EdgeInsets.all(30),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(height: 15.0,),
+                    Text(
+                      "입소자 정보를 입력해주세요",
+                      style: TextStyle(fontSize: 15.0),
                     ),
-                  ),
-                  SizedBox(height: 30.0,),
-                  Consumer<UserProvider>(
-                    builder: (context, userProvider, child) {
-                      return ElevatedButton (
-                          child: Text(
-                            '확인',
-                            style: TextStyle(fontSize: 18.0),
+                    SizedBox(height: 10.0,),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(labelText: '이름'),
+                            validator: (value) =>
+                            value!.isEmpty ? '이름을 입력해주세요.' : null,
+                            onSaved: (value) => _residentname = value!,
                           ),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(10),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
+                          TextFormField(
+                            obscureText: true,
+                            decoration: InputDecoration(labelText: '생년월일'),
+                            validator: (value) =>
+                            value!.isEmpty ? '생년월일을 입력해주세요.' : null,
+                            onSaved: (value) => _birthdate = value!,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 30.0,),
+                    Consumer<UserProvider>(
+                      builder: (context, userProvider, child) {
+                        return ElevatedButton (
+                            child: Text(
+                              '확인',
+                              style: TextStyle(fontSize: 18.0),
                             ),
-                          ),
-                          onPressed: () async {
-                            if (validateAndSave()) {
-                              var data;
-                              try {
-                                data = await addResident(userProvider.uid);
-                                var json_data = json.decode(data);
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (validateAndSave()) {
+                                var data;
+                                try {
+                                  data = await addResident(userProvider.uid);
+                                  var json_data = json.decode(data);
 
-                                if (json_data['resident_id'] != null) {
-                                  Provider.of<ResidentProvider>(context, listen:false)
-                                    .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
-                                            invitationUserRole,_birthdate, healthInfo);
+                                  if (json_data['resident_id'] != null) {
+                                    Provider.of<ResidentProvider>(context, listen:false)
+                                      .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
+                                              invitationUserRole,_birthdate, healthInfo);
 
-                                  Provider.of<UserProvider>(context, listen:false)
-                                   .setRole(invitationUserRole);
+                                    Provider.of<UserProvider>(context, listen:false)
+                                     .setRole(invitationUserRole);
 
-                                   Navigator.pop(context);
+                                     Navigator.pop(context);
+                                  }
+
+                                  Provider.of<UserProvider>(context,listen:false).getData();
+
+                                } catch(e) {
+                                  String errorMessage = '';
+
+                                  if (e.runtimeType == FormatException)  //중복된 아이디
+                                    errorMessage = '중복된 아이디입니다';
+                                  else
+                                    errorMessage = '회원가입에 실패하였습니다';
+
+
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Text(errorMessage),
+                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('확인'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    );
                                 }
 
-                                Provider.of<UserProvider>(context,listen:false).getData();
-                              
-                              } catch(e) {
-                                String errorMessage = '';
-
-                                if (e.runtimeType == FormatException)  //중복된 아이디
-                                  errorMessage = '중복된 아이디입니다';
-                                else 
-                                  errorMessage = '회원가입에 실패하였습니다';
-                                
-                                
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: Text(errorMessage),
-                                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('확인'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  );
-                              } 
-                            
+                              }
                             }
-                          }
-                      );
-                    }
-                  ),
-                ],
+                        );
+                      }
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      )
-    );
+          ],
+        )
+      );
+    else
+      return Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            test(userProvider.uid);
+           return CircularProgressIndicator();
+        }
+      );
+  }
+  Future<void> test(uid) async {
+    await addResident(uid);
+    var data;
+    try {
+      data = await addResident(uid);
+      var json_data = json.decode(data);
+
+      if (json_data['resident_id'] != null) {
+        Provider.of<ResidentProvider>(context, listen:false)
+            .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
+            invitationUserRole,_birthdate, healthInfo);
+
+        Provider.of<UserProvider>(context, listen:false)
+            .setRole(invitationUserRole);
+
+        Navigator.pop(context);
+      }
+
+      Provider.of<UserProvider>(context,listen:false).getData();
+
+    } catch(e) {}
   }
 }
+
