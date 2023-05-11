@@ -42,8 +42,6 @@ class _MyAppState extends State<MyApp> {
   late MainPage mainPage;
   late SetupPage setupPage;
 
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

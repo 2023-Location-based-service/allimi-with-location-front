@@ -119,30 +119,30 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
       key: formKey,
       child: SizedBox(
         child: TextFormField(
-            validator: (value) {
-              if(value!.isEmpty) { return '내용을 입력하세요'; }
-              else { return null; }
-            },
-            maxLines: 10,
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Color(0xfff2f3f6),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(width: 1, color: Colors.transparent),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide(width: 1, color: Colors.transparent),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              //focusedBorder: InputBorder.none,
+          validator: (value) {
+            if(value!.isEmpty) { return '내용을 입력하세요'; }
+            else { return null; }
+          },
+          maxLines: 10,
+          decoration: const InputDecoration(
+            filled: true,
+            fillColor: Color(0xfff2f3f6),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(width: 1, color: Colors.transparent),
             ),
-            onSaved: (value) {
-              _contents = value!;
-            }
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(width: 1, color: Colors.transparent),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            //focusedBorder: InputBorder.none,
+          ),
+          onSaved: (value) {
+            _contents = value!;
+          }
         ),
       ),
     );

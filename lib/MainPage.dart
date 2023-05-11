@@ -149,7 +149,6 @@ class _MainPageState extends State<MainPage> {
 
   //메뉴 리스트 출력
   Widget menuList(BuildContext context) {
-    debugPrint("@@userRole: " + _userRole);
     return Container(
       padding: EdgeInsets.fromLTRB(11,0,11,0),
       child: GridView.builder(

@@ -28,11 +28,9 @@ class _SetupPageState extends State<SetupPage> {
 
   @override
   void initState() {
-    debugPrint("@@@setuppage initState!");
     super.initState();
     _userRole = widget.userRole;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,24 +38,13 @@ class _SetupPageState extends State<SetupPage> {
       appBar: AppBar(title: Text('설정')),
       body: ListView(
         children: [
-
-          //TODO: 위젯 작성
           appProfile(),
           appInmateProfile(),
-          appLogout(),
-          //appTest(),
+          appLogout()
         ],
       ),
     );
   }
-
-  Widget appTest() {
-    return ListTile(
-        title: Text('시설 추가하기 - 화면 테스트'),
-        leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
-        onTap: () { pageAnimation(context, AddFacilities()); });
-  }
-
 
   Widget appProfile() {
     return ListTile(
@@ -76,8 +63,6 @@ class _SetupPageState extends State<SetupPage> {
         }
     );
   }
-
-
 
   Widget appLogout() {
     return ListTile(
@@ -111,11 +96,6 @@ class _SetupPageState extends State<SetupPage> {
           );
         });
   }
-
-
-
-
-
 }
 
 
