@@ -23,7 +23,7 @@ class InviteListPage extends StatefulWidget {
 
 class _InviteListPageState extends State<InviteListPage> {
   static List<Map<String, dynamic>> _inviteDatalist = [];
-  late int _inviteId;
+  late int _facilityId;
 
   Future<void> getInvitation(int facilityId) async {
     http.Response response = await http.get(
@@ -70,7 +70,8 @@ class _InviteListPageState extends State<InviteListPage> {
   void initState() {
     super.initState();
     final residentProvider = context.read<ResidentProvider>();
-    getInvitation(residentProvider.facility_id);
+    _facilityId = residentProvider.facility_id;
+    getInvitation(_facilityId);
   }
 
   @override
@@ -98,7 +99,7 @@ class _InviteListPageState extends State<InviteListPage> {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: _inviteDatalist.length,
-            itemBuilder: (BuildContext context, int index) {
+            itemBuilder: (BuildContext context_, int index) {
               return ListTile(
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
@@ -119,7 +120,7 @@ class _InviteListPageState extends State<InviteListPage> {
                             showDialog(
                                 context: context,
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                builder: (BuildContext context) {
+                                builder: (BuildContext context3) {
                                   return AlertDialog(
                                     content: Text("정말 삭제하시겠습니까?"),
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
@@ -135,9 +136,12 @@ class _InviteListPageState extends State<InviteListPage> {
                                         onPressed: () async {
                                           try {
                                             await deleteInvitation(_inviteDatalist[index]['id']);
+                                            Navigator.of(context).pop();
+                                            getInvitation(_facilityId);
                                           } catch(e) {
                                           }
-                                          Navigator.of(context).pop();
+
+
                                         },
                                       ),
                                     ],
@@ -168,7 +172,16 @@ class _InviteListPageState extends State<InviteListPage> {
       focusElevation: 0,
       highlightElevation: 0,
       hoverElevation: 0,
-      onPressed: () { pageAnimation(context, InvitePage()); },
+      onPressed: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => InvitePage()),
+        );
+
+        getInvitation(_facilityId);
+
+        },
       child: Icon(Icons.add, color: Colors.white),
     );
   }
