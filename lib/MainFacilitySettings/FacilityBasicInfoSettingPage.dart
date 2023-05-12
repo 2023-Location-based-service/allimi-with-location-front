@@ -11,17 +11,19 @@ String backendUrl = "http://52.78.62.115:8080/v2/";
 //시설 기본정보 설정 화면
 
 class FacilityBasicInfoPage extends StatefulWidget {
-  const FacilityBasicInfoPage({Key? key}) : super(key: key);
+  const FacilityBasicInfoPage({Key? key, required this.facilityId}) : super(key: key);
+  final int facilityId;
 
   @override
   State<FacilityBasicInfoPage> createState() => _FacilityBasicInfoPageState();
 }
 class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
-  static List<Map<String, dynamic>> _facilityList = [];
+  int _facilityId = 0;
+  Map<String, dynamic> _facilityInfo = {};
 
   Future<void> getFacilityInfo() async {
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "facilities/admin/"),
+        Uri.parse(backendUrl + "facilities/" + _facilityId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -30,16 +32,17 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
 
     var data =  utf8.decode(response.bodyBytes);
     dynamic decodedJson = json.decode(data);
-    List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
+    Map<String, dynamic> parsedJson = Map<String, dynamic>.from(decodedJson);
 
     setState(() {
-      _facilityList =  parsedJson;
+      _facilityInfo =  parsedJson;
     });
   }
 
   @override
   void initState() {
     super.initState();
+    _facilityId = widget.facilityId;
     getFacilityInfo();
   }
 
@@ -52,85 +55,112 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
   }
 
   Widget appSetting(){
-    return Container(
-      child: Consumer<ResidentProvider>(
-        builder: (context, residentProvider, child){
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: _facilityList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+    if (_facilityInfo.length == 0) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return Container(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(18),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        child: Text('시설 정보'),
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Color(0xfff2f3f6),
+                            border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                        ),
+                      ),
+                      Container(  //시설 이름
+                        child: Text(_facilityInfo['name'], textScaleFactor: 1.2,),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                        ),
+                      ),
+                      Container(  //전화번호
+                        child: Text(_facilityInfo['tel'], textScaleFactor: 1.2,),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                        ),
+                      ),
 
-                  if(_facilityList[index]['id']==residentProvider.facility_id)
-                    Container(
-                        padding: EdgeInsets.all(18),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              child: Text('시설 정보'),
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                  color: Color(0xfff2f3f6),
-                                  border: Border.all(color: Color(0xfff2f3f6),width: 3)
-                              ),
-                            ),
-                            Container(  //시설 이름
-                              child: Text(_facilityList[index]['name'], textScaleFactor: 1.2,),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                              ),
-                            ),
-                            Container(  //전화번호
-                              child: Text(_facilityList[index]['tel'], textScaleFactor: 1.2,),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                              ),
-                            ),
-
-                          ],
-                        )
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(18),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              child: Text('시설 주소'),
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                  color: Color(0xfff2f3f6),
-                                  border: Border.all(color: Color(0xfff2f3f6),width: 3)
-                              ),
-                            ),
-                            Container(
-                              child: Text(_facilityList[index]['address'], textScaleFactor: 1.2,),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                              ),
-                            ),
-                          ],
-                        )
-                    ),
-                ],
-              );
-            }
+                    ],
+                  )
+              ),
+              Container(
+                  padding: EdgeInsets.all(18),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        child: Text('시설 주소'),
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Color(0xfff2f3f6),
+                            border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                        ),
+                      ),
+                      Container(
+                        child: Text(_facilityInfo['address'], textScaleFactor: 1.2,),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                        ),
+                      ),
+                    ],
+                  )
+              ),
+              Container(
+                  padding: EdgeInsets.all(18),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        child: Text('시설장 이름'),
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Color(0xfff2f3f6),
+                            border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                        ),
+                      ),
+                      Container(
+                        child: Text(_facilityInfo['fm_name'], textScaleFactor: 1.2,),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                        ),
+                      ),
+                    ],
+                  )
+              ),
+            ],
           );
-        },
-      ),
-    );
+        }
+      )
+          
+        
+      );
+    
+    }
+    
   }
 }

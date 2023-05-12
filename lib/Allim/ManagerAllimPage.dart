@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '/Allim/WriteAllimPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
-import '/AllimModel.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 String backendUrl = "http://52.78.62.115:8080/v2/";
@@ -71,23 +70,24 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
 
   Widget _getFAB() {
 
-    if (_userRole == 'PROTECTOR')
+    if (_userRole == 'PROTECTOR') {
       return Container();
-    else
+    }
+    else {
       return FloatingActionButton(
-      onPressed: () async{
-        //글쓰기 화면으로 이동
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WriteAllimPage()),
-        );
+        onPressed: () async{
+          //글쓰기 화면으로 이동
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WriteAllimPage()),
+          );
 
-        getNotice(_residentId);
-      },
-      child: const Icon(Icons.create),
+          getNotice(_residentId);
+        },
+        child: const Icon(Icons.create),
     );
-
+    }
   }
 
 //시설장 및 직원 알림장 목록
@@ -100,7 +100,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index){
 
-
             if (_noticeList != null && _noticeList.length != 0) {
               List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
               
@@ -111,8 +110,8 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white),
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white),
                           width: double.infinity,
                           height: 130,
                           padding: EdgeInsets.only(top: 5,left: 1,right: 1),
@@ -140,14 +139,14 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                     Spacer(),
                                     //세부내용(너무 길면 ...로 표시)
                                     Container(
-                                        padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                                        child: Text(
-                                          _noticeList[index]['content'],
-                                          style: TextStyle(fontSize: 14),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                        )
+                                      padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
+                                      child: Text(
+                                        _noticeList[index]['content'],
+                                        style: TextStyle(fontSize: 14),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                      )
                                     ),
                                     Spacer(),
                                   ],
@@ -156,11 +155,11 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                               //이미지
                               if (imgList.length != 0)
                                 Container(
-                                    width: 100,
-                                    height: 100,
-                                    child: Container(
-                                      child: Image.network(imgList[0], fit: BoxFit.fill,),
-                                    )
+                                  width: 100,
+                                  height: 100,
+                                  child: Container(
+                                    child: Image.network(imgList[0], fit: BoxFit.fill,),
+                                  )
                                 ),
                             ],
                           ),
@@ -179,7 +178,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                     },
                   ),
               );
-
             }
               
             
@@ -192,9 +190,5 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       ],
 
     );
-          
-        
-      
-    
   }
 }

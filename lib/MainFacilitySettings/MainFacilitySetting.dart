@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
+import 'package:provider/provider.dart';
 import 'package:test_data/LoginPage.dart';
 import 'package:test_data/ResidentInfoInputPage.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
 import '/MainFacilitySettings/FacilityBasicInfoSettingPage.dart';
 import '/Invite/InviteListPage.dart';
 import 'PeopleManagementPage.dart';
@@ -76,13 +78,17 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
   }
 
   Widget appFacilityBasicSetting() {
-    return ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-        title: Text('시설 기본 정보 설정'),
-        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-        onTap: () {
-          pageAnimation(context, FacilityBasicInfoPage());
-        });
+    return Consumer<ResidentProvider>(
+      builder: (context, residentProvider, child) {
+        return ListTile(
+          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+          title: Text('시설 기본 정보 설정'),
+          trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+          onTap: () {
+            pageAnimation(context, FacilityBasicInfoPage(facilityId: residentProvider.facility_id));
+          });
+      }
+    );
   }
 
 

@@ -14,6 +14,7 @@ ThemeColor themeColor = ThemeColor();
 class WriteCommentPage extends StatefulWidget {
   const WriteCommentPage({Key? key}) : super(key: key);
 
+
   @override
   State<WriteCommentPage> createState() => _WriteCommentPageState();
 }
