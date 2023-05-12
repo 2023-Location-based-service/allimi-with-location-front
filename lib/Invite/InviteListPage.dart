@@ -78,7 +78,6 @@ class _InviteListPageState extends State<InviteListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: inviteButton(),
       appBar: AppBar(title: Text('초대 목록')),
       body: ListView(
         children: [
@@ -140,8 +139,6 @@ class _InviteListPageState extends State<InviteListPage> {
                                             getInvitation(_facilityId);
                                           } catch(e) {
                                           }
-
-
                                         },
                                       ),
                                     ],
@@ -160,29 +157,6 @@ class _InviteListPageState extends State<InviteListPage> {
           SizedBox(height: 80,)
         ],
       ),
-    );
-  }
-
-  //초대하기 버튼
-  Widget inviteButton(){
-    return FloatingActionButton(
-      focusColor: Colors.white54,
-      backgroundColor: themeColor.getColor(),
-      elevation: 0,
-      focusElevation: 0,
-      highlightElevation: 0,
-      hoverElevation: 0,
-      onPressed: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => InvitePage()),
-        );
-
-        getInvitation(_facilityId);
-
-        },
-      child: Icon(Icons.add, color: Colors.white),
     );
   }
 }
