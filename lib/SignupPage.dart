@@ -6,15 +6,15 @@ import 'LoginPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
     debugPrint("@@@@@ 회원가입 백앤드 url 보냄");
 
   http.Response response = await http.post(
     Uri.parse(backendUrl+"users"),
     headers: <String, String>{
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode({
       "login_id": id,
@@ -24,6 +24,7 @@ Future<String> signUpRequest(String id, String password, String name, String pho
     }),
   );
 
+  debugPrint("@@StatusCode: " + response.statusCode.toString());
 
     // 응답 코드가 200 OK가 아닐 경우 예외 처리
   if (response.statusCode == 500) {

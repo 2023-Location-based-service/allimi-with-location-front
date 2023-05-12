@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
           //로그인도 되었고 입소자도 있을 때 화면
           else {
             mainPage = new MainPage(userRole: userProvider.urole);
-            setupPage = new SetupPage(userRole: userProvider.urole);
+            setupPage = new SetupPage(userRole: userProvider.urole, userId: userProvider.uid);
 
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {

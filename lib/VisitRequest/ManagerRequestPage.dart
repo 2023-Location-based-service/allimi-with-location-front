@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Backend.dart';
 import 'package:test_data/VisitRequest/SelectedTimePage.dart';
 import 'package:test_data/VisitRequest/VisitWritePage.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
@@ -11,7 +12,7 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
+String backendUrl = Backend.getUrl();
 
 ThemeColor themeColor = ThemeColor();
 
@@ -57,7 +58,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
 
   // 서버에 면회신청 상태변경 WAITING -> REJECTED, APPROVED, COMPLETED
   Future<void> editState(int visit_id, String state) async {
-    var url = Uri.parse("http://52.78.62.115:8080/" + 'visit/approval');
+    var url = Uri.parse(Backend.getDomain() + 'visit/approval');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
         "visit_id": visit_id,

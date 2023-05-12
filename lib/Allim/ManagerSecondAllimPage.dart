@@ -6,8 +6,8 @@ import 'package:test_data/Allim/EditAllimPage.dart';
 import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage({
     Key? key,

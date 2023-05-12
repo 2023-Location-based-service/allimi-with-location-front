@@ -17,7 +17,7 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 
 ThemeColor themeColor = ThemeColor();
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
+String backendUrl = "https://allimi-fydfi.run.goorm.site/v2/";
 
 class WriteNoticePage extends StatefulWidget {
   const WriteNoticePage({Key? key}) : super(key: key);

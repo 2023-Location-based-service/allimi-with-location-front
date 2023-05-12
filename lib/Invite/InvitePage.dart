@@ -8,8 +8,8 @@ import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 //초대하기 화면
 
 ThemeColor themeColor = ThemeColor();

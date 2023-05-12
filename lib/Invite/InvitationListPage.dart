@@ -13,11 +13,11 @@ import 'package:test_data/Backend.dart';
 String backendUrl = Backend.getUrl();
 //사용자의 초대대기 화면
 
-class InviteWaitPage extends StatefulWidget {
+class InvitationListPage extends StatefulWidget {
   @override
-  _InviteWaitPageState createState() => _InviteWaitPageState();
+  _InvitationListPageState createState() => _InvitationListPageState();
 
-  const InviteWaitPage({
+  const InvitationListPage({
     Key? key, 
     required this.uid
   }) : super(key: key);
@@ -25,8 +25,8 @@ class InviteWaitPage extends StatefulWidget {
   final int uid;
 }
 
-class _InviteWaitPageState extends State<InviteWaitPage> {
-  late int _count ;
+class _InvitationListPageState extends State<InvitationListPage> {
+  int _count =0 ;
   int uid = 0;
 
   List<Map<String, dynamic>> _residentList = [];
@@ -62,77 +62,9 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("초대받은 리스트")),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: ElevatedButton (
-                  child: Text(
-                    '시설 추가하기',
-                    style: TextStyle(fontSize: 18.0,),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      primary: themeColor.getColor(),
-                      padding: EdgeInsets.all(7),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                  onPressed: (){
-                    pageAnimation(context, AddFacilities());
-                  }
-              ),
-            ),
-            SizedBox(width: 5,),
-            Expanded(
-              child: ElevatedButton (
-                  child: Text(
-                    '로그아웃',
-                    style: TextStyle(fontSize: 18.0, ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      primary: themeColor.getColor(),
-                      padding: EdgeInsets.all(7),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                  onPressed: (){
-                    showDialog(
-                      context: context,
-                      builder: (context) =>
-                          AlertDialog(
-                            content: const Text('로그아웃하시겠습니까?'),
-                            actions: [
-                              TextButton(child: Text('아니오',
-                                style: TextStyle(color: themeColor.getMaterialColor())),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                              TextButton(child: Text('예',
-                                style: TextStyle(color: themeColor.getMaterialColor())),
-                                  onPressed: () {
-                                  Provider.of<UserProvider>(context, listen:false) //로그아웃
-                                    .uid = 0;
-
-                                  Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
-                                    .getData();
-                                  Navigator.pop(context);
-                              })
-                                
-                            ],
-                          ),
-                    );
-
-                     
-                  }
-              ),
-            ),
-          ],
-        )
+        padding: EdgeInsets.all(10)
       ),
       body: Scrollbar(
         child: ListView(
@@ -211,7 +143,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
               Container(
                 padding: EdgeInsets.all(2),
                 child: Consumer<UserProvider>(
-                builder: (context, userProvider, child) {
+                  builder: (context, userProvider, child) {
                     return OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: themeColor.getColor(),)
@@ -225,8 +157,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                     );
                   }
                 ),
-              )
-                
+              ),
             ],
           ),
         )

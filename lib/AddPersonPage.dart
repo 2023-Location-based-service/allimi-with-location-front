@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 
-
-String backendUrl = "http://52.78.62.115:8080/v2/";
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 
 // List<String> home =['금오요양원', '빛나요양원', '강아지요양원'];
 // List<String> person =['구현진 님', '주효림 님', '권태연 님'];
@@ -100,8 +101,14 @@ class _AddPersonPageState extends State<AddPersonPage> {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(_residentList[index]['facility_name']), //요양원
-                    Text(_residentList[index]['resident_name']), //사람 이름
+                    Text(_residentList[index]['facility_name']!= null?_residentList[index]['facility_name']:"null"), //요양원
+                    Row(
+                      children: [
+                        Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']:"null"),
+                        SizedBox(width: 10),
+                        Text(_residentList[index]['user_role']),
+                      ],
+                    ), //사람 이름
                   ],
                 ),
               onTap: () {

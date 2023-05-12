@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 
 import '../provider/ResidentProvider.dart';
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 class PeopleManagementPage extends StatefulWidget {
   const PeopleManagementPage({Key? key}) : super(key: key);
 

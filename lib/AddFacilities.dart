@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart'; //http 사용
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 
 class AddFacilities extends StatefulWidget {
   const AddFacilities({Key? key}) : super(key: key);
@@ -32,21 +33,22 @@ class _AddFacilitiesState extends State<AddFacilities> {
   int _resident_id = 0;
 
   Future<void> facilityRequest(int uid) async {
+    debugPrint("@@@@ 시설 추가하는 백엔드 url보냄: " + _personName);
     //입소자추가 psot
     http.Response response1 = await http.post(
-      
       Uri.parse(backendUrl+ 'facilities'),
       headers: <String, String>{
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
         'Accept-Charset': 'utf-8'
       },
       body: jsonEncode({
         "name": _facilityName,
         "address": _location,
         "tel": _number,
-        "fm_name": _personName
       })
     );
+
+    debugPrint("@@@@ statusCode: " + response1.statusCode.toString());
 
     if (response1.statusCode != 200) {
         throw Exception('POST request failed');
@@ -102,33 +104,33 @@ class _AddFacilitiesState extends State<AddFacilities> {
               child: Column(
                 children: [
                   getTextFormField(
-                      textInputType: TextInputType.text,
-                      icon: Icons.home_rounded,
-                      hintText: '시설명',
-                      controller: facilityNameController,
-                      errormsg: '시설명을 입력하세요'),
+                    textInputType: TextInputType.text,
+                    icon: Icons.home_rounded,
+                    hintText: '시설명',
+                    controller: facilityNameController,
+                    errormsg: '시설명을 입력하세요'),
                   getTextFormField(
-                      textInputType: TextInputType.text,
-                      icon: Icons.place_rounded,
-                      hintText: '주소',
-                      controller: locationController,
-                      errormsg: '주소를 입력하세요'),
+                    textInputType: TextInputType.text,
+                    icon: Icons.place_rounded,
+                    hintText: '주소',
+                    controller: locationController,
+                    errormsg: '주소를 입력하세요'),
 
                   getTextFormField(
-                      textInputType: TextInputType.number,
-                      inputFormatters: [
-                        MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
-                      ],
-                      icon: Icons.call_rounded,
-                      hintText: '전화번호',
-                      controller: numberController,
-                      errormsg: '전화번호를 입력하세요'),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                    ],
+                    icon: Icons.call_rounded,
+                    hintText: '전화번호',
+                    controller: numberController,
+                    errormsg: '전화번호를 입력하세요'),
                   getTextFormField(
-                      textInputType: TextInputType.text,
-                      icon: Icons.person_rounded,
-                      hintText: '시설장 이름',
-                      controller: personNameController,
-                      errormsg: '시설장 이름을 입력하세요'),
+                    textInputType: TextInputType.text,
+                    icon: Icons.person_rounded,
+                    hintText: '시설장 이름',
+                    controller: personNameController,
+                    errormsg: '시설장 이름을 입력하세요'),
                 ],
               )
             ),
@@ -190,7 +192,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context) {
+                                      builder: (BuildContext context_) {
                                         return AlertDialog(
                                           content: Text('시설 등록에 실패하였습니다'),
                                           insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
@@ -198,6 +200,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                             TextButton(
                                               child: const Text('확인'),
                                               onPressed: () {
+                                                Navigator.of(context_).pop();
                                                 Navigator.of(context).pop();
                                               },
                                             ),

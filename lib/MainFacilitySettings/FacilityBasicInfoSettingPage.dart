@@ -6,8 +6,8 @@ import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 //시설 기본정보 설정 화면
 
 class FacilityBasicInfoPage extends StatefulWidget {
@@ -22,6 +22,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
   Map<String, dynamic> _facilityInfo = {};
 
   Future<void> getFacilityInfo() async {
+    debugPrint("@@@@시설 정보 받아오기 백엔드");
     http.Response response = await http.get(
         Uri.parse(backendUrl + "facilities/" + _facilityId.toString()),
         headers: <String, String>{

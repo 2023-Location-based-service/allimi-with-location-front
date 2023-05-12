@@ -8,8 +8,8 @@ import 'MainPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 //입소자 정보 입력 화면
 
 class ResidentInfoInputPage extends StatefulWidget {
@@ -19,13 +19,15 @@ class ResidentInfoInputPage extends StatefulWidget {
     required this.invitationId,
     required this.invitationUserRole,
     required this.invitationFacilityId,
-    required this.invitationFacilityName
+    required this.invitationFacilityName,
+    required this.userId
   }) : super(key: key);
 
   final int invitationId;
   final String invitationUserRole;
   final int invitationFacilityId;
   final String invitationFacilityName;
+  final int userId;
 
   @override
   _ResidentInfoInputPageState createState() => _ResidentInfoInputPageState();
@@ -40,6 +42,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   late String invitationUserRole;
   late int invitationFacilityId;
   late String invitationFacilityName;
+  late int _userId;
 
   bool _isHighBloodPress = false;
   bool _isDiabetes = false;
@@ -55,6 +58,9 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     invitationUserRole = widget.invitationUserRole;
     invitationFacilityId = widget.invitationFacilityId;
     invitationFacilityName = widget.invitationFacilityName;
+    _userId = widget.userId;
+    if (invitationUserRole != 'PROTECTOR')
+      test(_userId);
   }
 
   bool validateAndSave() {
@@ -129,7 +135,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(invitationUserRole == 'PROTECTOR')
+    if(invitationUserRole == 'PROTECTOR') {
       return Scaffold(
         body: ListView(
           children: [
@@ -245,15 +251,15 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
           ],
         )
       );
-    else
-      return Consumer<UserProvider>(
-          builder: (context, userProvider, child) {
-            test(userProvider.uid);
-           return CircularProgressIndicator();
-        }
-      );
+    }
+
+    else {
+      return Center(child: CircularProgressIndicator());
+    }
+      
   }
-  Future<void> test(uid) async {
+  Future<void> test(int uid) async {
+    debugPrint("@@요양보호사 추가 백엔드 요청 보냄");
     await addResident(uid);
     var data;
     try {

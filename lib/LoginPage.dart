@@ -9,7 +9,8 @@ import 'SignupPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 
 class LoginPage extends StatefulWidget {
   @override

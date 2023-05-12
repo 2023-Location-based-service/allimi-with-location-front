@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 
-String backendUrl = "http://52.78.62.115:8080/v2/";
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 
 class MyInmateProfilePage extends StatefulWidget {
   const MyInmateProfilePage({Key? key, required this.uid}) : super(key: key);

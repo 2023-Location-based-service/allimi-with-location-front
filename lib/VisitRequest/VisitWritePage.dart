@@ -10,8 +10,8 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://52.78.62.115:8080/";
-
+import 'package:test_data/Backend.dart';
+String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 // List<String> dateList =['2022.12.23','2022.12.24','2022.12.25'];
 // List<String> timeList =['16:00', '13:00', '11:00'];
@@ -63,7 +63,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
     String datetimeConvert = date.replaceAll('.', '-') + 'T' + time + ":00.000Z";
 
     debugPrint("@@@@@ 면회신청 추가하는 백앤드 url 보냄");
-    var url = Uri.parse("http://52.78.62.115:8080/" + 'visit');
+    var url = Uri.parse(Backend.getDomain() + 'visit');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "user_id": _userId,
