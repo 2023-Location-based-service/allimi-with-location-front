@@ -98,69 +98,64 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                             border: Border.all(color: Color(0xfff2f3f6),width: 2)
                         ),
                       ),
-
                     ],
                   )
               ),
               Container(
-                  padding: EdgeInsets.all(18),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        child: Text('시설 주소'),
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Color(0xfff2f3f6),
-                            border: Border.all(color: Color(0xfff2f3f6),width: 3)
-                        ),
+                padding: EdgeInsets.all(18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      child: Text('시설 주소'),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Color(0xfff2f3f6),
+                          border: Border.all(color: Color(0xfff2f3f6),width: 3)
                       ),
-                      Container(
-                        child: Text(_facilityInfo['address'], textScaleFactor: 1.2,),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                        ),
+                    ),
+                    Container(
+                      child: Text(_facilityInfo['address'], textScaleFactor: 1.2,),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Color(0xfff2f3f6),width: 2)
                       ),
-                    ],
-                  )
+                    ),
+                  ],
+                )
               ),
               Container(
-                  padding: EdgeInsets.all(18),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        child: Text('시설장 이름'),
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Color(0xfff2f3f6),
-                            border: Border.all(color: Color(0xfff2f3f6),width: 3)
-                        ),
+                padding: EdgeInsets.all(18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      child: Text('시설장 이름'),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Color(0xfff2f3f6),
+                          border: Border.all(color: Color(0xfff2f3f6),width: 3)
                       ),
-                      Container(
-                        child: Text(_facilityInfo['fm_name'], textScaleFactor: 1.2,),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                        ),
+                    ),
+                    Container(
+                      child: Text(_facilityInfo['fm_name'], textScaleFactor: 1.2,),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Color(0xfff2f3f6),width: 2)
                       ),
-                    ],
-                  )
+                    ),
+                  ],
+                )
               ),
             ],
           );
         }
       )
-          
-        
       );
-    
     }
-    
   }
 }

@@ -135,7 +135,18 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                         width: 100,
                         height: 100,
                         child: Container(
-                          child: Image.network(imgList[0], fit: BoxFit.fill,),
+                          child: Image.network(
+                            imgList[0], 
+                            fit: BoxFit.fill,
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                ),
+                              );
+                            },),
                         )
                     ),
                 ],

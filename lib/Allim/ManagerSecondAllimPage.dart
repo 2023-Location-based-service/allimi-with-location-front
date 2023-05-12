@@ -227,7 +227,18 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
               Column(
                 children: [
                   for (int i =0; i< _imageUrls.length; i++ ) ...[
-                    Image.network(_imageUrls[i], fit: BoxFit.fill,),
+                    Image.network(
+                      _imageUrls[i], 
+                      fit: BoxFit.fill,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                          ),
+                        );
+                      },),
                   ]
                 ]
               ),

@@ -136,24 +136,50 @@ class _EditAllimPageState extends State<EditAllimPage> {
 
   // 서버에 알림장 업로드 + 사진 업로드
   Future<void> editAllim(userId, facilityId) async {
-    final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
-    var formData = FormData.fromMap({
-      "notice": MultipartFile.fromString(
-        jsonEncode(
-          {"notice_id": _noticeId, "user_id": userId, "resident_id": selectedPersonId, 
-           "content": _contents, "sub_content": _subContents}),
-        contentType: MediaType.parse('application/json'),
-      ),
-      "file": _files
-    });
+    debugPrint("@@@@ 공지사항 수정 백엔드 요청 보냄");
+    List<MultipartFile> _files = [];
+    var formData = null;
 
+
+    if (_pickedImgs.length != 0 ) {
+      _files = _pickedImgs.map((img) 
+          => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
+
+      formData = FormData.fromMap({
+        "notice": MultipartFile.fromString(
+          jsonEncode(
+            {"notice_id": _noticeId, "user_id": userId, "resident_id": selectedPersonId, 
+            "content": _contents, "sub_content": _subContents}),
+          contentType: MediaType.parse('application/json'),
+        ),
+        "file": _files
+      });
+    } else {
+      formData = FormData.fromMap({
+        "notice": MultipartFile.fromString(
+          jsonEncode(
+            {"notice_id": _noticeId, "user_id": userId, "resident_id": selectedPersonId, 
+            "content": _contents, "sub_content": _subContents}),
+          contentType: MediaType.parse('application/json'),
+        ),
+        "file": _files
+      });
+    }
+    
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
-    final response = await dio.patch(backendUrl + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
 
+    var response = null;
+    try {
+     response = await dio.patch(backendUrl + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+    }catch(e) {
+      debugPrint("@@response .. : " + e.toString());
+      throw new Exception();
+    }
+    debugPrint("@@StatusCode: " + response.statusCode.toString());
 
     if (response.statusCode == 200) {
-      print("성공");
+      print("@@성공");
     } else {
       throw Exception();
     }
