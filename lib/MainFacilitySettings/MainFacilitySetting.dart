@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_data/Invite/InvitePage.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/LoginPage.dart';
@@ -26,20 +27,17 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
       body: ListView(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              appResidentManagement(),
-              Divider(thickness: 0.5,),
+              groupText('직원 및 입소자 관리'),
               appEmployeeManagement(),
-              Divider(thickness: 0.5,),
+              appResidentManagement(),
+              SizedBox(height: 15,),
+              groupText('초대'),
               appInvite(),
-              Divider(thickness: 0.5,),
+              appInviteList(),
+              groupText('시설'),
               appFacilityBasicSetting(),
-              // Divider(thickness: 3,),
-              // Test(),
-              // Divider(thickness: 0.5,),
-              // Test2(),
-              // Divider(thickness: 0.5,),
-              // Test3()
             ],
           )
         ],
@@ -47,11 +45,17 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
     );
   }
 
+  Widget groupText(String value) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Text(value),
+    );
+  }
+
   Widget appResidentManagement() {
     return ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -3),
         title: Text('입소자 관리'),
-        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+        leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, userPeopleManagementPage());
         });
@@ -59,9 +63,8 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appEmployeeManagement() {
     return ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         title: Text('직원 관리'),
-        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+        leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, PeopleManagementPage());
         });
@@ -69,9 +72,17 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appInvite() {
     return ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         title: Text('초대하기'),
-        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+        leading: Icon(Icons.send_rounded, color: Colors.grey),
+        onTap: () {
+          pageAnimation(context, InvitePage());
+        });
+  }
+
+  Widget appInviteList() {
+    return ListTile(
+        title: Text('초대목록'),
+        leading: Icon(Icons.favorite_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, InviteListPage());
         });
@@ -81,45 +92,12 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
     return Consumer<ResidentProvider>(
       builder: (context, residentProvider, child) {
         return ListTile(
-          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
           title: Text('시설 기본 정보 설정'),
-          trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+          leading: Icon(Icons.home_rounded, color: Colors.grey),
           onTap: () {
             pageAnimation(context, FacilityBasicInfoPage(facilityId: residentProvider.facility_id));
           });
       }
     );
   }
-
-
-
-
-  // Widget Test() {
-  //   return ListTile(
-  //       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-  //       title: Text('로그인 테스트'),
-  //       trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-  //       onTap: () {
-  //         pageAnimation(context, LoginPage());
-  //       });
-  // }
-  // Widget Test2() {
-  //   return ListTile(
-  //       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-  //       title: Text('초대대기 테스트'),
-  //       trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-  //       onTap: () {
-  //         pageAnimation(context, InviteWaitPage());
-  //       });
-  // }
-  // Widget Test3() {
-  //   return ListTile(
-  //       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-  //       title: Text('입소자정보입력 테스트'),
-  //       trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-  //       onTap: () {
-  //         pageAnimation(context, ResidentInfoInputPage());
-  //       });
-  // }
-
 }
