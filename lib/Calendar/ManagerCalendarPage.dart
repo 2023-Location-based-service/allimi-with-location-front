@@ -40,7 +40,6 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
 
   final titleController = TextEditingController();
   final descpController = TextEditingController();
-  List<Map<String, dynamic>> _scheduleList = [];
 
   @override
   void initState() {
@@ -77,19 +76,23 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
   }
 
   Future<void> getSchedules() async {
-    debugPrint("일정표 목록 요청 보냄");
+    debugPrint("월별 일정표 목록 요청 보냄");
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "schedule/" + _facility_id.toString()),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept-Charset': 'utf-8'
-        }
+      Uri.parse(backendUrl + "schedule/" + _facility_id.toString()+ "/" + _focusedDay.toString().substring(0, 7)),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      }
     );
+
+    debugPrint("@@response.statusCode: " + response.statusCode.toString());
 
     if (response.statusCode == 200) {
       var data =  utf8.decode(response.bodyBytes);
       dynamic decodedJson = json.decode(data);
       List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
+
+      mySelectedEvents = {};
 
       for (Map<String, dynamic> schedule in parsedJson) {
         List<String> result = schedule['date'].split('-');//"2023-05-08",
@@ -106,9 +109,8 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
           ];
         }
       }     
-
       setState(() {
-        _scheduleList = parsedJson;
+        
       });
     } else {
       debugPrint("노노@@@");
@@ -143,7 +145,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
         children: [
           TableCalendar(
             locale: 'ko_KR', // 한국어
-            firstDay: DateTime(2023),
+            firstDay: DateTime(2022),
             lastDay: DateTime(2100),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
@@ -172,6 +174,8 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
               }
             },
             selectedDayPredicate: (day) {
+              //달 바뀌거나 focus날짜 바뀌면 상당히 많이 호출됨.. 35번? 성능문제
+              debugPrint("@@@cc");
               return isSameDay(_selectedDate, day);
             },
             onFormatChanged: (format) {
@@ -183,8 +187,10 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
               }
             },
             onPageChanged: (focusedDay) {
-              // No need to call `setState()` here
+              // No need to call `setState()` here 
+              // 달 바뀔 때 한 번만 호출됨
               _focusedDay = focusedDay;
+              getSchedules();
             },
             eventLoader: _listOfDayEvents,
           ),
