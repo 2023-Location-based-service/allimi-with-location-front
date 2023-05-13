@@ -2,12 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Supplementary/ThemeColor.dart';
 import '../Allim/WriteAllimPage.dart';
 import 'package:http/http.dart' as http;
+import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/ResidentProvider.dart'; //http 사용
 
 import 'package:test_data/Backend.dart';
+
+import '../provider/UserProvider.dart';
 String backendUrl = Backend.getUrl();
+ThemeColor themeColor = ThemeColor();
 class userPeopleManagementPage extends StatefulWidget {
   const userPeopleManagementPage({Key? key}) : super(key: key);
 
@@ -18,6 +23,7 @@ class userPeopleManagementPage extends StatefulWidget {
 
 class _userPeopleManagementPageState extends State<userPeopleManagementPage> with TickerProviderStateMixin {
   static List<Map<String, dynamic>> _residents = [];
+  Map<String, dynamic> _residentsdetail = {};
 
   Future<void> getFacilityResident(int facilityId) async {
     http.Response response = await http.get(
@@ -37,6 +43,28 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
     });
   }
 
+  Future<void> getResidentDetail(int nhrId) async {
+    http.Response response = await http.get(
+        Uri.parse("https://allimi-fydfi.run.goorm.site/v3/nhResidents/" + nhrId.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept-Charset': 'utf-8'
+        }
+    );
+
+    var data =  utf8.decode(response.bodyBytes);
+    dynamic decodedJson = json.decode(data);
+    Map<String, dynamic> parsedJson =  Map<String, dynamic>.from(decodedJson);
+
+    setState(() {
+      _residentsdetail =  parsedJson;
+    });
+    if (response.statusCode == 200)
+      print('성공');
+    else
+      print('실패');
+  }
+
   //삭제
   Future<void> deleteresident(int userId, int nhresidentId) async {
     http.Response response = await http.delete(
@@ -50,6 +78,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
           "nhresident_id": nhresidentId
         })
     );
+    print(response.statusCode);
     if (response.statusCode == 200)
       // 화면 다시 그리기
       setState(() {
@@ -87,7 +116,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: _residents.length,
-              itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (BuildContext _context, int index) {
                 return ListTile(
                   leading: Icon(Icons.person_rounded, color: Colors.grey),
                   title: Row(
@@ -136,6 +165,10 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                       ),
                     ],
                   ),
+                  onTap: () async {
+                    await getResidentDetail(_residents[index]['id']);
+                    pageAnimation(context, residentDetailPage(index));
+                  },
                 );
               },
             );
@@ -144,4 +177,52 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
     );
   }
 
+
+
+  //입소자 상세 내용
+  Widget residentDetailPage(int index) {
+    return Scaffold(
+        appBar: AppBar(title: Text('입소자 세부 정보')),
+        backgroundColor: Colors.white,
+        body: ListView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('입소자 이름'),),
+                myDetailBox(_residentsdetail['resident_name']),
+                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('입소자 생년월일'),),
+                myDetailBox(_residentsdetail['birth']),
+                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('보호자 이름'),),
+                myDetailBox(_residentsdetail['protector_name']),
+                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('보호자 연락처'),),
+                myDetailBox(_residentsdetail['protector_phone_num'])
+              ],
+            )
+          ],
+        )
+    );
+  }
+
+  Widget myDetailBox(String text) {
+    return Container(
+        width: double.infinity,
+        height: 50,
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+        decoration: BoxDecoration(
+          color: Color(0xfff2f3f6),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('$text', textScaleFactor: 1.2),
+              ],
+            )
+        )
+    );
+  }
 }
