@@ -118,11 +118,13 @@ class NoticeDropdown extends StatefulWidget {
   const NoticeDropdown({
     Key? key,
     required this.menu,
+    required this.selected,
     this.initialVal = '공지사항'
   }) : super(key: key);
 
   final String menu;
   final String initialVal;
+  final String selected;
 
   @override
   State<NoticeDropdown> createState() => _NoticeDropdownState();
@@ -132,15 +134,15 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
   final items = ['공지사항', '중요'];
   String? selectedValue;
   String initialVal = '';
-
   String menu = '';
 
   @override
   void initState() {
     super.initState();
     setState(() {
+      //selectedValue = items[items.indexOf(initialVal)];
       initialVal = widget.initialVal;
-      selectedValue = items[items.indexOf(initialVal)];
+      selectedValue = widget.selected;
       menu = widget.menu;
     });
   }

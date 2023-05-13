@@ -57,7 +57,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   }
 
   // 서버에 이미지 업로드
-  Future<void> addNotice(userId, facilityId, bool _importantTest) async {
+  Future<void> addNotice(userId, facilityId, importantTest) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path,
         contentType: MediaType("image", "jpg"))).toList();
 
@@ -68,7 +68,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
           "facility_id": facilityId,
           "title": _title,
           "contents": _contents,
-          "important": _importantTest}),
+          "important": importantTest}),
         contentType: MediaType.parse('application/json'),
       ),
       "file": _files
@@ -189,11 +189,11 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                     child: Row(
                       children: [
                         Icon(Icons.info_rounded, size: 18, color: Colors.grey),
-                        Text(' 중요한 공지는 중요 태그를 사용하세요.', style: TextStyle(color: Colors.grey)),
+                        Text(' 중요한 공지는 중요 태그를 사용해보세요', style: TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),
-                  NoticeDropdown(menu: '공지사항'),
+                  NoticeDropdown(menu: '공지사항', selected: '공지사항',),
 
                   SizedBox(height: 8),
                   //getTitle(),

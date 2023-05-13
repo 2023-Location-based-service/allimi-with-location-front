@@ -2,8 +2,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Notice/ModificationNoticePage.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/NoticeTempProvider.dart';
+import '../provider/ResidentProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'WriteNoticePage.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -19,7 +21,8 @@ class ManagerNoticePage extends StatefulWidget {
   const ManagerNoticePage({
     Key? key,
     required this.userRole,
-    required this.facilityId
+    required this.facilityId,
+
   }) : super(key: key);
 
   final String userRole;
@@ -34,7 +37,27 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   String _userRole = '';
   List<Map<String, dynamic>> _noticeList = [];
 
-  Future<void> getNotice(int facility_id) async {
+  //삭제
+  Future<void> deleteNotice(int allnoticeId) async {
+    http.Response response = await http.delete(
+        Uri.parse(backendUrl+ 'all-notices'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept-Charset': 'utf-8'
+        },
+        body: jsonEncode({
+          "allnotice_id": allnoticeId
+        })
+    );
+
+    debugPrint("@@@statusCode= " + response.statusCode.toString());
+
+    if (response.statusCode != 200)
+      throw Exception();
+  }
+
+  //공지사항 받아옴옴
+ Future<void> getNotice(int facility_id) async {
     debugPrint("@@@@@ 공지사항 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
@@ -49,7 +72,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     dynamic decodedJson = json.decode(data);
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
 
-    parsedJson.sort((a, b) {
+    parsedJson.sort((a, b) { //날짜 최신순으로 정렬
       DateTime aDate = DateTime.parse(a['create_date']);
       DateTime bDate = DateTime.parse(b['create_date']);
       return bDate.compareTo(aDate);
@@ -82,11 +105,11 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
   //플로팅액션버튼
   Widget _getFAB() {
-    if (_userRole == 'PROTECTOR')
+    if (_userRole == 'PROTECTOR') {
       return Container();
-    else
+    } else {
       return FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           //글쓰기 화면으로 이동
           await Navigator.push(
             context,
@@ -97,6 +120,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         },
         child: const Icon(Icons.create),
       );
+    }
   }
 
   //공지사항 목록
@@ -126,12 +150,13 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                       isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시
                       SizedBox(height: 5),
                       Container(
-                          child: Text(_noticeList[index]['title'], overflow: TextOverflow.ellipsis), //공지사항 제목
+                          child: Text(_noticeList[index]['title'], overflow: TextOverflow.ellipsis), //TODO: 공지사항 제목
                           width: MediaQuery.of(context).size.width * 0.5),
-                      Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //공지사항 날짜
+                      Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //TODO: 공지사항 날짜
                     ],
                   ),
-                  //이미지
+
+                  //TODO: 이미지
                   if (imgList.length != 0)
                     Container(
                         width: 100,
@@ -163,7 +188,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
 
         else
-          return Container();
+          return Container(width: 100, height: 100);
 
       },
       separatorBuilder: (context, index) {
@@ -174,7 +199,6 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
 
   //태그 선택
-
   Widget getTag(BuildContext context) {
     if (Provider.of<NoticeTempProvider>(context).isImportant) {
       return getRedTag(); // 중요
@@ -182,7 +206,6 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
       return getGreyTag(); // 공지사항
     }
   }
-
 
   Widget getRedTag() {
     return Container(
@@ -231,43 +254,101 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                       ],
                     ),
                     const Spacer(),
-                    OutlinedButton(
-                      child: Text('수정'),
-                      onPressed: (){
-                        //TODO: 수정 화면으로 넘어가기
-                      },
-                    ),
-                    OutlinedButton(
-                      child: Text('삭제'),
-                      onPressed: (){
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                              AlertDialog(
-                                content: const Text('삭제하시겠습니까?'),
-                                actions: [
-                                  TextButton(child: Text('취소',
-                                      style: TextStyle(color: themeColor.getMaterialColor())),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      }),
-                                  TextButton(child: Text('예',
-                                      style: TextStyle(color: themeColor.getMaterialColor())),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        //TODO: 공지 삭제 이벤트
-                                      }),
-                                ],
-                              ),
-                        );
-                      },
+                    if (_userRole != 'PROTECTOR')
+                      OutlinedButton(
+                        child: Text('수정'),
+                        onPressed: () async {
+                          int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'],
+                                    facility_id: facility_id, noticeList: _noticeList[index], imageUrls: imgList))
+                                    //EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
 
-                    ),
+                          );
+                        },
+                      ),
+                    if (_userRole != 'PROTECTOR')
+                      OutlinedButton(
+                        child: Text('삭제'),
+                        onPressed: () async {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Text("정말 삭제하시겠습니까?"),
+                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('삭제'),
+                                      onPressed: () async {
+                                        try {
+                                          await deleteNotice(_noticeList[index]['allNoticeId']);
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                              builder: (BuildContext context3) {
+                                                return AlertDialog(
+                                                  content: Text('삭제 완료'),
+                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text('확인'),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                          );
+                                        } catch(e) {
+                                          debugPrint("@@@삭제 오류 $e");
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: Text("공지사항 삭제 실패! 다시 시도해주세요"),
+                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text('확인'),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('취소'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                          );
+                        },
+
+                      ),
+
                   ],
                 ),
               ),
 
-              //공지사항 사진
+              //TODO: 공지사항 본문 사진
               Container(
                   margin: EdgeInsets.fromLTRB(0,10,0,0),
                   width: double.infinity,
@@ -281,7 +362,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                   ),
               ),
 
-              //공지사항 세부 내용
+              //TODO: 공지사항 세부 내용
               Container(
                 width: double.infinity,
                 color: Colors.white,
