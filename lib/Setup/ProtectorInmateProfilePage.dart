@@ -9,16 +9,16 @@ import '../provider/ResidentProvider.dart';
 import 'package:test_data/Backend.dart';
 String backendUrl = Backend.getUrl();
 
-class MyInmateProfilePage extends StatefulWidget {
-  const MyInmateProfilePage({Key? key, required this.uid}) : super(key: key);
+class ProtectorInmateProfilePage extends StatefulWidget {
+  const ProtectorInmateProfilePage({Key? key, required this.uid}) : super(key: key);
 
   final int uid;
 
   @override
-  State<MyInmateProfilePage> createState() => _MyInmateProfilePageState();
+  State<ProtectorInmateProfilePage> createState() => _ProtectorInmateProfilePageState();
 }
 
-class _MyInmateProfilePageState extends State<MyInmateProfilePage> {
+class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage> {
   late int _userId;
   List<Map<String, dynamic>> _residentList = [];
 
@@ -78,7 +78,7 @@ class _MyInmateProfilePageState extends State<MyInmateProfilePage> {
               children: [
                 Icon(Icons.info_rounded, color: Colors.grey),
                 SizedBox(width: 5),
-                Text('현재 내가 보호하고 있는 피보호자 목록입니다.'),
+                Text('현재 내가 보호하고 있는 입소자 목록입니다'),
               ],
             ),
           ),

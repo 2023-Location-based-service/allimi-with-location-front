@@ -5,8 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InvitationListPage.dart';
 import 'package:test_data/Invite/InviteListPage.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
-import 'package:test_data/Setup/MyInmateProfilePage.dart';
+import 'package:test_data/Setup/ProtectorInmateProfilePage.dart';
 import 'package:test_data/Setup/MyProfilePage.dart';
+import 'package:test_data/Setup/WorkerInmateProfilePage.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '../AddFacilities.dart';
 import '/Supplementary/ThemeColor.dart';
@@ -19,12 +21,9 @@ String backendUrl = Backend.getUrl();
 
 ThemeColor themeColor = ThemeColor();
 
-List<String> personList = ['구현진', '권태연', '정혜지', '주효림'];
-
 
 class SetupPage extends StatefulWidget {
   const SetupPage({Key? key, required this.userRole, required this.userId}) : super(key: key);
-
   final String userRole;
   final int userId;
 
@@ -74,7 +73,12 @@ class _SetupPageState extends State<SetupPage> {
       body: ListView(
         children: [
           appProfile(),
-          appInmateProfile(),
+          if (_userRole == 'PROTECTOR') //현재 보호 중인 입소자 정보: 보호자 ver
+            appProtectorInmateProfile(),
+
+          // if (_userRole == 'WORKER') //현재 보호 중인 입소자 정보: 요양보호사 ver
+          //   appWorkerInmateProfile(),
+
           if (_userRole != 'MANAGER')
             appInvitation(),
           appLogout()
@@ -90,13 +94,26 @@ class _SetupPageState extends State<SetupPage> {
         onTap: () { pageAnimation(context, MyProfilePage()); });
   }
 
-  Widget appInmateProfile() {
+  //입소자 정보 - 보호자일 때
+  Widget appProtectorInmateProfile() {
     return Consumer<UserProvider>(
         builder: (context, userProvider, child) {
           return ListTile(
               title: Text('입소자 정보'),
               leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
-              onTap: () { pageAnimation(context, MyInmateProfilePage(uid: userProvider.uid,)); });
+              onTap: () { pageAnimation(context, ProtectorInmateProfilePage(uid: userProvider.uid,)); });
+        }
+    );
+  }
+
+  //입소자 정보 - 요양보호사일 때
+  Widget appWorkerInmateProfile() {
+    return Consumer2<UserProvider, ResidentProvider>(
+        builder: (context, userProvider, residentProvider, child) {
+          return ListTile(
+              title: Text('입소자 정보'),
+              leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
+              onTap: () { pageAnimation(context, WorkerInmateProfilePage(uid: userProvider.uid, facilityId: residentProvider.facility_id, residentId: residentProvider.resident_id)); });
         }
     );
   }
