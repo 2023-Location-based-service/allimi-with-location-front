@@ -10,6 +10,8 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:test_data/Backend.dart';
+import '../Supplementary/ThemeColor.dart';
+ThemeColor themeColor = ThemeColor();
 String backendUrl = Backend.getUrl();
 //사용자의 초대대기 화면
 

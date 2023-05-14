@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'ThemeColor.dart';
-
-ThemeColor themeColor = ThemeColor();
 
 class PageRouteWithAnimation {
   final Widget page;
@@ -80,7 +77,7 @@ Widget customPage({
             height: 10,
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: themeColor.getColor(),
+                backgroundColor:  Color(0xff5BB193),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100),
                 ),
@@ -126,10 +123,10 @@ Widget display({
 }
 
 //FloatingActionButton 커스텀
-Widget writeButton(BuildContext context, Widget widget){
+Widget writeButton(BuildContext context, Widget widget ){
   return FloatingActionButton(
     focusColor: Colors.white54,
-    backgroundColor: themeColor.getColor(),
+    backgroundColor:  Color(0xff5BB193),
     elevation: 0,
     focusElevation: 0,
     highlightElevation: 0,

@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
       title: '요양원 알리미',
       theme: ThemeData(
         fontFamily: 'NotoSans',
-        scaffoldBackgroundColor: Color(0xfff8f8f8), //기본 배경색
+        scaffoldBackgroundColor: Colors.white, //기본 배경색Color(0xfff8f8f8)
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(fontFamily: 'NotoSans', color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18.5), //앱바 텍스트 색상
           backgroundColor: Colors.white, //앱바 배경색
