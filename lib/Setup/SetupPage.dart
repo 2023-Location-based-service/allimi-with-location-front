@@ -1,3 +1,4 @@
+//SetupPage
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -41,11 +42,11 @@ class _SetupPageState extends State<SetupPage> {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "users/invitations/" + _userId.toString()),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Accept-Charset': 'utf-8'
-      }
+        Uri.parse(backendUrl + "users/invitations/" + _userId.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept-Charset': 'utf-8'
+        }
     );
 
     var data =  utf8.decode(response.bodyBytes);
@@ -76,8 +77,8 @@ class _SetupPageState extends State<SetupPage> {
           if (_userRole == 'PROTECTOR') //현재 보호 중인 입소자 정보: 보호자 ver
             appProtectorInmateProfile(),
 
-          // if (_userRole == 'WORKER') //현재 보호 중인 입소자 정보: 요양보호사 ver
-          //   appWorkerInmateProfile(),
+          if (_userRole == 'WORKER') //현재 보호 중인 입소자 정보: 요양보호사 ver
+            appWorkerInmateProfile(),
 
           if (_userRole != 'MANAGER')
             appInvitation(),
@@ -113,37 +114,37 @@ class _SetupPageState extends State<SetupPage> {
           return ListTile(
               title: Text('입소자 정보'),
               leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
-              onTap: () { pageAnimation(context, WorkerInmateProfilePage(uid: userProvider.uid, facilityId: residentProvider.facility_id, residentId: residentProvider.resident_id)); });
+              onTap: () { pageAnimation(context, WorkerInmateProfilePage(uid: userProvider.uid, facilityId: residentProvider.facility_id)); });
         }
     );
   }
 
   Widget appInvitation() {
-      return ListTile(
-          title: Text('초대받기'),
-          leading: Icon(Icons.person_rounded, color: Colors.grey),
-          onTap: () { pageAnimation(context, InvitationListPage(uid:_userId)); },
-          trailing: inviteCount()
-      );
+    return ListTile(
+        title: Text('초대받기'),
+        leading: Icon(Icons.person_rounded, color: Colors.grey),
+        onTap: () { pageAnimation(context, InvitationListPage(uid:_userId)); },
+        trailing: inviteCount()
+    );
   }
 
   Widget inviteCount() {
     if (_count > 0) {
       return Container(
-          padding: EdgeInsets.all(5),
-          width: 37, height: 37,
-          child: CircleAvatar(
-            backgroundColor: Color(0xffF3959D),
-            child: Text(
-              '$_count',
-              style: TextStyle(fontSize: 13, color: Colors.white),
-            ),
+        padding: EdgeInsets.all(5),
+        width: 37, height: 37,
+        child: CircleAvatar(
+          backgroundColor: Color(0xffF3959D),
+          child: Text(
+            '$_count',
+            style: TextStyle(fontSize: 13, color: Colors.white),
           ),
-        );
+        ),
+      );
     } else {
       return Text('');
     }
-    
+
   }
 
   Widget appLogout() {
@@ -154,27 +155,27 @@ class _SetupPageState extends State<SetupPage> {
           showDialog(
             context: context,
             builder: (context) =>
-              AlertDialog(
-                content: const Text('로그아웃하시겠습니까?'),
-                actions: [
-                  TextButton(child: Text('아니오',
-                    style: TextStyle(color: themeColor.getMaterialColor())),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                  Consumer<UserProvider>(
-                    builder: (context, userProvider, child) {
-                      return TextButton(child: Text('예',
+                AlertDialog(
+                  content: const Text('로그아웃하시겠습니까?'),
+                  actions: [
+                    TextButton(child: Text('아니오',
                         style: TextStyle(color: themeColor.getMaterialColor())),
-                          onPressed: () {
-                        userProvider.logout();
-                            userProvider.getData();
-                        Navigator.pop(context);
-                      });
-                    }
-                  ),
-                ],
-              ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                    Consumer<UserProvider>(
+                        builder: (context, userProvider, child) {
+                          return TextButton(child: Text('예',
+                              style: TextStyle(color: themeColor.getMaterialColor())),
+                              onPressed: () {
+                                userProvider.logout();
+                                userProvider.getData();
+                                Navigator.pop(context);
+                              });
+                        }
+                    ),
+                  ],
+                ),
           );
         });
   }
