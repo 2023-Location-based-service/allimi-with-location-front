@@ -150,10 +150,17 @@ class _InvitationListPageState extends State<InvitationListPage> {
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: themeColor.getColor(),)
                         ),
-                        onPressed: (){
-                          pageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole, 
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole, 
                                       invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                                      userId: userProvider.uid));
+                                      userId: userProvider.uid)),
+                          );
+
+                          getResidentList(uid);
+
                         },
                         child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
                     );

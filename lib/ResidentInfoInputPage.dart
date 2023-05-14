@@ -59,8 +59,10 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     invitationFacilityId = widget.invitationFacilityId;
     invitationFacilityName = widget.invitationFacilityName;
     _userId = widget.userId;
-    if (invitationUserRole != 'PROTECTOR')
+    if (invitationUserRole != 'PROTECTOR') {
       test(_userId);
+    }
+      
   }
 
   bool validateAndSave() {
@@ -260,7 +262,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   }
   Future<void> test(int uid) async {
     debugPrint("@@요양보호사 추가 백엔드 요청 보냄");
-    await addResident(uid);
+
     var data;
     try {
       data = await addResident(uid);

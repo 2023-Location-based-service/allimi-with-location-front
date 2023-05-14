@@ -129,6 +129,8 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                             await deleteEmployee(_employee[index]['user_id'], _employee[index]['id']);
                                           } catch(e) {
                                           }
+
+                                          getFacilityEmployee(residentProvider.facility_id);
                                           Navigator.of(context).pop();
                                         },
                                       ),
