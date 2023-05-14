@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,10 +57,14 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text('💫', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
                     SizedBox(height: 10),
-                    Text('서비스 이용을 위해', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('로그인해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('로그인을', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('진행해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 50),
                     TextFormField(
+                      keyboardType: TextInputType.text,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
+                      ],
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person_rounded, color: Colors.grey),
                         hintText: '아이디',
@@ -85,6 +90,10 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 7),
                     TextFormField(
                       obscureText: true,
+                      keyboardType: TextInputType.text,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')), //한글 빼고 전부 입력 가능
+                      ],
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey,),
                         hintText: '비밀번호',
@@ -125,8 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                             try {
                               data = await loginRequest(_id, _password);
                             } catch(e) {
-                              showToast('아이디 또는 패스워드가 일치하지 않습니다');
-                              
+                              showToast('아이디 또는 비밀번호가 일치하지 않습니다');
+
                               // showDialog(
                               //     context: context,
                               //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
