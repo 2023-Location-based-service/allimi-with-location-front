@@ -212,16 +212,16 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                 padding: EdgeInsets.all(2),
                 child: Consumer<UserProvider>(
                 builder: (context, userProvider, child) {
-                    return OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: themeColor.getColor(),)
-                        ),
-                        onPressed: (){
-                          pageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole, 
-                                      invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                                      userId: userProvider.uid));
-                        },
-                        child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
+                  return OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: themeColor.getColor(),)
+                      ),
+                      onPressed: (){
+                        pageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole, 
+                                    invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                                    userId: userProvider.uid));
+                      },
+                      child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
                     );
                   }
                 ),

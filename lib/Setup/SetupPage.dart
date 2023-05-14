@@ -126,7 +126,6 @@ class _SetupPageState extends State<SetupPage> {
     } else {
       return Text('');
     }
-    
   }
 
   Widget appLogout() {
