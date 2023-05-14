@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
+import '../Supplementary/ThemeColor.dart';
+ThemeColor themeColor = ThemeColor();
 
 class SelectedTimePage extends StatefulWidget {
   const SelectedTimePage({Key? key}) : super(key: key);
