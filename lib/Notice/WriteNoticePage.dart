@@ -56,7 +56,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
     }
   }
 
-  // 서버에 이미지 업로드
+  // 서버에 이미지, 공지사항 업로드
   Future<void> addNotice(userId, facilityId, importantTest) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path,
         contentType: MediaType("image", "jpg"))).toList();
@@ -73,9 +73,6 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
       ),
       "file": _files
     });
-
-
-
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
@@ -122,6 +119,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                                 try {
                                   bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
                                   await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);
+                                  
                                   _pickedImgs = [];
 
                                   showDialog(

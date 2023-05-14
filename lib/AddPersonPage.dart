@@ -88,11 +88,22 @@ class _AddPersonPageState extends State<AddPersonPage> {
 
 
   Widget personList() {
-    return Scaffold(
+    if (_residentList.length != 0) {
+      return Scaffold(
       appBar: AppBar(title: Text('등록된 요양원 목록')),
       body: ListView.separated(
         itemCount: _residentList.length, //면회 목록 출력 개수
         itemBuilder: (context, index) {
+          String userRoleString = _residentList[index]['user_role'];
+          if (userRoleString == 'PROTECTOR')
+            userRoleString = '보호자';
+          else if (userRoleString == 'WORKER')
+            userRoleString = '직원';
+          else if (userRoleString == 'MANAGER')
+            userRoleString = '시설장';
+          else
+            userRoleString = '알 수 없음';
+
           return Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
             color: Colors.white,
@@ -104,9 +115,16 @@ class _AddPersonPageState extends State<AddPersonPage> {
                     Text(_residentList[index]['facility_name']!= null?_residentList[index]['facility_name']:"null"), //요양원
                     Row(
                       children: [
-                        Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']:"null"),
+                        if (_residentList[index]['user_role'] == 'PROTECTOR')
+                          Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']+"님":"null"),
+                        if (_residentList[index]['user_role'] == 'WORKER')
+                          Consumer<UserProvider>(
+                            builder: (context, userProvider, child) {
+                              return Text(userProvider.name + "님");
+                            }
+                          ),
                         SizedBox(width: 10),
-                        Text(_residentList[index]['user_role']),
+                        Text("("+ userRoleString +")"),
                       ],
                     ), //사람 이름
                   ],
@@ -135,5 +153,9 @@ class _AddPersonPageState extends State<AddPersonPage> {
         },
       ),
     );
+  
+    } else {
+      return Center(child: CircularProgressIndicator(),);
+    }
   }
 }

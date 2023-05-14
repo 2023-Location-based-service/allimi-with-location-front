@@ -86,8 +86,8 @@ class _InvitePageState extends State<InvitePage> {
         builder: (context, residentProvider, child){
           return customPage(
             title: '초대하기',
+            buttonName: '확인',
             onPressed: () async {
-              
               if(this.formKey.currentState!.validate()) {
                 this.formKey.currentState!.save();
 
@@ -200,7 +200,6 @@ class _InvitePageState extends State<InvitePage> {
                 }
               }},
             body: inviteFormat(),
-            buttonName: '확인',
           );
         }
     );
