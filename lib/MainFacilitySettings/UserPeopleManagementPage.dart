@@ -65,6 +65,25 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
       print('실패');
   }
 
+  //추가
+  // Future<void> addInmate(residentId, uid, facilityId) async {
+  //   var url = Uri.parse(backendUrl + 'nhResident/change');
+  //   var headers = {'Content-type': 'application/json'};
+  //   var body = json.encode({
+  //     "resident_id": residentId,
+  //     "user_id": uid,
+  //     "facility_id": facilityId,
+  //   });
+  //
+  //   final response = await http.post(url, headers: headers, body: body);
+  //
+  //   if (response.statusCode == 200) {
+  //     print("성공: $residentId $uid $facilityId"); //39 10 1
+  //   } else {
+  //     throw Exception();
+  //   }
+  // }
+
   //삭제
   Future<void> deleteresident(int userId, int nhresidentId) async {
     http.Response response = await http.delete(
@@ -110,8 +129,8 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
   Widget approve(){
     return Container(
       padding: EdgeInsets.only(left: 5, top: 10),
-      child: Consumer<ResidentProvider>(
-          builder: (context, residentProvider, child) {
+      child: Consumer2<ResidentProvider, UserProvider>(
+          builder: (context, residentProvider, userProvider, child) {
             return ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -123,46 +142,86 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                     children: [
                       Text('${_residents[index]['name']} 님'),
                       Spacer(),
-                      Container(
-                        padding: EdgeInsets.all(2),
-                        child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: themeColor.getColor(),)
-                            ),
+                      Row(
+                        children: [
+                          OutlinedButton(
+                            child: Text('추가',style: TextStyle(color: themeColor.getColor()),),
+                            style: OutlinedButton.styleFrom(side: BorderSide(color: themeColor.getColor())),
                             onPressed: () async {
-                              //입소자 삭제
+                              //입소자 추가 시 -> 입소자 정보에 추가
                               showDialog(
-                                context: context,
-                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    content: Text("정말 삭제하시겠습니까?"),
-                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                    actions: [
-                                      TextButton(
-                                        child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
-                                        onPressed: () async {
-                                          try {
-                                            await deleteresident(_residents[index]['user_id'], _residents[index]['id']);
-                                          } catch(e) {
-                                          }
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                }
+                                  context: context,
+                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: Text("내가 담당하는 입소자로 추가하시겠습니까?"),
+                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text('예',style: TextStyle(color: themeColor.getColor())),
+                                          onPressed: () async {
+                                            try {
+                                              //await addInmate(_residents[index]['id'], userProvider.uid, residentProvider.facility_id);
+                                            } catch(e) { print('에러@@@@@@@@@@@@@@@@@@@'); }
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  }
                               );
                             },
-                            child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),)
-                        ),
-                      ),
+                          ),
+
+                          SizedBox(width: 4,),
+                          OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: themeColor.getColor(),)
+                              ),
+                              onPressed: () async {
+                                //입소자 삭제
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text("정말 삭제하시겠습니까?"),
+                                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                                            onPressed: () async {
+                                              try {
+                                                await deleteresident(_residents[index]['user_id'], _residents[index]['id']);
+                                              } catch(e) {
+                                              }
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                );
+                              },
+                              child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),)
+                          ),
+
+                        ],
+                      )
+
+
                     ],
                   ),
                   onTap: () async {
