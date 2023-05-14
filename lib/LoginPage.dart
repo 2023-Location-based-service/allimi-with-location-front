@@ -1,15 +1,21 @@
 import 'dart:convert';
-
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Supplementary/CustomLoading.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'MainPage.dart';
 import 'SignupPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:test_data/Backend.dart';
+import '../Supplementary/ThemeColor.dart';
+import '/Supplementary/CustomWidget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+ThemeColor themeColor = ThemeColor();
 String backendUrl = Backend.getUrl();
 
 class LoginPage extends StatefulWidget {
@@ -38,126 +44,167 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.all(40),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.person_rounded),
-                      hintText: '아이디',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) =>
-                    value!.isEmpty ? '아이디를 입력해주세요.' : null,
-                    onSaved: (value) => _id = value!,
-                  ),
-                  SizedBox(height: 5,),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.lock),
-                      hintText: '비밀번호',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) =>
-                    value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
-                    onSaved: (value) => _password = value!,
-                  ),
-                  SizedBox(height: 20.0,),
-                  ElevatedButton (
-                      child: Text(
-                        '로그인',
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(10),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(20),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('💫', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
+                    SizedBox(height: 10),
+                    Text('로그인을', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('진행해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(height: 50),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
+                      ],
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.person_rounded, color: Colors.grey),
+                        hintText: '아이디',
+                        hintStyle: TextStyle(fontSize: 15),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(width: 2, color: Colors.red),
                         ),
                       ),
+                      validator: (value) =>
+                      value!.isEmpty ? '아이디를 입력하세요' : null,
+                      onSaved: (value) => _id = value!,
+                    ), //아이디
+                    SizedBox(height: 7),
+                    TextFormField(
+                      obscureText: true,
+                      keyboardType: TextInputType.text,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')), //한글 빼고 전부 입력 가능
+                      ],
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey,),
+                        hintText: '비밀번호',
+                        hintStyle: TextStyle(fontSize: 15),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(width: 2, color: Colors.red),
+                        ),
+                      ),
+                      validator: (value) =>
+                      value!.isEmpty ? '비밀번호를 입력하세요' : null,
+                      onSaved: (value) => _password = value!,
+                    ), //비번
+                    SizedBox(height: 100),
+                    TextButton (
+                        child: Container(
+                            width: double.infinity,
+                            child: Text('로그인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.white10),
+                          backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                          padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                        ),
+                        onPressed: () async {
+                          if (validateAndSave() == true) {
+                            var data;
 
-                      onPressed: () async {
-                        if (validateAndSave() == true) {
-                          var data;
-                          
-                          try {
-                            data = await loginRequest(_id, _password);
-                          } catch(e) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Text("아이디 또는 패스워드가 일치하지 않습니다"),
-                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('확인'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
-                            return;
-                          }
+                            try {
+                              data = await loginRequest(_id, _password);
+                            } catch(e) {
+                              showToast('아이디 또는 비밀번호가 일치하지 않습니다');
 
-                          var json_data = json.decode(data);
+                              // showDialog(
+                              //     context: context,
+                              //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              //     builder: (BuildContext context) {
+                              //       return AlertDialog(
+                              //         content: Text("아이디 또는 패스워드가 일치하지 않습니다"),
+                              //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                              //         actions: [
+                              //           TextButton(
+                              //             child: const Text('확인'),
+                              //             onPressed: () {
+                              //               Navigator.of(context).pop();
+                              //             },
+                              //           ),
+                              //         ],
+                              //       );
+                              //     }
+                              // );
+                              return;
+                            }
 
-                          var userRole = '';
-                          if (json_data['user_role'] != null) {
-                            userRole = json_data['user_role'];
+                            var json_data = json.decode(data);
+
+                            var userRole = '';
+                            if (json_data['user_role'] != null) {
+                              userRole = json_data['user_role'];
+                              var residentData = await getResidentInfo(json_data['user_id']);
+                              var jsonResidentData = json.decode(residentData);
+
+                              Provider.of<ResidentProvider>(context, listen:false)
+                                  .setInfo(jsonResidentData['nhr_id'], jsonResidentData['facility_id'], jsonResidentData['facility_name'], jsonResidentData['resident_name'],
+                                  json_data['user_role'],'', '');
+
+                            }
+
                             var residentData = await getResidentInfo(json_data['user_id']);
                             var jsonResidentData = json.decode(residentData);
 
-                            Provider.of<ResidentProvider>(context, listen:false)
-                              .setInfo(jsonResidentData['nhr_id'], jsonResidentData['facility_id'], jsonResidentData['facility_name'], jsonResidentData['resident_name'],
-                                        json_data['user_role'],'', '');
+                            Provider.of<UserProvider>(context, listen:false)
+                                .setInfo(json_data['user_id'], userRole, _id, json_data['phone_num'], json_data['user_name']);
 
+                            Provider.of<UserProvider>(context, listen: false)
+                                .getData();
                           }
-                            
-                          var residentData = await getResidentInfo(json_data['user_id']);
-                          var jsonResidentData = json.decode(residentData);
-
-                          Provider.of<UserProvider>(context, listen:false)
-                              .setInfo(json_data['user_id'], userRole, _id, json_data['phone_num'], json_data['user_name']);
-
-                          Provider.of<UserProvider>(context, listen: false)
-                            .getData();
                         }
-                      }
-                  ),
-                  SizedBox(height: 10.0,),
-                  OutlinedButton (
-                    child: Text(
-                      '회원가입',
-                      style: TextStyle(fontSize: 18.0, color: Colors.black),
                     ),
-                    style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.all(10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
+                    Row(
+                      children: [
+                        Text('처음 오셨나요?', style: TextStyle(color: Colors.grey)),
+                        Spacer(),
+                        TextButton (
+                          child: Text('회원가입', style: TextStyle(color: Colors.grey)),
+                          style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          ),
+                          onPressed: (){
+                            pageAnimation(context, SignupPage());
+                          },
+                        ),
+                        Icon(Icons.chevron_right_rounded, color: Colors.grey,),
+                      ],
                     ),
-                    onPressed: (){
-                      pageAnimation(context, SignupPage());
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      )
     );
   }
 }

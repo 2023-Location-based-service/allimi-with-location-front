@@ -1,3 +1,5 @@
+//WorkerInmatePage
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -9,62 +11,50 @@ import '../provider/ResidentProvider.dart';
 import 'package:test_data/Backend.dart';
 String backendUrl = Backend.getUrl();
 
-class MyInmateProfilePage extends StatefulWidget {
-  const MyInmateProfilePage({Key? key, required this.uid}) : super(key: key);
+class WorkerInmateProfilePage extends StatefulWidget {
+  const WorkerInmateProfilePage({Key? key, required this.facilityId, required this.uid}) : super(key: key);
 
+  final int facilityId;
   final int uid;
 
   @override
-  State<MyInmateProfilePage> createState() => _MyInmateProfilePageState();
+  State<WorkerInmateProfilePage> createState() => _WorkerInmateProfilePageState();
 }
 
-class _MyInmateProfilePageState extends State<MyInmateProfilePage> {
+class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
   late int _userId;
+  late int _facilityId;
   List<Map<String, dynamic>> _residentList = [];
 
   @override
   void initState() {
     super.initState();
     _userId = widget.uid;
-    getResident();
+    _facilityId = widget.facilityId;
+    addInmate(_facilityId, _userId);
   }
 
-  Future<void> getResident() async {
-    debugPrint("@@@@@ 유저의 입소자들 리스트 받아오는 백앤드 url 보냄");
-
-    http.Response response = await http.get(
-        Uri.parse(backendUrl+ 'nhResidents/' + _userId.toString()),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept-Charset': 'utf-8'
-        }
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('POST request failed');
-    }
-
-    var data =  utf8.decode(response.bodyBytes);
-    dynamic decodedJson = json.decode(data);
-
-    Map<String, dynamic> parsedJson = Map<String, dynamic>.from(decodedJson);
-
-    List<Map<String, dynamic>> parsedJsonList
-    = List<Map<String, dynamic>>.from(parsedJson['resident_list']);
-
-    setState(() {
-      _residentList = parsedJsonList;
+  Future<void> addInmate(facilityId, uid) async {
+    var url = Uri.parse(backendUrl + 'nhResident/change');
+    var headers = {'Content-type': 'application/json'};
+    var body = json.encode({
+      "facility_id": facilityId,
+      "user_id": uid,
     });
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print("성공");
+    } else {
+      throw Exception();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return myInmateProfile();
   }
-
-
-
-
 
   //입소자 정보
   Widget myInmateProfile() {
@@ -78,7 +68,7 @@ class _MyInmateProfilePageState extends State<MyInmateProfilePage> {
               children: [
                 Icon(Icons.info_rounded, color: Colors.grey),
                 SizedBox(width: 5),
-                Text('현재 내가 보호하고 있는 피보호자 목록입니다.'),
+                Text('현재 내가 담당하고 있는 입소자 목록입니다'),
               ],
             ),
           ),
@@ -108,5 +98,4 @@ class _MyInmateProfilePageState extends State<MyInmateProfilePage> {
       ),
     );
   }
-
 }

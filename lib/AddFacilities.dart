@@ -104,20 +104,20 @@ class _AddFacilitiesState extends State<AddFacilities> {
               child: Column(
                 children: [
                   getTextFormField(
-                    textInputType: TextInputType.text,
+                    keyboardType: TextInputType.text,
                     icon: Icons.home_rounded,
                     hintText: '시설명',
                     controller: facilityNameController,
                     errormsg: '시설명을 입력하세요'),
                   getTextFormField(
-                    textInputType: TextInputType.text,
+                    keyboardType: TextInputType.text,
                     icon: Icons.place_rounded,
                     hintText: '주소',
                     controller: locationController,
                     errormsg: '주소를 입력하세요'),
 
                   getTextFormField(
-                    textInputType: TextInputType.number,
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
                       MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
                     ],
@@ -126,7 +126,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                     controller: numberController,
                     errormsg: '전화번호를 입력하세요'),
                   getTextFormField(
-                    textInputType: TextInputType.text,
+                    keyboardType: TextInputType.text,
                     icon: Icons.person_rounded,
                     hintText: '시설장 이름',
                     controller: personNameController,
@@ -236,7 +236,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   }
 
   Widget getTextFormField({
-    TextInputType? textInputType,
+    TextInputType? keyboardType,
     required IconData? icon,
     required String? hintText,
     required TextEditingController controller,
@@ -248,7 +248,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
       validator: (value) {
         if(value!.isEmpty) { return errormsg; } else { return null; }
       },
-      keyboardType: textInputType,
+      keyboardType: keyboardType,
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         icon: Icon(icon),
