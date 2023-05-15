@@ -203,6 +203,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                 actions: [
                                   TextButton(
                                     child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -211,6 +212,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                       builder: (context2, userProvider, child) {
                                         return TextButton(
                                           child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
                                           onPressed: () async {
                                             try {
                                               await facilityRequest(userProvider.uid);
