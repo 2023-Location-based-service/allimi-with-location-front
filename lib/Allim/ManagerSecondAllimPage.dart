@@ -96,7 +96,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   //시설장 및 직원 알림장(각 목록)
   Widget eachmanager() {
         if (_noticeDetail['notice_id'] == null)
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
 
         return SingleChildScrollView(
           child: Column(

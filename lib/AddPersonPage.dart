@@ -155,7 +155,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
     );
   
     } else {
-      return Center(child: CircularProgressIndicator(),);
+      return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
     }
   }
 }
