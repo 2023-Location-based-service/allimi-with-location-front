@@ -23,6 +23,8 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
 
   Future<void> getFacilityInfo() async {
     debugPrint("@@@@시설 정보 받아오기 백엔드");
+
+    debugPrint("@@@love" + _facilityId.toString());
     http.Response response = await http.get(
         Uri.parse(backendUrl + "facilities/" + _facilityId.toString()),
         headers: <String, String>{
@@ -38,6 +40,8 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
     setState(() {
       _facilityInfo =  parsedJson;
     });
+
+    debugPrint("@@" + _facilityInfo['name'] + "/ " + _facilityInfo['tel'] + "/ " + _facilityInfo['address'] + "/ " + _facilityInfo['fm_name']);
   }
 
   @override
@@ -65,6 +69,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
           physics: NeverScrollableScrollPhysics(),
           itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
+            
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -54,6 +54,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
         "name": _facilityName,
         "address": _location,
         "tel": _number,
+        "fm_name": _personName
       })
     );
 
@@ -296,7 +297,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
           } else if (hintText == '주소') {
             _location = value!;
           } else if (hintText == '전화번호') {
-            _location = value!;
+            _number = value!;
           } else if (hintText == '시설장 이름') {
             _personName = value!;
           }
