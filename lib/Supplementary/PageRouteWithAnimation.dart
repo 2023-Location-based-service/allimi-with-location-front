@@ -27,33 +27,15 @@ class PageRouteWithAnimation {
       },
     );
   }
-
-  Route slideLeftToRight() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return page;
-      },
-      transitionsBuilder: (
-          BuildContext context,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-          Widget child,
-          ) {
-        var begin = Offset(1.0, 0.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
-  }
 }
 
 //페이지 이동 함수
 void pageAnimation(BuildContext context, Widget page) {
+  PageRouteWithAnimation pageRouteWithAnimation = PageRouteWithAnimation(page);
+  Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
+}
+
+Future<void> awaitPageAnimation(BuildContext context, Widget page) async {
   PageRouteWithAnimation pageRouteWithAnimation = PageRouteWithAnimation(page);
   Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
 }
@@ -68,16 +50,16 @@ Widget customPage({
   return Scaffold(
     //backgroundColor: Colors.white,
     appBar: AppBar(
-      title: Text('$title'),
+      title: Text(title),
       actions: [
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: SizedBox(
             width: 50,
             height: 10,
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor:  Color(0xff5BB193),
+                backgroundColor: Color(0xff5BB193),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100),
                 ),
