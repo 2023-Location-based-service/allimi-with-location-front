@@ -68,7 +68,8 @@ class _UserCommentPageState extends State<UserCommentPage> {
   }
 
   Widget _getFAB() {
-    if (_userRole == 'PROTECTOR')
+    debugPrint("@@@ UserRole: " + _userRole);
+    if (_userRole == 'PROTECTOR') {
       return FloatingActionButton(
         backgroundColor: themeColor.getColor(),
         onPressed: () async {
@@ -84,6 +85,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
         },
         child: const Icon(Icons.create),
       );
+    }
     else
       return Container();
   }

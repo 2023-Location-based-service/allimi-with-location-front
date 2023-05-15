@@ -35,11 +35,11 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _userRole = widget.userRole;
   }
 
   @override
   Widget build(BuildContext context) {
+    _userRole = widget.userRole;
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
@@ -47,13 +47,16 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: ListView(
-        children: [
-          //TODO: 위젯 작성
-          myCard(),
-          menuList(context),
-
-        ],
+      body: Consumer<UserProvider>(
+        builder: (context, userProvider, child) {
+          return ListView(
+            children: [
+              //TODO: 위젯 작성
+              myCard(),
+              menuList(context),
+            ],
+          );
+        }
       ),
     );
   }

@@ -134,11 +134,15 @@ class _EditAllimPageState extends State<EditAllimPage> {
     }
   }
 
+
+  
   // 서버에 알림장 업로드 + 사진 업로드
   Future<void> editAllim(userId, facilityId) async {
     debugPrint("@@@@ 공지사항 수정 백엔드 요청 보냄");
     List<MultipartFile> _files = [];
     var formData = null;
+
+    debugPrint("@@@: " + _noticeId.toString() + "/" + userId.toString() + "/" + selectedPersonId.toString());
 
 
     if (_pickedImgs.length != 0 ) {
