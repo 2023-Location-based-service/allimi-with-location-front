@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart'; //http 사용
 import 'package:google_fonts/google_fonts.dart';
@@ -128,33 +129,13 @@ class _AddFacilitiesState extends State<AddFacilities> {
                               controller: facilityNameController,
                               errormsg: '시설명을 입력하세요'),
                           SizedBox(height: 7),
-
-
-
                           //주소 검색
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-
-
-                              Container(
-                                child: Text(postCode),
-                                padding: EdgeInsets.all(10), // 텍스트와 테두리 사이 간격 설정
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.shade300, width: 1), // 실선 테두리 설정
-                                  borderRadius: BorderRadius.circular(5), // 둥근 모서리 설정
-                                ),
-                              ),
-
+                              addressText(text: postCode),
                               GestureDetector(
-                                child: Container(
-                                  child: Text('주소 검색', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  padding: EdgeInsets.all(10), // 텍스트와 테두리 사이 간격 설정
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300, width: 1), // 실선 테두리 설정
-                                    borderRadius: BorderRadius.circular(5), // 둥근 모서리 설정
-                                  ),
-                                ),
+                                child: addressText(text: '주소 검색', style: TextStyle(fontWeight: FontWeight.bold)),
                                 onTap: () async {
                                   await awaitPageAnimation(context, KpostalView(
                                     appBar: AppBar(title: Text('주소 검색')),
@@ -170,7 +151,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
                             ],
                           ),
-
                           SizedBox(height: 7),
                           getTextFormField(
                               keyboardType: TextInputType.text,
@@ -218,38 +198,23 @@ class _AddFacilitiesState extends State<AddFacilities> {
                             barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                             builder: (BuildContext context1) {
                               return AlertDialog(
-                                content: Text("요양원을 등록하시겠습니까?"),
+                                content: Text('시설을 등록하시겠습니까?'),
                                 insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                 actions: [
+                                  TextButton(
+                                    child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
                                   Consumer<UserProvider>(
                                       builder: (context2, userProvider, child) {
                                         return TextButton(
-                                          child: const Text('확인'),
+                                          child: Text('확인', style: TextStyle(color: themeColor.getColor())),
                                           onPressed: () async {
                                             try {
                                               await facilityRequest(userProvider.uid);
-
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                                  builder: (BuildContext context3) {
-                                                    return AlertDialog(
-                                                      content: Text('요양원 등록에 성공하였습니다'),
-                                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                      actions: [
-                                                        TextButton(
-                                                          child: const Text('확인'),
-                                                          onPressed: () {
-                                                            Navigator.of(context).pop();
-                                                            Navigator.of(context).pop();
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }
-                                              );
-
+                                              showToast('시설 등록에 성공하였습니다');
                                               Provider.of<ResidentProvider>(context, listen:false)
                                                   .setInfo(_resident_id, _facilityId, _facilityName, '', 'MANAGER','', '');
 
@@ -258,49 +223,23 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
                                               Provider.of<UserProvider>(context, listen: false)
                                                   .getData();
-
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
                                             } catch(e) {
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                                  builder: (BuildContext context_) {
-                                                    return AlertDialog(
-                                                      content: Text('시설 등록에 실패하였습니다'),
-                                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                      actions: [
-                                                        TextButton(
-                                                          child: const Text('확인'),
-                                                          onPressed: () {
-                                                            Navigator.of(context_).pop();
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }
-                                              );
+                                              showToast('시설 등록에 실패하였습니다');
+                                              Navigator.of(context).pop();
                                             }
-
-                                            // Navigator.of(context).pop();
                                           },
                                         );
                                       }
-                                  ),
-                                  TextButton(
-                                    child: const Text('취소'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
                                   ),
                                 ],
                               );
                             }
                         );
-
                       }
                     },
                   ),
-
                 ],
               ),
             ),
@@ -355,6 +294,17 @@ class _AddFacilitiesState extends State<AddFacilities> {
             _personName = value!;
           }
         }
+    );
+  }
+
+  Widget addressText({required String? text, TextStyle? style}) {
+    return Container(
+      child: Text(text!, style: style),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300, width: 1),
+        borderRadius: BorderRadius.circular(5),
+      ),
     );
   }
 }
