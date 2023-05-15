@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
+import 'package:google_fonts/google_fonts.dart';
 ThemeColor themeColor = ThemeColor();
 
 String backendUrl = Backend.getUrl();
@@ -65,132 +66,138 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: ElevatedButton (
-                  child: Text(
-                    '시설 추가하기',
-                    style: TextStyle(fontSize: 18.0,),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      primary: themeColor.getColor(),
-                      padding: EdgeInsets.all(7),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                  onPressed: (){
-                    pageAnimation(context, AddFacilities());
-                  }
-              ),
+      appBar: AppBar(title: Row(
+        children: [
+          Text('초대 대기 목록'),
+          SizedBox(width: 7),
+          Container(
+            //padding: EdgeInsets.all(0),
+            width: 30, height: 30,
+            child: CircleAvatar(
+              backgroundColor: Color(0xfff3727c),
+              child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
             ),
-            SizedBox(width: 5,),
-            Expanded(
-              child: ElevatedButton (
-                  child: Text(
-                    '로그아웃',
-                    style: TextStyle(fontSize: 18.0, ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      primary: themeColor.getColor(),
-                      padding: EdgeInsets.all(7),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                  onPressed: (){
-                    showDialog(
-                      context: context,
-                      builder: (context) =>
-                          AlertDialog(
-                            content: const Text('로그아웃하시겠습니까?'),
-                            actions: [
-                              TextButton(child: Text('아니오',
-                                style: TextStyle(color: themeColor.getMaterialColor())),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                              TextButton(child: Text('예',
-                                style: TextStyle(color: themeColor.getMaterialColor())),
-                                  onPressed: () {
-                                  Provider.of<UserProvider>(context, listen:false) //로그아웃
-                                    .uid = 0;
+          ),
+          IconButton(
+              onPressed: () { getResidentList(uid); },
+              icon: Icon(Icons.restart_alt_rounded)
+          )
+        ],
+      )),
 
-                                  Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
-                                    .getData();
-                                  Navigator.pop(context);
-                              })
-                                
-                            ],
-                          ),
-                    );
-
-                     
-                  }
-              ),
-            ),
-          ],
-        )
-      ),
-      body: Scrollbar(
-        child: ListView(
+        body: ListView(
           children: [
             Container(
-                padding: EdgeInsets.all(15),
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  //crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          '초대 대기목록',
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          width: 37, height: 37,
-                          child: CircleAvatar(
-                            backgroundColor: Color(0xffF3959D),
-                            child: Text(
-                              '$_count',
-                              style: TextStyle(fontSize: 13, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        IconButton(onPressed: () {
-                          getResidentList(uid);
-                        }, icon: Icon(Icons.restart_alt))
-                        
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Text('초대 대기 목록', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                    //     SizedBox(width: 7),
+                    //     Container(
+                    //       //padding: EdgeInsets.all(0),
+                    //       width: 30, height: 30,
+                    //       child: CircleAvatar(
+                    //         backgroundColor: Color(0xfff3727c),
+                    //         child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
+                    //       ),
+                    //     ),
+                    //     IconButton(
+                    //         onPressed: () { getResidentList(uid); },
+                    //         icon: Icon(Icons.restart_alt_rounded)
+                    //     )
+                    //   ],
+                    // ),
+                    // SizedBox(height: 5),
                     Container(
-                      padding: EdgeInsets.all(4),
-                      child: Column(
-                        children:[
-                          for (var i=0; i< _residentList.length; i++)... [
-                            addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date'])
-                          ]
-                        ],
-                      )
+                      //padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        child: Column(
+                          children:[
+                            for (var i=0; i< _residentList.length; i++)... [
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 0),
+                                child: addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date']),
+                              ),
+                              Divider(thickness: 0.5),
+                            ]
+                          ],
+                        )
                     ),
                   ],
                 )
-                
-            ),
+
+            )
           ],
-        )
+        ),
+      bottomNavigationBar: Row(
+        children: [
+          SizedBox(width: 5),
+          Expanded(
+            child: TextButton(
+                child: Container(
+                    child: Text('시설장이신가요?', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.white10),
+                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                ),
+                onPressed: (){
+                  pageAnimation(context, AddFacilities());
+                }
+            ),
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: TextButton(
+                child: Container(child: Text('로그아웃', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.white10),
+                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                ),
+                onPressed: (){
+                  showDialog(
+                    context: context,
+                    builder: (context) =>
+                        AlertDialog(
+                          content: const Text('로그아웃하시겠습니까?'),
+                          actions: [
+                            TextButton(
+                                child: Text('취소', style: TextStyle(color: themeColor.getMaterialColor())),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                            TextButton(
+                                child: Text('확인', style: TextStyle(color: themeColor.getMaterialColor())),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                onPressed: () {
+                                  Provider.of<UserProvider>(context, listen:false) //로그아웃
+                                      .uid = 0;
+
+                                  Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
+                                      .getData();
+                                  Navigator.pop(context);
+                                })
+
+                          ],
+                        ),
+                  );
+                }
+            ),
+          ),
+          SizedBox(width: 5),
+        ],
       ),
     );
   }
 
-
-  Card addList(int id, int facilityId, String name, String facility_name, String userRole, String date){
+  Container addList(int id, int facilityId, String name, String facility_name, String userRole, String date){
     String userRoleString = '';
 
     if (userRole == 'PROTECTOR')
@@ -202,37 +209,38 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
     else
       userRoleString = '누구세요';
 
-    return Card(
-        child: Container(
-          padding: EdgeInsets.only(right: 7, left: 7),
-          child: Row(
-            children: [
-              Text(
-                facility_name + ": " + userRoleString
-              ),
-              Spacer(),
-              Container(
-                padding: EdgeInsets.all(2),
-                child: Consumer<UserProvider>(
+    return Container(
+
+      //padding: EdgeInsets.only(right: 8, left: 8, ),
+      child: Row(
+        children: [
+          Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(" " + userRoleString),
+          Spacer(),
+          Container(
+            child: Consumer<UserProvider>(
                 builder: (context, userProvider, child) {
                   return OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: themeColor.getColor(),)
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: themeColor.getColor(),)
                       ),
                       onPressed: (){
-                        pageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole, 
-                                    invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                                    userId: userProvider.uid));
+                        pageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                            invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                            userId: userProvider.uid));
                       },
-                      child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
-                    );
-                  }
-                ),
-              )
-                
-            ],
-          ),
-        )
+                      child: Text('초대받기',style: TextStyle(color: themeColor.getColor()),)
+                  );
+                }
+            ),
+          )
+
+        ],
+      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(color: Colors.grey.shade300, width: 1),
+      //   borderRadius: BorderRadius.circular(5),
+      // ),
     );
   }
 }
