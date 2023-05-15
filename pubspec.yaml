@@ -25,6 +25,7 @@ dependencies:
   multi_masked_formatter: ^1.0.0
   async: ^2.9.0
   fluttertoast: ^8.2.1
+  kpostal: ^0.5.1
 
 dev_dependencies:
   flutter_test:

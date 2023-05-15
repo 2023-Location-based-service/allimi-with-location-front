@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:kpostal/kpostal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
@@ -7,8 +8,14 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart'; //http 사용
+import 'package:google_fonts/google_fonts.dart';
+import '../Supplementary/ThemeColor.dart';
+
 
 import 'package:test_data/Backend.dart';
+
+import 'Supplementary/PageRouteWithAnimation.dart';
+ThemeColor themeColor = ThemeColor();
 String backendUrl = Backend.getUrl();
 
 class AddFacilities extends StatefulWidget {
@@ -25,6 +32,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   TextEditingController numberController = TextEditingController();
   TextEditingController personNameController = TextEditingController();
 
+  String postCode = '우편번호';
   String _facilityName = '';
   String _location = '';
   String _number = '';
@@ -96,140 +104,207 @@ class _AddFacilitiesState extends State<AddFacilities> {
   Widget addFacilities() {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          children: [
-            Text('시설 정보를 입력해주세요.'),
-            Form(
-              key: formKey,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  getTextFormField(
-                    keyboardType: TextInputType.text,
-                    icon: Icons.home_rounded,
-                    hintText: '시설명',
-                    controller: facilityNameController,
-                    errormsg: '시설명을 입력하세요'),
-                  getTextFormField(
-                    keyboardType: TextInputType.text,
-                    icon: Icons.place_rounded,
-                    hintText: '주소',
-                    controller: locationController,
-                    errormsg: '주소를 입력하세요'),
-
-                  getTextFormField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
-                    ],
-                    icon: Icons.call_rounded,
-                    hintText: '전화번호',
-                    controller: numberController,
-                    errormsg: '전화번호를 입력하세요'),
-                  getTextFormField(
-                    keyboardType: TextInputType.text,
-                    icon: Icons.person_rounded,
-                    hintText: '시설장 이름',
-                    controller: personNameController,
-                    errormsg: '시설장 이름을 입력하세요'),
-                ],
-              )
-            ),
+                  Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
+                  SizedBox(height: 10),
+                  Text('시설 정보를', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('입력해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 50),
+                  Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          getTextFormField(
+                              keyboardType: TextInputType.text,
+                              icon: Icon(Icons.home_rounded, color: Colors.grey),
+                              hintText: '시설명',
+                              controller: facilityNameController,
+                              errormsg: '시설명을 입력하세요'),
+                          SizedBox(height: 7),
 
 
-            OutlinedButton(
-              child: Text('확인'),
-              onPressed: (){
-                if(this.formKey.currentState!.validate()) {
-                  this.formKey.currentState!.save();
 
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                    builder: (BuildContext context1) {
-                      return AlertDialog(
-                        content: Text("요양원을 등록하시겠습니까?"),
-                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                        actions: [
-                          Consumer<UserProvider>(
-                            builder: (context2, userProvider, child) {
-                              return TextButton(
-                                child: const Text('확인'),
-                                onPressed: () async {
-                                  try {
-                                    await facilityRequest(userProvider.uid);
+                          //주소 검색
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
 
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context3) {
-                                        return AlertDialog(
-                                          content: Text('요양원 등록에 성공하였습니다'),
-                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('확인'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop(); 
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                    );
 
-                                    Provider.of<ResidentProvider>(context, listen:false)
+                              Container(
+                                child: Text(postCode),
+                                padding: EdgeInsets.all(10), // 텍스트와 테두리 사이 간격 설정
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey.shade300, width: 1), // 실선 테두리 설정
+                                  borderRadius: BorderRadius.circular(5), // 둥근 모서리 설정
+                                ),
+                              ),
+
+                              GestureDetector(
+                                child: Container(
+                                  child: Text('주소 검색', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  padding: EdgeInsets.all(10), // 텍스트와 테두리 사이 간격 설정
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey.shade300, width: 1), // 실선 테두리 설정
+                                    borderRadius: BorderRadius.circular(5), // 둥근 모서리 설정
+                                  ),
+                                ),
+                                onTap: () async {
+                                  await awaitPageAnimation(context, KpostalView(
+                                    appBar: AppBar(title: Text('주소 검색')),
+                                    callback: (Kpostal result) {
+                                      setState(() {
+                                        locationController.text = result.address;
+                                        postCode = result.postCode;
+                                      });
+                                    },
+                                  ),);
+                                }
+                              ),
+
+                            ],
+                          ),
+
+                          SizedBox(height: 7),
+                          getTextFormField(
+                              keyboardType: TextInputType.text,
+                              icon: Icon(Icons.place_rounded, color: Colors.grey),
+                              hintText: '주소',
+                              controller: locationController,
+                              errormsg: '주소를 입력하세요'),
+                          SizedBox(height: 7),
+                          getTextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                              ],
+                              icon: Icon(Icons.call_rounded, color: Colors.grey),
+                              hintText: '전화번호',
+                              controller: numberController,
+                              errormsg: '전화번호를 입력하세요'),
+                          SizedBox(height: 7),
+                          getTextFormField(
+                              keyboardType: TextInputType.text,
+                              icon: Icon(Icons.person_rounded, color: Colors.grey),
+                              hintText: '시설장 이름',
+                              controller: personNameController,
+                              errormsg: '시설장 이름을 입력하세요'),
+                        ],
+                      )
+                  ),
+                  SizedBox(height: 50),
+                  TextButton(
+                    child: Container(
+                        width: double.infinity,
+                        child: Text('확인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                    style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.white10),
+                        backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                    ),
+                    onPressed: () {
+                      if(this.formKey.currentState!.validate()) {
+                        this.formKey.currentState!.save();
+
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                            builder: (BuildContext context1) {
+                              return AlertDialog(
+                                content: Text("요양원을 등록하시겠습니까?"),
+                                insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                actions: [
+                                  Consumer<UserProvider>(
+                                      builder: (context2, userProvider, child) {
+                                        return TextButton(
+                                          child: const Text('확인'),
+                                          onPressed: () async {
+                                            try {
+                                              await facilityRequest(userProvider.uid);
+
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                  builder: (BuildContext context3) {
+                                                    return AlertDialog(
+                                                      content: Text('요양원 등록에 성공하였습니다'),
+                                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                      actions: [
+                                                        TextButton(
+                                                          child: const Text('확인'),
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                            Navigator.of(context).pop();
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                              );
+
+                                              Provider.of<ResidentProvider>(context, listen:false)
                                                   .setInfo(_resident_id, _facilityId, _facilityName, '', 'MANAGER','', '');
-                                    
-                                    Provider.of<UserProvider>(context, listen: false)
+
+                                              Provider.of<UserProvider>(context, listen: false)
                                                   .setRole('MANAGER');
 
-                                    Provider.of<UserProvider>(context, listen: false)
+                                              Provider.of<UserProvider>(context, listen: false)
                                                   .getData();
-                                  
-                                  } catch(e) {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context_) {
-                                        return AlertDialog(
-                                          content: Text('시설 등록에 실패하였습니다'),
-                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('확인'),
-                                              onPressed: () {
-                                                Navigator.of(context_).pop();
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
+
+                                            } catch(e) {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                  builder: (BuildContext context_) {
+                                                    return AlertDialog(
+                                                      content: Text('시설 등록에 실패하였습니다'),
+                                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                      actions: [
+                                                        TextButton(
+                                                          child: const Text('확인'),
+                                                          onPressed: () {
+                                                            Navigator.of(context_).pop();
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                              );
+                                            }
+
+                                            // Navigator.of(context).pop();
+                                          },
                                         );
                                       }
-                                    );
-                                  }
-
-                                  // Navigator.of(context).pop();
-                                },
+                                  ),
+                                  TextButton(
+                                    child: const Text('취소'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
                               );
                             }
-                          ),
-                          TextButton(
-                            child: const Text('취소'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                  );
+                        );
 
-                }
-              },
+                      }
+                    },
+                  ),
+
+                ],
+              ),
             ),
-          ],
+          ),
         )
       ),
     );
@@ -237,7 +312,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
   Widget getTextFormField({
     TextInputType? keyboardType,
-    required IconData? icon,
+    required Widget icon,
     required String? hintText,
     required TextEditingController controller,
     required String? errormsg,
@@ -245,40 +320,41 @@ class _AddFacilitiesState extends State<AddFacilities> {
   }) {
     return TextFormField(
       controller: controller,
-      validator: (value) {
-        if(value!.isEmpty) { return errormsg; } else { return null; }
-      },
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
-        icon: Icon(icon),
+        prefixIcon: icon,
         hintText: hintText,
-        labelStyle: const TextStyle(color: Colors.black54),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          borderSide: BorderSide(width: 1, color: Colors.transparent),
+        hintStyle: TextStyle(fontSize: 15),
+        //labelStyle: const TextStyle(color: Colors.black54),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(color: Colors.grey.shade300),
         ),
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          borderSide: BorderSide(width: 1, color: Colors.transparent),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(color: Colors.grey.shade300),
         ),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(width: 2, color: Colors.red),
         ),
-        filled: true,
-        fillColor: Color(0xfff2f3f6),
       ),
-      onSaved: (value) {
-        if (hintText == '시설명') {
-          _facilityName = value!;
-        } else if (hintText == '주소') {
-          _location = value!;
-        } else if (hintText == '전화번호') {
-          _location = value!;
-        } else if (hintText == '시설장 이름') {
-          _personName = value!;
-        } 
-      }
+        validator: (value) {
+          if(value!.isEmpty) { return errormsg; } else { return null; }
+        },
+        onSaved: (value) {
+          if (hintText == '시설명') {
+            _facilityName = value!;
+          } else if (hintText == '주소') {
+            _location = value!;
+          } else if (hintText == '전화번호') {
+            _location = value!;
+          } else if (hintText == '시설장 이름') {
+            _personName = value!;
+          }
+        }
     );
   }
 }
