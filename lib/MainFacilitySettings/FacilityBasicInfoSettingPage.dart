@@ -57,7 +57,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
 
   Widget appSetting(){
     if (_facilityInfo.length == 0) {
-      return Center(child: CircularProgressIndicator());
+      return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
     } else {
       return Container(
         child: ListView.builder(

@@ -127,7 +127,8 @@ class _AddFacilitiesState extends State<AddFacilities> {
                               icon: Icon(Icons.home_rounded, color: Colors.grey),
                               hintText: '시설명',
                               controller: facilityNameController,
-                              errormsg: '시설명을 입력하세요'),
+                              validator: (value) => value!.isEmpty ? '시설명을 입력하세요' : null,
+                          ),
                           SizedBox(height: 7),
                           //주소 검색
                           Row(
@@ -157,24 +158,30 @@ class _AddFacilitiesState extends State<AddFacilities> {
                               icon: Icon(Icons.place_rounded, color: Colors.grey),
                               hintText: '주소',
                               controller: locationController,
-                              errormsg: '주소를 입력하세요'),
+                            validator: (value) => value!.isEmpty ? '주소를 입력하세요' : null,),
                           SizedBox(height: 7),
                           getTextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
-                              ],
-                              icon: Icon(Icons.call_rounded, color: Colors.grey),
-                              hintText: '전화번호',
-                              controller: numberController,
-                              errormsg: '전화번호를 입력하세요'),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')],
+                            icon: Icon(Icons.call_rounded, color: Colors.grey),
+                            hintText: '전화번호',
+                            controller: numberController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return '전화번호를 입력하세요';
+                              } else if (value.length < 12) {
+                                return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                              }
+                              return null;
+                            },
+                          ),
                           SizedBox(height: 7),
                           getTextFormField(
                               keyboardType: TextInputType.text,
                               icon: Icon(Icons.person_rounded, color: Colors.grey),
                               hintText: '시설장 이름',
                               controller: personNameController,
-                              errormsg: '시설장 이름을 입력하세요'),
+                            validator: (value) => value!.isEmpty ? '시설장 이름을 입력하세요' : null,),
                         ],
                       )
                   ),
@@ -198,7 +205,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                             barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                             builder: (BuildContext context1) {
                               return AlertDialog(
-                                content: Text('시설을 등록하시겠습니까?'),
+                                content: Text('시설 등록을 진행하시겠습니까?'),
                                 insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                 actions: [
                                   TextButton(
@@ -256,7 +263,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
     required Widget icon,
     required String? hintText,
     required TextEditingController controller,
-    required String? errormsg,
+    String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
@@ -282,9 +289,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
           borderSide: BorderSide(width: 2, color: Colors.red),
         ),
       ),
-        validator: (value) {
-          if(value!.isEmpty) { return errormsg; } else { return null; }
-        },
+        validator: validator,
         onSaved: (value) {
           if (hintText == '시설명') {
             _facilityName = value!;

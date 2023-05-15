@@ -127,7 +127,14 @@ class _SignupPageState extends State<SignupPage> {
                       ],
                       title: '전화번호',
                       prefixIcon: Icon(Icons.phone_rounded, color: Colors.grey),
-                      validator: (value) => value!.isEmpty ? '전화번호를 입력하세요' : null,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return '전화번호를 입력하세요';
+                        } else if (value.length < 12) {
+                          return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                        }
+                        return null;
+                      },
                       onSaved: (value) => _tel = value!,
                     ),
                     SizedBox(height: 50),

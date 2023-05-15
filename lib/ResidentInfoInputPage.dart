@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'MainPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
 String backendUrl = Backend.getUrl();
 //입소자 정보 입력 화면
@@ -139,124 +141,148 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   Widget build(BuildContext context) {
     if(invitationUserRole == 'PROTECTOR') {
       return Scaffold(
-        body: ListView(
-          children: [
-            Container(
-              padding: EdgeInsets.all(30),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    SizedBox(height: 15.0,),
-                    Text(
-                      "입소자 정보를 입력해주세요",
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                    SizedBox(height: 10.0,),
-                    Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextFormField(
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(labelText: '이름'),
-                            validator: (value) =>
-                            value!.isEmpty ? '이름을 입력해주세요.' : null,
-                            onSaved: (value) => _residentname = value!,
-                          ),
-                          TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(labelText: '생년월일'),
-                            validator: (value) =>
-                            value!.isEmpty ? '생년월일을 입력해주세요.' : null,
-                            onSaved: (value) => _birthdate = value!,
-                          ),
-                        ],
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('🤗', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
+                      SizedBox(height: 10),
+                      Text('입소자 정보를', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('입력해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 50),
+
+                      getTextFeild(
+                        keyboardType: TextInputType.text,
+                        title: '이름',
+                        prefixIcon: Icon(Icons.person_rounded, color: Colors.grey),
+                        validator: (value) => value!.isEmpty ? '이름을 입력하세요' : null,
+                        onSaved: (value) => _residentname = value!,
                       ),
-                    ),
-                    SizedBox(height: 30.0,),
-                    Consumer<UserProvider>(
-                      builder: (context, userProvider, child) {
-                        return ElevatedButton (
-                            child: Text(
-                              '확인',
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(10),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                            ),
-                            onPressed: () async {
-                              if (validateAndSave()) {
-                                var data;
-                                try {
-                                  data = await addResident(userProvider.uid);
-                                  var json_data = json.decode(data);
+                      SizedBox(height: 7),
 
-                                  if (json_data['resident_id'] != null) {
-                                    Provider.of<ResidentProvider>(context, listen:false)
-                                      .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
-                                              invitationUserRole,_birthdate, healthInfo);
+                      getTextFeild(
+                        keyboardType: TextInputType.number,
+                        title: '생년월일 8자리',
+                        prefixIcon: Icon(Icons.cake_rounded, color: Colors.grey),
+                        inputFormatters: [MultiMaskedTextInputFormatter(masks: ['xxxx.xx.xx'], separator: '.')],
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return '생년월일을 입력하세요';
+                          } else if (value.length != 10) {
+                            return '생년월일 8자리를 입력하세요';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _birthdate = value!,
+                      ),
 
-                                    Provider.of<UserProvider>(context, listen:false)
-                                     .setRole(invitationUserRole);
+                      // Container(
+                      //   padding: EdgeInsets.only(left: 20, right: 20),
+                      //   child: Column(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //     children: [
+                      //       TextFormField(
+                      //         keyboardType: TextInputType.text,
+                      //         decoration: InputDecoration(labelText: '이름'),
+                      //         validator: (value) => value!.isEmpty ? '이름을 입력하세요' : null,
+                      //         onSaved: (value) => _residentname = value!,
+                      //       ),
+                      //       TextFormField(
+                      //         decoration: InputDecoration(labelText: '생년월일 8자리'),
+                      //         inputFormatters: [MultiMaskedTextInputFormatter(masks: ['xxxx.xx.xx'], separator: '.')],
+                      //         validator: (value) => value!.isEmpty ? '생년월일을 입력하세요' : null,
+                      //         onSaved: (value) => _birthdate = value!,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      SizedBox(height: 100),
+                      Consumer<UserProvider>(
+                          builder: (context, userProvider, child) {
+                            return TextButton(child: Container(
+                                width: double.infinity,
+                                child: Text('확인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                                style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.white10),
+                                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                                ),
+                                onPressed: () async {
+                                  if (validateAndSave()) {
+                                    var data;
+                                    try {
+                                      data = await addResident(userProvider.uid);
+                                      var json_data = json.decode(data);
 
-                                     Navigator.pop(context);
-                                  }
+                                      if (json_data['resident_id'] != null) {
+                                        Provider.of<ResidentProvider>(context, listen:false)
+                                            .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
+                                            invitationUserRole,_birthdate, healthInfo);
 
-                                  Provider.of<UserProvider>(context,listen:false).getData();
+                                        Provider.of<UserProvider>(context, listen:false)
+                                            .setRole(invitationUserRole);
 
-                                } catch(e) {
-                                  String errorMessage = '';
-
-                                  if (e.runtimeType == FormatException)  //중복된 아이디
-                                    errorMessage = '중복된 아이디입니다';
-                                  else
-                                    errorMessage = '회원가입에 실패하였습니다';
-
-
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          content: Text(errorMessage),
-                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('확인'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
+                                        Navigator.pop(context);
                                       }
-                                    );
-                                }
 
-                              }
-                            }
-                        );
-                      }
-                    ),
-                  ],
+                                      Provider.of<UserProvider>(context,listen:false).getData();
+
+                                    } catch(e) {
+                                      String errorMessage = '';
+
+                                      if (e.runtimeType == FormatException)  //중복된 아이디
+                                        errorMessage = '중복된 아이디입니다';
+                                      else
+                                        errorMessage = '회원가입에 실패하였습니다';
+
+
+                                      showDialog(
+                                          context: context,
+                                          barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: Text(errorMessage),
+                                              insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text('확인'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                      );
+                                    }
+
+                                  }
+                                }
+                            );
+                          }
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ],
+          )
         )
       );
     }
 
     else {
-      return Center(child: CircularProgressIndicator());
+      return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
+        //Center(child: CircularProgressIndicator())
     }
       
   }
@@ -282,6 +308,40 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
       Provider.of<UserProvider>(context,listen:false).getData();
 
     } catch(e) {}
+  }
+
+  Widget getTextFeild({
+    required String title,
+    required Widget prefixIcon,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
+    String? Function(String?)? validator,
+    void Function(String?)? onSaved,
+}) {
+    return TextFormField(
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(width: 2, color: Colors.red),
+        ),
+        hintText: title,
+        hintStyle: TextStyle(fontSize: 15),
+      ),
+      validator: validator,
+      onSaved: onSaved,
+    );
   }
 }
 
