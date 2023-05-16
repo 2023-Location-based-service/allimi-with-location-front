@@ -35,7 +35,8 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
   }
 
   Future<void> addInmate(facilityId, uid) async {
-    var url = Uri.parse(backendUrl + 'nhResident/change');
+    debugPrint("@@내가 담당하는 입소자 정보 받아오는 백엔드 요청 ");
+    var url = Uri.parse(backendUrl + 'nhResidents/manage/list');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "facility_id": facilityId,
@@ -44,11 +45,23 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
 
     final response = await http.post(url, headers: headers, body: body);
 
+    debugPrint("@@statusCode: " + response.statusCode.toString());
+
     if (response.statusCode == 200) {
       print("성공");
     } else {
       throw Exception();
     }
+
+    var data =  utf8.decode(response.bodyBytes);
+    dynamic decodedJson = json.decode(data);
+
+    List<Map<String, dynamic>> parsedJsonList 
+      = List<Map<String, dynamic>>.from(decodedJson);
+
+    setState(() {
+      _residentList = parsedJsonList;
+    });
   }
 
   @override

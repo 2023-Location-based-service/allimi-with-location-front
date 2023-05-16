@@ -135,7 +135,7 @@ class _SignupPageState extends State<SignupPage> {
                         }
                         return null;
                       },
-                      onSaved: (value) => _tel = value!,
+                      onSaved: (value) => _tel = value!.replaceAll("-", ""),
                     ),
                     SizedBox(height: 50),
                     TextButton (

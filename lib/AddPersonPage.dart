@@ -109,26 +109,24 @@ class _AddPersonPageState extends State<AddPersonPage> {
             color: Colors.white,
             child: ListTile(
               leading: Icon(Icons.home_rounded, size: 50),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_residentList[index]['facility_name']!= null?_residentList[index]['facility_name']:"null"), //요양원
-                    Row(
-                      children: [
-                        if (_residentList[index]['user_role'] == 'PROTECTOR')
-                          Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']+"님":"null"),
-                        if (_residentList[index]['user_role'] == 'WORKER')
-                          Consumer<UserProvider>(
-                            builder: (context, userProvider, child) {
-                              return Text(userProvider.name + "님");
-                            }
-                          ),
-                        SizedBox(width: 10),
-                        Text("("+ userRoleString +")"),
-                      ],
-                    ), //사람 이름
-                  ],
-                ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_residentList[index]['facility_name']!= null?_residentList[index]['facility_name']:"null"), //요양원
+                  Row(
+                    children: [
+                      if (_residentList[index]['user_role'] == 'PROTECTOR')
+                        Row(
+                          children: [
+                            Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']+"님":"null"),
+                            SizedBox(width: 10),
+                          ]
+                        ),
+                      Text("("+ userRoleString +")"),
+                    ],
+                  ), //사람 이름
+                ],
+              ),
               onTap: () {
                 //현재 입소자 바꿈
                 changeResident(_residentList[index]['resident_id']);

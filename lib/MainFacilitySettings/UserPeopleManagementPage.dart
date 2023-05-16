@@ -66,23 +66,26 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
   }
 
   //추가
-  // Future<void> addInmate(residentId, uid, facilityId) async {
-  //   var url = Uri.parse(backendUrl + 'nhResident/change');
-  //   var headers = {'Content-type': 'application/json'};
-  //   var body = json.encode({
-  //     "resident_id": residentId,
-  //     "user_id": uid,
-  //     "facility_id": facilityId,
-  //   });
-  //
-  //   final response = await http.post(url, headers: headers, body: body);
-  //
-  //   if (response.statusCode == 200) {
-  //     print("성공: $residentId $uid $facilityId"); //39 10 1
-  //   } else {
-  //     throw Exception();
-  //   }
-  // }
+  Future<void> addInmate(residentId, uid, facilityId) async {
+    debugPrint("@@입소자를 내가 담당하는 입소자로 추가 백엔드 요청 보냄: " + residentId.toString() + "/" + uid.toString() + "/" + facilityId.toString());
+    var url = Uri.parse(backendUrl + 'nhResidents/manage');
+    var headers = {'Content-type': 'application/json'};
+    var body = json.encode({
+      "nhresident_id": residentId,
+      "user_id": uid,
+      "facility_id": facilityId,
+    });
+  
+    final response = await http.post(url, headers: headers, body: body);
+
+    debugPrint("@@추가에서 statuscode: " + response.statusCode.toString());
+  
+    if (response.statusCode == 200) {
+      print("성공: $residentId $uid $facilityId"); //39 10 1
+    } else {
+      throw Exception();
+    }
+  }
 
   //삭제
   Future<void> deleteresident(int userId, int nhresidentId) async {
@@ -144,12 +147,13 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                       Spacer(),
                       Row(
                         children: [
-                          OutlinedButton(
-                            child: Text('추가',style: TextStyle(color: themeColor.getColor()),),
-                            style: OutlinedButton.styleFrom(side: BorderSide(color: themeColor.getColor())),
-                            onPressed: () async {
-                              //입소자 추가 시 -> 입소자 정보에 추가
-                              showDialog(
+                          if (_residents[index]['worker_id'] != residentProvider.resident_id)
+                            OutlinedButton(
+                              child: Text('추가',style: TextStyle(color: themeColor.getColor()),),
+                              style: OutlinedButton.styleFrom(side: BorderSide(color: themeColor.getColor())),
+                              onPressed: () async {
+                                //입소자 추가 시 -> 입소자 정보에 추가
+                                await showDialog(
                                   context: context,
                                   barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                   builder: (BuildContext context) {
@@ -167,17 +171,20 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                                           child: Text('예',style: TextStyle(color: themeColor.getColor())),
                                           onPressed: () async {
                                             try {
-                                              //await addInmate(_residents[index]['id'], userProvider.uid, residentProvider.facility_id);
-                                            } catch(e) { print('에러@@@@@@@@@@@@@@@@@@@'); }
+                                              await addInmate(_residents[index]['id'], userProvider.uid, residentProvider.facility_id);
+                                            } catch(e) { print('에러@@@@@@@@@@@@@@@@@@@' + e.toString()); }
+
                                             Navigator.of(context).pop();
                                           },
                                         ),
                                       ],
                                     );
                                   }
-                              );
-                            },
-                          ),
+                                );
+                              
+                                getFacilityResident(residentProvider.facility_id);
+                              },
+                            ),
 
                           SizedBox(width: 4,),
                           OutlinedButton(
