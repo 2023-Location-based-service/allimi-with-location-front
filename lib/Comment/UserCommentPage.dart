@@ -60,7 +60,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.white,
+      backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(title: Text('한마디')),
       body: userCommentList(),
       floatingActionButton: _getFAB()
@@ -126,7 +126,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.white),
                 height: 130,
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
