@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/ThemeColor.dart';
 import '../Allim/WriteAllimPage.dart';
 import 'package:http/http.dart' as http;
+import '../Supplementary/CustomClick.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/ResidentProvider.dart'; //http 사용
 
@@ -13,6 +14,7 @@ import 'package:test_data/Backend.dart';
 import '../provider/UserProvider.dart';
 String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
+CheckClick checkClick = new CheckClick();
 class userPeopleManagementPage extends StatefulWidget {
   const userPeopleManagementPage({Key? key}) : super(key: key);
 
@@ -232,6 +234,9 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                     ],
                   ),
                   onTap: () async {
+                    if (checkClick.isRedundentClick(DateTime.now())) {
+                      return;
+                    }
                     await getResidentDetail(_residents[index]['id']);
                     pageAnimation(context, residentDetailPage(index));
                   },

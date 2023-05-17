@@ -89,11 +89,11 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
     return ListView(
       children: [
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('날짜'),
+              Text('날짜', textScaleFactor: 1.1),
               SizedBox(height: 5,),
               Container(
                 padding: EdgeInsets.all(15),
@@ -106,7 +106,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                 child: Text(currentDate, textScaleFactor: 1.3),
               ),
               SizedBox(height: 15,),
-              Text('한마디 작성'),
+              Text('한마디 작성', textScaleFactor: 1.1),
               SizedBox(height: 5,),
               createField()
             ],
