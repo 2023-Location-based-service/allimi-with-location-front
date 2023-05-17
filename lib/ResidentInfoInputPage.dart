@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'MainPage.dart';
+import 'Supplementary/CustomClick.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
@@ -52,6 +53,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   bool _isHeartDisease = false;
   bool _isEtc = false;
 
+  CheckClick checkClick = new CheckClick();
   String healthInfo = '';
   List<String> checkList = [];
 
@@ -217,6 +219,9 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                                     shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                                 ),
                                 onPressed: () async {
+                                  if (checkClick.isRedundentClick(DateTime.now())) {
+                                    return;
+                                  }
                                   if (validateAndSave()) {
                                     var data;
                                     try {
