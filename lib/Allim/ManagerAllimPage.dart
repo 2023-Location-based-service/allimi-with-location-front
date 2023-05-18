@@ -127,7 +127,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                   children: [
                                     //어떤 보호자에게 썼는지
                                     Container(
-                                      child: Text(_noticeList[index]['resident_name'] + " 입소자님", textScaleFactor: 0.9,),
+                                      child: Text(_noticeList[index]['resident_name'] + " 보호자님", textScaleFactor: 0.9,),
                                     ),
                                     //언제 썼는지
                                     Container(
