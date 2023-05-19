@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:test_data/Invite/InvitePage.dart';
-import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:provider/provider.dart';
-import 'package:test_data/LoginPage.dart';
-import 'package:test_data/ResidentInfoInputPage.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
+import '../Supplementary/ThemeColor.dart';
 import '/MainFacilitySettings/FacilityBasicInfoSettingPage.dart';
 import '/Invite/InviteListPage.dart';
 import 'PeopleManagementPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'UserPeopleManagementPage.dart';
+
+ThemeColor themeColor = ThemeColor();
 
 class MainFacilitySettingsPage extends StatefulWidget {
   const MainFacilitySettingsPage({Key? key}) : super(key: key);
@@ -47,8 +47,14 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget groupText(String value) {
     return Padding(
-      padding: EdgeInsets.all(10),
-      child: Text(value),
+      padding: EdgeInsets.fromLTRB(20,10,20,10),
+      child: Text(
+        value,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: themeColor.getColor()
+        ),
+      ),
     );
   }
 

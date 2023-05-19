@@ -126,8 +126,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.white),
-                height: 130,
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                padding: EdgeInsets.fromLTRB(20, 7, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -141,7 +140,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                         Spacer(),
                         if (_userRole == 'PROTECTOR')
                           Container(
-                            padding: EdgeInsets.all(4),
                             child: OutlinedButton(
                                 // style: OutlinedButton.styleFrom(
                                 //     side: BorderSide(color: themeColor.getColor(),)
@@ -212,8 +210,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                           SizedBox(height: 10,),
                         Text(
                           _CommentList[index]['content'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                         ),
                       ],
