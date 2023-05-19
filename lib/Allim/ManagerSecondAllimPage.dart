@@ -90,7 +90,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color(0xfff8f8f8), //배경색
+      backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
         title: const Text('알림장 내용'),
       ),
@@ -111,142 +111,169 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                 padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
                 width: double.infinity,
                 color: Colors.white,
-                child: Row(
+                child: Stack(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
-                        ),
-                        Text(
-                          _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
-                        ),
-                      ],
-
-                    ),
-                    Spacer(),
-                    
                     if (_userRole != 'PROTECTOR')
-                      Container(
-                        child: Consumer<ResidentProvider>(
-                          builder: (context, residentProvider, child) {
-                            return OutlinedButton(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
-                                  );
-                                  getNoticeDetail();
-                                },
-                                child: Text('수정',style: TextStyle(color: Colors.grey))
-                            );
-                          }
+                      SizedBox(
+                        width: (MediaQuery.of(context).size.width)/2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
+                            ),
+                            Text(
+                              _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                            ),
+                          ],
                         ),
-
                       ),
-                    if (_userRole != 'PROTECTOR')
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        //alignment: Alignment.centerRight,
-                        child: OutlinedButton(
-                            onPressed: () async {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    content: Text("정말 삭제하시겠습니까?"),
-                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                    actions: [
-                                      TextButton(
-                                        child: Text('취소',style: TextStyle(color: themeColor.getColor()),),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                    if (_userRole == 'PROTECTOR')
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
+                            ),
+                            Text(
+                              _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                            ),
+                          ],
+                        ),
+                      ),
+                    Positioned(
+                      top: -10,
+                      right: 5,
+                      child: Row(
+                        children: [
+                          if (_userRole != 'PROTECTOR')
+                            Container(
+                              child: Consumer<ResidentProvider>(
+                                  builder: (context, residentProvider, child) {
+                                    return OutlinedButton(
                                         onPressed: () async {
-                                          debugPrint("@@@love");
-                                          if (checkClick.isRedundentClick(DateTime.now())) {
-                                            return;
-                                          }
-
-                                          try {
-                                            await deleteNotice(_noticeId);
-                                            showDialog(
-                                              context: context,
-                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                              builder: (BuildContext context3) {
-                                                return AlertDialog(
-                                                  content: Text('삭제되었습니다'),
-                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                        Navigator.of(context).pop();
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                            );
-                                          } catch(e) {
-                                            showDialog(
-                                              context: context,
-                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Text("알림장 업로드 실패! 다시 시도해주세요"),
-                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                            );
-                                          }
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
+                                          );
+                                          getNoticeDetail();
                                         },
-                                      ),
-                                    ],
-                                  );
-                                }
-                              );
-                            },
-                            child: Text('삭제',style: TextStyle(color: Colors.grey))
-                        ),
+                                        child: Text('수정',style: TextStyle(color: Colors.grey))
+                                    );
+                                  }
+                              ),
+
+                            ),
+                          if (_userRole != 'PROTECTOR')
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              //alignment: Alignment.centerRight,
+                              child: OutlinedButton(
+                                  onPressed: () async {
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: Text("정말 삭제하시겠습니까?"),
+                                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                            actions: [
+                                              TextButton(
+                                                child: Text('취소',style: TextStyle(color: themeColor.getColor()),),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                                                onPressed: () async {
+                                                  debugPrint("@@@love");
+                                                  if (checkClick.isRedundentClick(DateTime.now())) {
+                                                    return;
+                                                  }
+
+                                                  try {
+                                                    await deleteNotice(_noticeId);
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                        builder: (BuildContext context3) {
+                                                          return AlertDialog(
+                                                            content: Text('삭제되었습니다'),
+                                                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                            actions: [
+                                                              TextButton(
+                                                                child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                                                onPressed: () {
+                                                                  Navigator.of(context).pop();
+                                                                  Navigator.of(context).pop();
+                                                                  Navigator.of(context).pop();
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  } catch(e) {
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            content: Text("알림장 업로드 실패! 다시 시도해주세요"),
+                                                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                            actions: [
+                                                              TextButton(
+                                                                child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                                                onPressed: () {
+                                                                  Navigator.of(context).pop();
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    );
+                                  },
+                                  child: Text('삭제',style: TextStyle(color: Colors.grey))
+                              ),
+                            ),
+                        ],
                       ),
-                    
+                    ),
                   ],
                 ),
               ),
-              Column(
-                children: [
-                  for (int i =0; i< _imageUrls.length; i++ ) ...[
-                    Image.network(
-                      _imageUrls[i], 
-                      fit: BoxFit.fill,
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                          ),
-                        );
-                      },),
-                  ]
-                ]
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                child: Column(
+                    children: [
+                      for (int i =0; i< _imageUrls.length; i++ ) ...[
+                        Image.network(
+                          _imageUrls[i],
+                          fit: BoxFit.fill,
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                              ),
+                            );
+                          },),
+                      ]
+                    ]
+                ),
               ),
 
               //알림장 세부 내용
