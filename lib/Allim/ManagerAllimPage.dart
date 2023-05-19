@@ -127,11 +127,20 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                   children: [
                                     //어떤 보호자에게 썼는지
                                     Container(
-                                      child: Text(_noticeList[index]['resident_name'] + " 보호자님", textScaleFactor: 0.9,),
+                                      child: Text(
+                                        _noticeList[index]['resident_name'] + " 입소자님",
+                                        textScaleFactor: 0.9,
+                                        //style: TextStyle(fontSize: 12,),
+                                      ),
                                     ),
                                     //언제 썼는지
                                     Container(
-                                      child: Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: 0.9,),
+                                      child: Text(
+                                        _noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'),
+                                        textScaleFactor: 0.9,
+                                        //style: TextStyle(fontSize: 10,)
+                                        
+                                      ),
                                     ),
                                     Spacer(),
                                     //세부내용(너무 길면 ...로 표시)
@@ -140,6 +149,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                       child: Text(
                                         _noticeList[index]['content'],
                                         textScaleFactor: 1.0,
+                                        //style: TextStyle(fontSize: 14),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,

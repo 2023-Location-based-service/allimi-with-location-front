@@ -140,10 +140,10 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                 child: Container(
                     child: Text('시설장이신가요?', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
                 style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.white10),
-                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                  overlayColor: MaterialStateProperty.all(Colors.white10),
+                  backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                  padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                 ),
                 onPressed: (){
                   pageAnimation(context, AddFacilities());
@@ -155,38 +155,38 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
             child: TextButton(
                 child: Container(child: Text('로그아웃', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
                 style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.white10),
-                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                  overlayColor: MaterialStateProperty.all(Colors.white10),
+                  backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                  padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                 ),
                 onPressed: (){
                   showDialog(
                     context: context,
                     builder: (context) =>
-                        AlertDialog(
-                          content: const Text('로그아웃하시겠습니까?'),
-                          actions: [
-                            TextButton(
-                                child: Text('취소', style: TextStyle(color: themeColor.getMaterialColor())),
-                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                            TextButton(
-                                child: Text('확인', style: TextStyle(color: themeColor.getMaterialColor())),
-                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                                onPressed: () {
-                                  Provider.of<UserProvider>(context, listen:false) //로그아웃
-                                      .uid = 0;
+                      AlertDialog(
+                        content: const Text('로그아웃하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                              child: Text('취소', style: TextStyle(color: themeColor.getMaterialColor())),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                          TextButton(
+                              child: Text('확인', style: TextStyle(color: themeColor.getMaterialColor())),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                              onPressed: () {
+                                Provider.of<UserProvider>(context, listen:false) //로그아웃
+                                    .uid = 0;
 
-                                  Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
-                                      .getData();
-                                  Navigator.pop(context);
-                                })
+                                Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
+                                    .getData();
+                                Navigator.pop(context);
+                              })
 
-                          ],
-                        ),
+                        ],
+                      ),
                   );
                 }
             ),
