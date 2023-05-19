@@ -62,7 +62,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xfff8f8f8), //배경색
+      backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
         title: const Text('알림장'),
       ),
@@ -127,11 +127,11 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                   children: [
                                     //어떤 보호자에게 썼는지
                                     Container(
-                                      child: Text(_noticeList[index]['resident_name'] + " 보호자님", textScaleFactor: 0.9,),
+                                      child: Text(_noticeList[index]['resident_name'] + " 보호자님",),
                                     ),
                                     //언제 썼는지
                                     Container(
-                                      child: Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: 0.9,),
+                                      child: Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'),),
                                     ),
                                     Spacer(),
                                     //세부내용(너무 길면 ...로 표시)
@@ -139,7 +139,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                       padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
                                       child: Text(
                                         _noticeList[index]['content'],
-                                        textScaleFactor: 1.0,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
