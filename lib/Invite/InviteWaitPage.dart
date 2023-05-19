@@ -30,7 +30,7 @@ class InviteWaitPage extends StatefulWidget {
 }
 
 class _InviteWaitPageState extends State<InviteWaitPage> {
-  late int _count ;
+  late int _count = 0;
   int uid = 0;
 
   List<Map<String, dynamic>> _residentList = [];

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/CustomLoading.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
@@ -191,8 +192,17 @@ class _LoginPageState extends State<LoginPage> {
                           style: ButtonStyle(
                             overlayColor: MaterialStateProperty.all(Colors.transparent),
                           ),
-                          onPressed: (){
-                            pageAnimation(context, SignupPage());
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: SignupPage(),
+                              ),
+                            );
+                            setState(() {
+                              
+                            });
                           },
                         ),
                         Icon(Icons.chevron_right_rounded, color: Colors.grey,),

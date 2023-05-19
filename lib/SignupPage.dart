@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
+import 'package:test_data/exception/LoginIdAlreadyExistsException.dart';
 import 'LoginPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -32,15 +33,16 @@ Future<String> signUpRequest(String id, String password, String name, String pho
 
   debugPrint("@@StatusCode: " + response.statusCode.toString());
 
-    // 응답 코드가 200 OK가 아닐 경우 예외 처리
-  // if (response.statusCode == 500) {
-  //   throw Exception('POST request failed');
-  // }
-  // else if (response.statusCode == 400) {
-  //   throw FormatException();
-  // }
-    if (response.statusCode != 200)
-      throw Exception();
+  //응답 코드가 200 OK가 아닐 경우 예외 처리
+  if (response.statusCode == 500) {
+    throw Exception('로그인 에러 발생');
+  }
+  else if (response.statusCode == 400) {
+    throw FormatException();
+  }
+  else if (response.statusCode == 409) {
+    throw LoginIdAlreadyExistsException("이미 존재하는 id입니다");
+  }
   
   return response.body;
 }
@@ -159,38 +161,36 @@ class _SignupPageState extends State<SignupPage> {
                             } catch(e) {
                               String errorMessage = '';
 
-                              // if (e.runtimeType == FormatException)  //중복된 아이디
+                              if (e.runtimeType == LoginIdAlreadyExistsException)  //중복된 아이디
                                 errorMessage = '중복된 아이디입니다';
-                              // else
-                              //   errorMessage = '회원가입에 실패하였습니다';
+                              else if (e.runtimeType == FormatException)
+                                errorMessage = '잘못된 요청입니다';
+                              else
+                                errorMessage = '회원가입에 실패하였습니다';
+                          
 
                               showToast(errorMessage);
-
-                              // showDialog(
-                              //     context: context,
-                              //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              //     builder: (BuildContext context) {
-                              //       return AlertDialog(
-                              //         content: Text(errorMessage),
-                              //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                              //         actions: [
-                              //           TextButton(
-                              //             child: const Text('확인'),
-                              //             onPressed: () {
-                              //               Navigator.of(context).pop();
-                              //             },
-                              //           ),
-                              //         ],
-                              //       );
-                              //     }
-                              // );
                             }
 
-                            // var json_data = json.decode(data);
-
-                            // if (json_data['user_id'] == null) {
-                            //   회원가입 실패
-                            // }
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              builder: (BuildContext context3) {
+                                return AlertDialog(
+                                  content: Text('회원가입 완료'),
+                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
                           }
                         }
                     ),

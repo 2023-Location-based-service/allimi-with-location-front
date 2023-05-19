@@ -167,25 +167,25 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                             _pickedImgs = [];
 
                             showDialog(
-                            context: context,
-                            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                            builder: (BuildContext context3) {
-                              return AlertDialog(
-                                content: Text('작성 완료'),
-                                insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('확인'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            }
-                          );
+                              context: context,
+                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              builder: (BuildContext context3) {
+                                return AlertDialog(
+                                  content: Text('작성 완료'),
+                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
                           } catch(e) {
                             showDialog(
                               context: context,
