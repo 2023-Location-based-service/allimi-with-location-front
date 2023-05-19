@@ -75,7 +75,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: EdgeInsets.all(18),
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,7 +89,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                         ),
                       ),
                       Container(  //시설 이름
-                        child: Text(_facilityInfo['name'], textScaleFactor: 1.2,),
+                        child: Text(_facilityInfo['name']),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -97,7 +97,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                         ),
                       ),
                       Container(  //전화번호
-                        child: Text(_facilityInfo['tel'], textScaleFactor: 1.2,),
+                        child: Text(_facilityInfo['tel']),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -108,7 +108,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                   )
               ),
               Container(
-                padding: EdgeInsets.all(18),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,7 +122,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                       ),
                     ),
                     Container(
-                      child: Text(_facilityInfo['address'], textScaleFactor: 1.2,),
+                      child: Text(_facilityInfo['address']),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -133,7 +133,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                 )
               ),
               Container(
-                padding: EdgeInsets.all(18),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -147,7 +147,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                       ),
                     ),
                     Container(
-                      child: Text(_facilityInfo['fm_name'], textScaleFactor: 1.2,),
+                      child: Text(_facilityInfo['fm_name']),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
