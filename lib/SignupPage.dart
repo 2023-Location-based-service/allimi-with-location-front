@@ -33,12 +33,14 @@ Future<String> signUpRequest(String id, String password, String name, String pho
   debugPrint("@@StatusCode: " + response.statusCode.toString());
 
     // 응답 코드가 200 OK가 아닐 경우 예외 처리
-  if (response.statusCode == 500) {
-    throw Exception('POST request failed');
-  }
-  else if (response.statusCode == 400) {
-    throw FormatException();
-  }
+  // if (response.statusCode == 500) {
+  //   throw Exception('POST request failed');
+  // }
+  // else if (response.statusCode == 400) {
+  //   throw FormatException();
+  // }
+    if (response.statusCode != 200)
+      throw Exception();
   
   return response.body;
 }
@@ -157,10 +159,10 @@ class _SignupPageState extends State<SignupPage> {
                             } catch(e) {
                               String errorMessage = '';
 
-                              if (e.runtimeType == FormatException)  //중복된 아이디
+                              // if (e.runtimeType == FormatException)  //중복된 아이디
                                 errorMessage = '중복된 아이디입니다';
-                              else
-                                errorMessage = '회원가입에 실패하였습니다';
+                              // else
+                              //   errorMessage = '회원가입에 실패하였습니다';
 
                               showToast(errorMessage);
 
@@ -184,13 +186,11 @@ class _SignupPageState extends State<SignupPage> {
                               // );
                             }
 
-                            var json_data = json.decode(data);
+                            // var json_data = json.decode(data);
 
-                            if (json_data['user_id'] == null) {
-                              //회원가입 실패
-                            }
-
-                            Navigator.pop(context);
+                            // if (json_data['user_id'] == null) {
+                            //   회원가입 실패
+                            // }
                           }
                         }
                     ),

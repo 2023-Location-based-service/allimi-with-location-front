@@ -7,7 +7,12 @@ import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 
 import 'package:test_data/Backend.dart';
+
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/ThemeColor.dart';
 String backendUrl = Backend.getUrl();
+ThemeColor themeColor = ThemeColor();
+
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage({
     Key? key,
@@ -85,7 +90,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.white,
+      //backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
         title: const Text('알림장 내용'),
       ),
@@ -113,11 +118,9 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                       children: [
                         Text(
                           '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
-                          style: TextStyle(fontSize: 13),
                         ),
                         Text(
                           _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
-                          style: TextStyle(fontSize: 10),
                         ),
                       ],
 
@@ -137,7 +140,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                   );
                                   getNoticeDetail();
                                 },
-                                child: Text('수정')
+                                child: Text('수정',style: TextStyle(color: Colors.black38))
                             );
                           }
                         ),
@@ -158,9 +161,18 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
-                                        child: const Text('삭제'),
+                                        child: Text('취소',style: TextStyle(color: themeColor.getColor()),),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () async {
                                           debugPrint("@@@love");
+                                          if (checkClick.isRedundentClick(DateTime.now())) {
+                                            return;
+                                          }
 
                                           try {
                                             await deleteNotice(_noticeId);
@@ -173,7 +185,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                   actions: [
                                                     TextButton(
-                                                      child: const Text('확인'),
+                                                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                                                       onPressed: () {
                                                         Navigator.of(context).pop();
                                                         Navigator.of(context).pop();
@@ -194,7 +206,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                   actions: [
                                                     TextButton(
-                                                      child: const Text('확인'),
+                                                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                                                       onPressed: () {
                                                         Navigator.of(context).pop();
                                                       },
@@ -206,18 +218,12 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                           }
                                         },
                                       ),
-                                      TextButton(
-                                        child: const Text('취소'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
                                     ],
                                   );
                                 }
                               );
                             },
-                            child: Text('삭제')
+                            child: Text('삭제',style: TextStyle(color: Colors.black38))
                         ),
                       ),
                     
@@ -251,7 +257,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                 margin: EdgeInsets.only(bottom: 10),
                 child: Text(
                   _noticeDetail['content'].toString(),
-                  style: TextStyle(fontSize: 15),
                 ),
               ),
 
@@ -295,10 +300,10 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
           padding: EdgeInsets.only(right: 30),
           child: Text(
             '$text1',
-            style: TextStyle(fontSize: 15,color: Colors.black38),
+            style: TextStyle(color: Colors.black38),
           ),
         ),
-        Text('$text2',style: TextStyle(fontSize: 15,color: Colors.black),),
+        Text('$text2',style: TextStyle(color: Colors.black),),
       ],
     );
 }

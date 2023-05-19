@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:flutter/material.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -51,6 +52,10 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
             title: '한마디 작성',
             onPressed: () async {
               print('한마디');
+              if (checkClick.isRedundentClick(DateTime.now())) {
+                return;
+              }
+
               if(this.formKey.currentState!.validate()) {
                 this.formKey.currentState!.save();
                 try {
