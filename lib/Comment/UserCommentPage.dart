@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'WriteCommentPage.dart';
@@ -132,19 +133,19 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   children: [
                     if (_userRole != 'PROTECTOR')
                       Container(
-                        child: Text(_CommentList[index]['nhr_name'] + " 보호자님", textScaleFactor: 1.0,),
+                        child: Text(_CommentList[index]['nhr_name'] + " 보호자님"),
                       ),
                       Row(
                       children: [
-                        Text(_CommentList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: 1.0,),
+                        Text(_CommentList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')),
                         Spacer(),
                         if (_userRole == 'PROTECTOR')
                           Container(
                             padding: EdgeInsets.all(4),
                             child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                    side: BorderSide(color: themeColor.getColor(),)
-                                ),
+                                // style: OutlinedButton.styleFrom(
+                                //     side: BorderSide(color: themeColor.getColor(),)
+                                // ),
                                 onPressed: () async {
                                   _letterId = _CommentList[index]['letter_id'];
                                   showDialog(
@@ -164,6 +165,9 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                           TextButton(
                                             child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
                                             onPressed: () async {
+                                              if (checkClick.isRedundentClick(DateTime.now())) {
+                                                return;
+                                              }
                                               try {
                                                 await deleteComment(_letterId);
 
@@ -176,7 +180,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                     actions: [
                                                       TextButton(
-                                                        child: const Text('확인'),
+                                                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                                                         onPressed: () {
                                                           Navigator.of(context).pop();
                                                           Navigator.of(context).pop();
@@ -190,8 +194,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                               } catch(e) {
                                               }
 
-                                              
-                                              
                                               },
                                             ),
                                           ],
@@ -199,7 +201,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                       }
                                   );
                                 },
-                                child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),)
+                                child: Text('삭제',style: TextStyle(color: Colors.grey))
                             ),
                           ),
                       ],
@@ -210,7 +212,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                           SizedBox(height: 10,),
                         Text(
                           _CommentList[index]['content'],
-                          textScaleFactor: 1.1,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,

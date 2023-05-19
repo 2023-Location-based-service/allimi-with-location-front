@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:flutter/material.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -51,6 +52,10 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
             title: '한마디 작성',
             onPressed: () async {
               print('한마디');
+              if (checkClick.isRedundentClick(DateTime.now())) {
+                return;
+              }
+
               if(this.formKey.currentState!.validate()) {
                 this.formKey.currentState!.save();
                 try {
@@ -93,20 +98,22 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('날짜', textScaleFactor: 1.1),
+              Text('날짜'),
               SizedBox(height: 5,),
               Container(
                 padding: EdgeInsets.all(15),
                 width: double.infinity,
-                height: 60,
+                //height: 60,
                 decoration: BoxDecoration(
-                  color: Color(0xfff2f3f6),
-                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Colors.grey,
+                  ),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                child: Text(currentDate, textScaleFactor: 1.3),
+                child: Text(currentDate),
               ),
               SizedBox(height: 15,),
-              Text('한마디 작성', textScaleFactor: 1.1),
+              Text('한마디 작성'),
               SizedBox(height: 5,),
               createField()
             ],
@@ -125,21 +132,20 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
             else { return null; }
           },
           maxLines: 10,
-          decoration: const InputDecoration(
-            filled: true,
-            fillColor: Color(0xfff2f3f6),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
-            ),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: Colors.grey),
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: Colors.grey),
             ),
-            //focusedBorder: InputBorder.none,
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(width: 2, color: Colors.red),
+            ),
           ),
           onSaved: (value) {
             _contents = value!;
