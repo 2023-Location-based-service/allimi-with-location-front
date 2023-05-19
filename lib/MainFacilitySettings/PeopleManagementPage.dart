@@ -111,9 +111,9 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                     Container(
                       padding: EdgeInsets.all(2),
                       child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: themeColor.getColor(),)
-                          ),
+                          // style: OutlinedButton.styleFrom(
+                          //     side: BorderSide(color: themeColor.getColor(),)
+                          // ),
                           onPressed: () async {
                             //직원 삭제
                             showDialog(
@@ -147,7 +147,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                 }
                             );
                           },
-                          child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),)
+                          child: Text('삭제',style: TextStyle(color: Colors.grey))
                       ),
                     ),
                   ],

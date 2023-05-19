@@ -190,9 +190,9 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
 
                           SizedBox(width: 4,),
                           OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(color: themeColor.getColor(),)
-                              ),
+                              // style: OutlinedButton.styleFrom(
+                              //     side: BorderSide(color: themeColor.getColor(),)
+                              // ),
                               onPressed: () async {
                                 //입소자 삭제
                                 showDialog(
@@ -224,7 +224,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                                     }
                                 );
                               },
-                              child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),)
+                              child: Text('삭제',style: TextStyle(color: Colors.grey))
                           ),
 
                         ],
@@ -260,13 +260,13 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('입소자 이름'),),
+                Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('입소자 이름'),),
                 myDetailBox(_residentsdetail['resident_name']),
-                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('입소자 생년월일'),),
+                Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('입소자 생년월일'),),
                 myDetailBox(_residentsdetail['birth']),
-                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('보호자 이름'),),
+                Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('보호자 이름'),),
                 myDetailBox(_residentsdetail['protector_name']),
-                Padding(padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),child: Text('보호자 연락처'),),
+                Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('보호자 연락처'),),
                 myDetailBox(_residentsdetail['protector_phone_num'])
               ],
             )
@@ -279,7 +279,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
     return Container(
         width: double.infinity,
         height: 50,
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
         decoration: BoxDecoration(
           color: Color(0xfff2f3f6),
           borderRadius: BorderRadius.circular(8),
@@ -290,7 +290,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('$text', textScaleFactor: 1.2),
+                Text('$text'),
               ],
             )
         )
