@@ -200,9 +200,6 @@ class _LoginPageState extends State<LoginPage> {
                                 child: SignupPage(),
                               ),
                             );
-                            setState(() {
-                              
-                            });
                           },
                         ),
                         Icon(Icons.chevron_right_rounded, color: Colors.grey,),

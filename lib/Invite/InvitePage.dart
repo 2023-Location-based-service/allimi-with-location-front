@@ -122,7 +122,31 @@ class _InvitePageState extends State<InvitePage> {
                                     ListTile(
                                         title: Text(_phoneNumUsers[index]['user_name']),
                                         onTap: () async {
-                                          await addInvite(_phoneNumUsers[index]['user_id'], residentProvider.facility_id, result);
+                                          try {
+                                            await addInvite(_phoneNumUsers[index]['user_id'], residentProvider.facility_id, result);
+                                          } catch(e) {
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    content: Text("초대하기에 실패하였습니다."),
+                                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                }
+                                            );
+                                          }
+                                          
                                           Navigator.of(context, rootNavigator: true).pop();
                                           showDialog(
                                               context: context,

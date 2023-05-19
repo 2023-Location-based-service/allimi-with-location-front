@@ -50,9 +50,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
           "nhresident_id": nhresidentId
         })
     );
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    print(response.statusCode);
-    print(response);
+
     if (response.statusCode == 200)
       // 화면 다시 그리기
       setState(() {
@@ -91,6 +89,16 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
             physics: NeverScrollableScrollPhysics(),
             itemCount: _employee.length,
             itemBuilder: (BuildContext context, int index) {
+
+              String userRole = '알 수 없음';
+              if (_employee[index]['user_role'] == 'PROTECTOR') {
+                userRole = '보호자';
+              } else if (_employee[index]['user_role'] == 'MANAGER') {
+                userRole = '시설장';
+              } else if (_employee[index]['user_role'] == 'WORKER') {
+                userRole = '직원';
+              }
+
               if (_employee[index]['user_role'] == 'PROTECTOR') {
                 return Container();
               }
@@ -98,7 +106,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Text('${_employee[index]['name']} 님'),
+                    Text('${_employee[index]['name']} 님 (' + userRole +')'),
                     Spacer(),
                     Container(
                       padding: EdgeInsets.all(2),

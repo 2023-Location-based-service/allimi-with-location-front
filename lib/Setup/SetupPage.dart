@@ -80,8 +80,7 @@ class _SetupPageState extends State<SetupPage> {
           if (_userRole == 'WORKER') //현재 보호 중인 입소자 정보: 요양보호사 ver
             appWorkerInmateProfile(),
 
-          if (_userRole != 'MANAGER')
-            appInvitation(),
+          appInvitation(),
           appLogout()
         ],
       ),

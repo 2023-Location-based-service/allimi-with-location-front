@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/AddFacilities.dart';
 import 'package:test_data/provider/UserProvider.dart';
@@ -224,10 +225,18 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: themeColor.getColor(),)
                       ),
-                      onPressed: (){
-                        pageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
-                            invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                            userId: userProvider.uid));
+                      onPressed: () async {
+                        
+                        await Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.scale, //화면 전환 시 움직이는거 설정
+                            child: ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                              invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                              userId: userProvider.uid),
+                          ),
+                        );
+
                       },
                       child: Text('초대받기',style: TextStyle(color: themeColor.getColor()),)
                   );

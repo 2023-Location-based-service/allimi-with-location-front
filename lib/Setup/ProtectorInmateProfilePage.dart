@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:test_data/ResidentDetailPage.dart';
 import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 
@@ -33,7 +35,7 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
     debugPrint("@@@@@ 유저의 입소자들 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-        Uri.parse(backendUrl+ 'nhResidents/' + _userId.toString()),
+        Uri.parse('https://allimi-fydfi.run.goorm.site/v3/' + 'nhResidents/users/' + _userId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -62,10 +64,6 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
     return myInmateProfile();
   }
 
-
-
-
-
   //입소자 정보
   Widget myInmateProfile() {
     return Scaffold(
@@ -89,18 +87,28 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
               physics: NeverScrollableScrollPhysics(),
               itemCount: _residentList.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Icon(Icons.person_rounded, color: Colors.grey),
-                  title: Row(
-                    children: [
-                      Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
-                    ],
-                  ),
-                  onTap: () {
-                    print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
+                if (_residentList[index]['user_role'] == 'PROTECTOR') {
+                  return ListTile(
+                    leading: Icon(Icons.person_rounded, color: Colors.grey),
+                    title: Row(
+                      children: [
+                        Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
+                      ],
+                    ),
+                    onTap: () async{
+                      await Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: ResidentDetailPage(residentId: _residentList[index]['resident_id']),
+                        ),
+                      );
+                      print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
 
-                  },
-                );
+                    },
+                  );
+                }
+                return Container();
               },
             ),
           ),

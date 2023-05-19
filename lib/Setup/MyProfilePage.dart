@@ -39,7 +39,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
   Widget myProfile() {
     final userProvider = context.watch<UserProvider>();
     return Scaffold(
-      appBar: AppBar(title: Text('내 정보')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Text('내 정보'), 
+            Spacer(),
+            OutlinedButton(
+              onPressed: () {
+                // await Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
+                // );
+                // getNoticeDetail();
+              },
+              child: Text('수정',style: TextStyle(color: Colors.grey))
+            )
+          ]
+        )
+      ),
       backgroundColor: Colors.white,
       body: ListView(
         children: [
