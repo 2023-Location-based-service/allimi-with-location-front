@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:provider/provider.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -122,6 +124,9 @@ class _InvitePageState extends State<InvitePage> {
                                     ListTile(
                                         title: Text(_phoneNumUsers[index]['user_name']),
                                         onTap: () async {
+                                          if (checkClick.isRedundentClick(DateTime.now())) {
+                                            return;
+                                          }
                                           try {
                                             await addInvite(_phoneNumUsers[index]['user_id'], residentProvider.facility_id, result);
                                           } catch(e) {
@@ -274,7 +279,7 @@ class _InvitePageState extends State<InvitePage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(height: 10,),
-                      Text('휴대폰 번호'),
+                      Text('전화번호'),
                       SizedBox(height: 5,),
                       Form(
                         key: formKey,
@@ -282,17 +287,18 @@ class _InvitePageState extends State<InvitePage> {
                           child: TextFormField(
                             controller: _contentEditController,
                             inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly, //숫자만 가능
-                              LengthLimitingTextInputFormatter(11) //11자리만 입력(숫자 11)
+                              MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
                             ],
-
                             validator: (value) {
-                              if(value!.isEmpty) { return '전화번호를 입력해주세요'; }
-                              if(value.length!=11){ return '전화번호를 알맞게 입력해주세요';}
-                              else { return null; }
+                              if (value!.isEmpty) {
+                                return '전화번호를 입력하세요';
+                              } else if (value.length < 12) {
+                                return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                              }
+                              return null;
                             },
                             onSaved: (value){
-                              _phone_num = value!;
+                              _phone_num = value!.replaceAll("-", "");
                             },
                             keyboardType: TextInputType.number, //키보드는 숫자
                             maxLines: 1,
@@ -312,7 +318,6 @@ class _InvitePageState extends State<InvitePage> {
                               ),
                             ),
                           ),
-
                         ),
                       ),
                       SizedBox(height: 60,),
