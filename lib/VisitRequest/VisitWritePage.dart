@@ -168,7 +168,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
                                   await addVisit(visitProvider.selectedDate, visitProvider.selectedTime);
 
                                   showToast('작성 완료');
-                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();Navigator.of(context).pop();
                                 } catch(e) {
                                   showToast('면회 신청 실패! 다시 시도해주세요');
                                   Navigator.of(context).pop();
