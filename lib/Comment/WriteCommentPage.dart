@@ -45,101 +45,103 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, ResidentProvider> (
-        builder: (context, userProvider, residentProvider, child){
-          return customPage(
-            title: '한마디 작성',
-            onPressed: () async {
-              print('한마디');
-              if (checkClick.isRedundentClick(DateTime.now())) {
-                return;
-              }
-
-              if(this.formKey.currentState!.validate()) {
-                this.formKey.currentState!.save();
-                try {
-                  await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
-                  Navigator.pop(context);
-                } catch(e) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Text("한마디 업로드 실패! 다시 시도해주세요"),
-                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                        actions: [
-                          TextButton(
-                            child: const Text('확인'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                  );
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Consumer2<UserProvider, ResidentProvider> (
+          builder: (context, userProvider, residentProvider, child){
+            return customPage(
+              title: '한마디 작성',
+              onPressed: () async {
+                print('한마디');
+                if (checkClick.isRedundentClick(DateTime.now())) {
+                  return;
                 }
-              }},
-            body: commentWrite(),
-            buttonName: '완료',
-          );
-        }
+
+                if(this.formKey.currentState!.validate()) {
+                  this.formKey.currentState!.save();
+                  try {
+                    await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
+                    Navigator.pop(context);
+                  } catch(e) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text("한마디 업로드 실패! 다시 시도해주세요"),
+                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                            actions: [
+                              TextButton(
+                                child: const Text('확인'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                    );
+                  }
+                }},
+              body: commentWrite(),
+              buttonName: '완료',
+            );
+          }
+      ),
     );
   }
 
   Widget commentWrite(){
     String currentDate = DateTime.now().toString().substring(0, 10).replaceAll('-', '.');
-    return ListView(
-      children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('날짜'),
-              SizedBox(height: 5,),
-              Container(
-                padding: EdgeInsets.all(15),
-                width: double.infinity,
-                //height: 60,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(5),
+    return Container(
+      color: Colors.white,
+      child: ListView(
+        children: [
+          text('날짜'),
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade300,
                 ),
-                child: Text(currentDate),
+                borderRadius: BorderRadius.circular(5),
               ),
-              SizedBox(height: 15,),
-              Text('한마디 작성'),
-              SizedBox(height: 5,),
-              createField()
-            ],
+              child: text(currentDate),
+            ),
           ),
-        ),
-      ],
+          SizedBox(height: 10,),
+          text('한마디 작성'),
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: createField(),
+          ),
+        ],
+      ),
     );
   }
   Widget createField() {
     return Form(
       key: formKey,
       child: SizedBox(
+        height: 300,
         child: TextFormField(
           validator: (value) {
             if(value!.isEmpty) { return '내용을 입력하세요'; }
             else { return null; }
           },
-          maxLines: 10,
+          maxLines: 100,
+          textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
@@ -150,6 +152,17 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
             _contents = value!;
           }
         ),
+      ),
+    );
+  }
+
+  //글자 출력
+  Widget text(String text) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
+      child: Text('$text',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        //textScaleFactor: 1.2,
       ),
     );
   }

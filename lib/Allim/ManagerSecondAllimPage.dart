@@ -122,7 +122,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
+                          _noticeDetail['target_name'] + ' 보호자님'
                         ),
                         Text(
                           _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
@@ -137,7 +137,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '삼족오 보호자님', //_noticeDetail['resident_name'] + '입소자님'
+                          _noticeDetail['target_name'] + ' 보호자님'
                         ),
                         Text(
                           _noticeDetail['create_date'].toString().substring(0, 10).replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기

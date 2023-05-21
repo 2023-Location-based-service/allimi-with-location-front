@@ -124,6 +124,24 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
         appBar: AppBar(title: Text('입소자 관리')),
         body: ListView(
           children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                  Expanded(
+                      child: Text(
+                        ' 추가를 누르면 입소자 정보에 추가할 수 있습니다',
+                        style: TextStyle(color: themeColor.getColor()),
+                        overflow: TextOverflow.visible,
+                        maxLines: null,
+                      ),
+                  )
+                ],
+              ),
+            ),
             approve()
           ],
         )
