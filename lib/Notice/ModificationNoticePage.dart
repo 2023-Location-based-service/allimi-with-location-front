@@ -27,10 +27,12 @@ class ModificationNoticePage extends StatefulWidget {
     required this.noticeId,
     required this.facility_id,
     required this.noticeList,
+    required this.residentId,
     required this.imageUrls,
   }) : super(key: key);
 
   final int noticeId;
+  final int residentId;
   final int facility_id;
   final List<String> imageUrls;
   final Map<String, dynamic> noticeList;
@@ -44,6 +46,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
   final formKey = GlobalKey<FormState>();
   late int _noticeId;
   late int _facility_id;
+  late int _residentId;
   late List<String> _imageUrls;
   String _title = '';
   String _contents = '';
@@ -60,6 +63,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
     _facility_id = widget.facility_id;
     _title = _noticeList['title'];
     _contents = _noticeList['content'];
+    _residentId = widget.residentId;
     //getFacilityResident(_facility_id);
     getFile();
   }
@@ -124,7 +128,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
         "allnotice": MultipartFile.fromString(
           jsonEncode(
               {"allnotice_id": _noticeId,
-                "user_id": userId,
+                "writer_id": _residentId,
                 "title": _title,
                 "contents": _contents,
                 "important": importantTest}),
@@ -137,7 +141,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
         "allnotice": MultipartFile.fromString(
           jsonEncode(
               {"allnotice_id": _noticeId,
-                "user_id": userId,
+                "writer_id": _residentId,
                 "title": _title,
                 "contents": _contents,
                 "important": importantTest}),

@@ -75,27 +75,32 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                         child: Row(
                           children: [
                             SizedBox(width: 3),
-                            OutlinedButton(
-                              child: Text('수정', style: TextStyle(color: Colors.grey)),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
-                              onPressed: () async {
-                                if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                  return ;
-                                }
-                                int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
+                            Consumer<ResidentProvider>(
+                              builder: (context, residentProvider, child) {
+                                return OutlinedButton(
+                                  child: Text('수정', style: TextStyle(color: Colors.grey)),
+                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
+                                  onPressed: () async {
+                                    if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                      return ;
+                                    }
+                                    int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
 
-                                await awaitPageAnimation(context, ModificationNoticePage(
-                                    noticeId: widget.noticeList[widget.index]['allNoticeId'],
-                                    facility_id: facility_id,
-                                    noticeList: widget.noticeList[widget.index],
-                                    imageUrls: imgList));
+                                    await awaitPageAnimation(context, ModificationNoticePage(
+                                        residentId: residentProvider.resident_id,
+                                        noticeId: widget.noticeList[widget.index]['allNoticeId'],
+                                        facility_id: facility_id,
+                                        noticeList: widget.noticeList[widget.index],
+                                        imageUrls: imgList));
 
-                                setState(() {
-                                  widget.getNotice(facility_id); // 추가된 부분
-                                });
-                                Navigator.of(context).pop(); //목록으로 감
+                                    setState(() {
+                                      widget.getNotice(facility_id); // 추가된 부분
+                                    });
+                                    Navigator.of(context).pop(); //목록으로 감
 
-                              },
+                                  },
+                                );
+                              }
                             ),
                           ],
                         ),

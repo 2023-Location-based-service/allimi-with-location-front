@@ -17,8 +17,6 @@ class ResidentProvider  with ChangeNotifier {
     this.resident_name = resident_name;
     this.birth = birth;
     this.health_info = health_info;
-
-    debugPrint("@@@ setinfo 완료");
   }
 
   void getData() {

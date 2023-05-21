@@ -12,13 +12,25 @@ import 'UserPeopleManagementPage.dart';
 ThemeColor themeColor = ThemeColor();
 
 class MainFacilitySettingsPage extends StatefulWidget {
-  const MainFacilitySettingsPage({Key? key}) : super(key: key);
+  const MainFacilitySettingsPage({Key? key, required this.facilityId}) : super(key: key);
+
+  final int facilityId;
 
   @override
   State<MainFacilitySettingsPage> createState() => _MainFacilitySettingsPageState();
 }
 
 class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
+
+  late int _facilityId;
+
+    @override
+  void initState() {
+    super.initState();
+    _facilityId = widget.facilityId;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +75,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         title: Text('입소자 관리'),
         leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
         onTap: () {
-          pageAnimation(context, userPeopleManagementPage());
+          pageAnimation(context, UserPeopleManagementPage());
         });
   }
 
@@ -95,15 +107,12 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
   }
 
   Widget appFacilityBasicSetting() {
-    return Consumer<ResidentProvider>(
-      builder: (context, residentProvider, child) {
-        return ListTile(
-          title: Text('시설 기본 정보 설정'),
-          leading: Icon(Icons.home_rounded, color: Colors.grey),
-          onTap: () {
-            pageAnimation(context, FacilityBasicInfoPage(facilityId: residentProvider.facility_id));
-          });
-      }
-    );
+    return ListTile(
+      title: Text('시설 기본 정보 설정'),
+      leading: Icon(Icons.home_rounded, color: Colors.grey),
+      onTap: () {
+        pageAnimation(context, FacilityBasicInfoPage(facilityId: _facilityId));
+      });
+      
   }
 }

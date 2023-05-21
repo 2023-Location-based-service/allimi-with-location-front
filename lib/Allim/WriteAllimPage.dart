@@ -106,9 +106,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ResidentProvider,AllimTempProvider> (
-      builder: (context, residentProvider,allimTempProvider, child) {
-        return customPage(
+    return customPage(
           title: '알림장 작성',
           buttonName: '완료',
           onPressed: () async {
@@ -155,51 +153,37 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                           Navigator.of(context).pop();
                         },
                       ),
-                      TextButton(
-                        child: Text('확인',style: TextStyle(color: themeColor.getColor())),
-                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                        onPressed: () async {
-                          if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                            return ;
-                          }
+                      Consumer2<ResidentProvider,AllimTempProvider> (
+                        builder: (context, residentProvider,allimTempProvider, child) {
+                          return TextButton(
+                            child: Text('확인',style: TextStyle(color: themeColor.getColor())),
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                            onPressed: () async {
+                              if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                return ;
+                              }
 
-                          _subContents = '';
-                          _subContents += allimTempProvider.morning + '\n';
-                          _subContents += allimTempProvider.launch + '\n';
-                          _subContents += allimTempProvider.dinner + '\n';
-                          _subContents += allimTempProvider.medication;
+                              _subContents = '';
+                              _subContents += allimTempProvider.morning + '\n';
+                              _subContents += allimTempProvider.launch + '\n';
+                              _subContents += allimTempProvider.dinner + '\n';
+                              _subContents += allimTempProvider.medication;
 
-                          try {
-                            await addAllim(residentProvider.resident_id);
-                            _pickedImgs = [];
+                              try {
+                                await addAllim(residentProvider.resident_id);
+                                _pickedImgs = [];
 
-                            showToast('작성 완료되었습니다');
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
+                                showToast('작성 완료되었습니다');
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
 
-                          } catch(e) {
-                            showToast('알림장 업로드 실패! 다시 시도해주세요');
-                            // showDialog(
-                            //   context: context,
-                            //   barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                            //   builder: (BuildContext context) {
-                            //     return AlertDialog(
-                            //       content: Text("알림장 업로드 실패! 다시 시도해주세요"),
-                            //       insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                            //       actions: [
-                            //         TextButton(
-                            //           child: const Text('확인'),
-                            //           onPressed: () {
-                            //             Navigator.of(context).pop();
-                            //           },
-                            //         ),
-                            //       ],
-                            //     );
-                            //   }
-                            // );
-                          }
-                          },
-                        ),
+                              } catch(e) {
+                                showToast('알림장 업로드 실패! 다시 시도해주세요');
+                              }
+                              },
+                            );
+                        }
+                      ),
                       ],
                     );
                   }
@@ -208,10 +192,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
             }
           },
           body: writePost(),
-          
         );
-      }
-    );
+      
 
   }
 
@@ -259,9 +241,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         ),
       ),
       onTap: () {
-
-        print('수급자 선택하기 Tap');
-
         //TODO: 수급자 선택 화면
         pageAnimation(context, selectedPersonPage());
 
@@ -288,42 +267,39 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
             color: Colors.white,
             child: Consumer<ResidentProvider>(
               builder: (context, residentProvider, child) {
-                return Consumer<ResidentProvider>(
-                  builder: (context, residentProvider, child) {
-                    return FutureBuilder(
-                      future: getFacilityResident(residentProvider.facility_id),
-                      builder: (context, snapshot) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _residents.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              leading: Icon(Icons.person_rounded, color: Colors.grey),
-                              title: Row(
-                                children: [
-                                  Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
-                                ],
-                              ),
-                              onTap: () {
-                                // TODO: 수급자 선택 시 처리할 이벤트
-                                setState(() {
-                                  selectedPerson = '${_residents[index]['name']} 님'; 
-                                  selectedPersonId = _residents[index]['id'];
-                                });
+                return FutureBuilder(
+                  future: getFacilityResident(residentProvider.facility_id),
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _residents.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          leading: Icon(Icons.person_rounded, color: Colors.grey),
+                          title: Row(
+                            children: [
+                              Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
+                            ],
+                          ),
+                          onTap: () {
+                            // TODO: 수급자 선택 시 처리할 이벤트
+                            setState(() {
+                              selectedPerson = '${_residents[index]['name']} 님'; 
+                              selectedPersonId = _residents[index]['id'];
+                            });
 
-                                Navigator.pop(context);
+                            Navigator.pop(context);
 
-                              },
-                            );
                           },
                         );
-                      }
+                      },
                     );
                   }
                 );
               }
-            ),
+            )
+              
           ),
         ],
       ),

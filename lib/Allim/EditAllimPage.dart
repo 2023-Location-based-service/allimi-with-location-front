@@ -26,7 +26,8 @@ class EditAllimPage extends StatefulWidget {
     required this.noticeId,
     required this.noticeDetail,
     required this.imageUrls,
-    required this.facility_id
+    required this.facility_id,
+    required this.residentId
   }) : super(key: key);
 
   final Map<String, dynamic> noticeDetail;
@@ -34,6 +35,7 @@ class EditAllimPage extends StatefulWidget {
 
   final int noticeId;
   final int facility_id;
+  final int residentId;
 
   @override
   State<EditAllimPage> createState() => _EditAllimPageState();
@@ -52,6 +54,8 @@ class _EditAllimPageState extends State<EditAllimPage> {
   List<Map<String, dynamic>> _residents = []; // 수정된 부분
 
   late int _noticeId;
+    late int _residentId;
+
   late Map<String, dynamic> _noticeDetail;
   late List<String> _imageUrls;
 
@@ -60,6 +64,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
     _noticeDetail = widget.noticeDetail;
     _imageUrls = widget.imageUrls;
     _facility_id = widget.facility_id;
+    _residentId = widget.residentId;
 
     _contents = _noticeDetail['content'];
     getFacilityResident(_facility_id);
@@ -137,12 +142,9 @@ class _EditAllimPageState extends State<EditAllimPage> {
   
   // 서버에 알림장 업로드 + 사진 업로드
   Future<void> editAllim(userId, facilityId) async {
-    debugPrint("@@@@ 공지사항 수정 백엔드 요청 보냄");
+    debugPrint("@@@@ 알림장 수정 백엔드 요청 보냄");
     List<MultipartFile> _files = [];
     var formData = null;
-
-    debugPrint("@@@: " + _noticeId.toString() + "/" + userId.toString() + "/" + selectedPersonId.toString());
-
 
     if (_pickedImgs.length != 0 ) {
       _files = _pickedImgs.map((img) 
@@ -151,7 +153,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
       formData = FormData.fromMap({
         "notice": MultipartFile.fromString(
           jsonEncode(
-            {"notice_id": _noticeId, "user_id": userId, "resident_id": selectedPersonId, 
+            {"notice_id": _noticeId, "writer_id": _residentId, "target_id": selectedPersonId, 
             "content": _contents, "sub_content": _subContents}),
           contentType: MediaType.parse('application/json'),
         ),
@@ -161,7 +163,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
       formData = FormData.fromMap({
         "notice": MultipartFile.fromString(
           jsonEncode(
-            {"notice_id": _noticeId, "user_id": userId, "resident_id": selectedPersonId, 
+            {"notice_id": _noticeId, "writer_id": _residentId, "target_id": selectedPersonId, 
             "content": _contents, "sub_content": _subContents}),
           contentType: MediaType.parse('application/json'),
         ),

@@ -19,15 +19,11 @@ ThemeColor themeColor = ThemeColor();
 class ManagerRequestPage extends StatefulWidget {
   const ManagerRequestPage({
     Key? key, 
-    required this.userId,
     required this.residentId,
-    required this.facilityId,
     required this.userRole
   }) : super(key: key);
 
-  final int userId;
   final int residentId;
-  final int facilityId;
   final String userRole;
 
   @override
@@ -41,9 +37,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
   late final TextEditingController refusalController = TextEditingController();
   String selectedHour = '시간 선택';
   List<Map<String, dynamic>> _visitList = [];
-  late int _userId;
   late int _residentId;
-  late int _facilityId;
   late String _userRole;
   String _rejectReason = '';
   String? stateText;
@@ -51,9 +45,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
   @override
   void initState() {
     super.initState();
-    _userId = widget.userId;
     _residentId = widget.residentId;
-    _facilityId = widget.facilityId;
     _userRole = widget.userRole;
     getVisitList();
   }
@@ -201,11 +193,6 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                       ),
                                       onPressed: () async {
                                         try {
-                                          // await deleteSchedule(sc.scheduleId);
-                                          // setState(() {
-                                          //   mySelectedEvents = {};
-                                          //   getSchedules();
-                                          // });
 
                                           // visit approve event
                                           await approve(_visitList[index]['visit_id']);
@@ -235,7 +222,6 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                               );
                                             });
                                         } catch (e) {
-                                          debugPrint("@@@@@ososfdo");
                                         }
                                       },
                                     ),
@@ -451,7 +437,6 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
 
                                         Navigator.of(context).pop();
                                       } catch (e) {
-                                        debugPrint("@@@@@ososfdo");
                                       }
                                     },
                                   ),
@@ -478,11 +463,6 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                 if (_visitList[index]['state'] == 'COMPLETED')
                   Text("방문완료", style: TextStyle(color: Colors.grey)), //TODO: 수락/거절 출력
               ],
-              //'2022.12.23'
-              // '16:00'
-              // '삼족오 보호자님'
-              // '면회 신청합니다.'
-              // '거절하였습니다. (면회 시간이 아님)'
             )
           ),
         );
@@ -498,12 +478,9 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
 
     if (_userRole == 'PROTECTOR') {
       return writeButton(
-          context: context,
+        context: context,
         onPressed: () async {
-            await awaitPageAnimation(context, VisitWritePage(userId: _userId, residentId: _residentId, facilityId: _facilityId));
-
-          // await Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => VisitWritePage(userId: _userId, residentId: _residentId, facilityId: _facilityId)));
+          await awaitPageAnimation(context, VisitWritePage(residentId: _residentId));
 
           getVisitList();
         },

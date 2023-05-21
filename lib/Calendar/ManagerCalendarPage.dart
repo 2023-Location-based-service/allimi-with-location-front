@@ -12,12 +12,11 @@ import 'package:test_data/Backend.dart';
 ThemeColor themeColor = ThemeColor();
 
 class ManagerCalendarPage extends StatefulWidget {
-  const ManagerCalendarPage({Key? key, required this.userId, required this.residentId, required this.userRole, required this.facility_id}) : super(key: key);
+  const ManagerCalendarPage({Key? key, required this.residentId, required this.userRole, required this.facility_id}) : super(key: key);
 
   final int residentId;
   final int facility_id;
   final String userRole;
-    final int userId;
 
   @override
   State<ManagerCalendarPage> createState() => _ManagerCalendarPageState();
@@ -40,7 +39,6 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
   Map<String, List<Schedule>> mySelectedEvents = {};
 
   late int _facility_id;
-  late int _userId;
   late String _userRole;
     late int _resident_id;
 
@@ -54,7 +52,6 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
     _selectedDate = _focusedDay;
     _facility_id = widget.facility_id;
     _resident_id = widget.residentId;
-    _userId = widget.userId;
     _userRole = widget.userRole;
     loadPreviousEvents();
     getSchedules();
@@ -70,7 +67,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
       },
       body: jsonEncode({
         "schedule_id": scheduleId,
-        "user_id": _userId
+        "nhr_id": _resident_id
       })
     );
 
@@ -193,7 +190,6 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
             },
             selectedDayPredicate: (day) {
               //달 바뀌거나 focus날짜 바뀌면 상당히 많이 호출됨.. 35번? 성능문제
-              debugPrint("@@@cc");
               return isSameDay(_selectedDate, day);
             },
             onFormatChanged: (format) {
@@ -271,7 +267,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
                         Navigator.of(context).pop();
 
                       } catch (e) {
-                        debugPrint("@@@@@ososfdo");
+
                       }
                     },
                   ),

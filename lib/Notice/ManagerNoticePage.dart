@@ -304,7 +304,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'],
+                                      ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'], residentId: _residentId,
                                           facility_id: facility_id, noticeList: _noticeList[index], imageUrls: imgList))
                             //EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
 

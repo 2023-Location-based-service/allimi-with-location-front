@@ -54,7 +54,6 @@ class _InviteListPageState extends State<InviteListPage> {
         })
     );
 
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     print(response.statusCode);
     if (response.statusCode == 200){
       setState(() {

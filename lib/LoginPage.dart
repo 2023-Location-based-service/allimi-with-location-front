@@ -139,25 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                               data = await loginRequest(_id, _password);
                             } catch(e) {
                               showToast('아이디 또는 비밀번호가 일치하지 않습니다');
-
-                              // showDialog(
-                              //     context: context,
-                              //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              //     builder: (BuildContext context) {
-                              //       return AlertDialog(
-                              //         content: Text("아이디 또는 패스워드가 일치하지 않습니다"),
-                              //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                              //         actions: [
-                              //           TextButton(
-                              //             child: const Text('확인'),
-                              //             onPressed: () {
-                              //               Navigator.of(context).pop();
-                              //             },
-                              //           ),
-                              //         ],
-                              //       );
-                              //     }
-                              // );
                               return;
                             }
 

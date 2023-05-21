@@ -22,14 +22,10 @@ ThemeColor themeColor = ThemeColor();
 class VisitWritePage extends StatefulWidget {
   const VisitWritePage({
     Key? key,
-    required this.userId,
-    required this.residentId,
-    required this.facilityId
+    required this.residentId
   }) : super(key: key);
 
-  final int userId;
   final int residentId;
-  final int facilityId;
 
   @override
   State<VisitWritePage> createState() => _VisitWritePageState();
@@ -41,19 +37,12 @@ class _VisitWritePageState extends State<VisitWritePage> {
   late final TextEditingController refusalController = TextEditingController();
   String _text = '';
   final formKey = GlobalKey<FormState>();
-
-  late int _userId;
   late int _residentId;
-  late int _facilityId;
-
-
 
   @override
   void initState() {
     super.initState();
-    _userId = widget.userId;
     _residentId = widget.residentId;
-    _facilityId = widget.facilityId;
   }
 
   // 서버에 면회신청 업로드

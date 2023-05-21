@@ -19,7 +19,9 @@ import 'Supplementary/PageRouteWithAnimation.dart';
 ThemeColor themeColor = ThemeColor();
 
 class AddFacilities extends StatefulWidget {
-  const AddFacilities({Key? key}) : super(key: key);
+  const AddFacilities({Key? key, required this.uid}) : super(key: key);
+
+  final int uid;
 
   @override
   State<AddFacilities> createState() => _AddFacilitiesState();
@@ -38,7 +40,14 @@ class _AddFacilitiesState extends State<AddFacilities> {
   String _number = '';
   String _personName = '';
   int _facilityId = 0;
+  late int _uid;
   int _resident_id = 0;
+
+    @override
+  void initState() {
+    super.initState();
+    _uid = widget.uid;
+  }
 
   Future<void> facilityRequest(int uid) async {
     debugPrint("@@@@ 시설 추가하는 백엔드 url보냄: " + _personName);
@@ -215,33 +224,30 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                       Navigator.of(context).pop();
                                     },
                                   ),
-                                  Consumer<UserProvider>(
-                                      builder: (context2, userProvider, child) {
-                                        return TextButton(
-                                          child: Text('확인', style: TextStyle(color: themeColor.getColor())),
-                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                                          onPressed: () async {
-                                            try {
-                                              await facilityRequest(userProvider.uid);
-                                              showToast('시설 등록에 성공하였습니다');
-                                              Provider.of<ResidentProvider>(context, listen:false)
-                                                  .setInfo(_resident_id, _facilityId, _facilityName, '', 'MANAGER','', '');
+                                  TextButton(
+                                    child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                    onPressed: () async {
+                                      try {
+                                        await facilityRequest(_uid);
+                                        showToast('시설 등록에 성공하였습니다');
+                                        Provider.of<ResidentProvider>(context, listen:false)
+                                            .setInfo(_resident_id, _facilityId, _facilityName, '', 'MANAGER','', '');
 
-                                              Provider.of<UserProvider>(context, listen: false)
-                                                  .setRole('MANAGER');
+                                        Provider.of<UserProvider>(context, listen: false)
+                                            .setRole('MANAGER');
 
-                                              Provider.of<UserProvider>(context, listen: false)
-                                                  .getData();
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            } catch(e) {
-                                              showToast('시설 등록에 실패하였습니다');
-                                              Navigator.of(context).pop();
-                                            }
-                                          },
-                                        );
+                                        Provider.of<UserProvider>(context, listen: false)
+                                            .getData();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      } catch(e) {
+                                        showToast('시설 등록에 실패하였습니다');
+                                        Navigator.of(context).pop();
                                       }
-                                  ),
+                                    },
+                                  )
+                                    
                                 ],
                               );
                             }

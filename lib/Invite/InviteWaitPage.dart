@@ -31,22 +31,21 @@ class InviteWaitPage extends StatefulWidget {
 
 class _InviteWaitPageState extends State<InviteWaitPage> {
   late int _count = 0;
-  int uid = 0;
+  int _uid = 0;
 
   List<Map<String, dynamic>> _residentList = [];
 
   @override
   void initState() {
-    this.uid = widget.uid;
-    getResidentList(uid);
-    
+    this._uid = widget.uid;
+    getResidentList();
   }
 
-  Future<void> getResidentList(int userId) async {
+  Future<void> getResidentList() async {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(Backend.getUrl() + "users/invitations/" + userId.toString()),
+      Uri.parse(Backend.getUrl() + "users/invitations/" + _uid.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -79,7 +78,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
             ),
           ),
           IconButton(
-              onPressed: () { getResidentList(uid); },
+              onPressed: () { getResidentList(); },
               icon: Icon(Icons.restart_alt_rounded)
           )
         ],
@@ -146,7 +145,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                 ),
                 onPressed: (){
-                  pageAnimation(context, AddFacilities());
+                  pageAnimation(context, AddFacilities(uid: _uid));
                 }
             ),
           ),
@@ -218,32 +217,19 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           Text(" " + userRoleString),
           Spacer(),
           Container(
-            child: Consumer<UserProvider>(
-                builder: (context, userProvider, child) {
-                  return OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: themeColor.getColor(),)
-                      ),
-                      onPressed: () async {
-                        
-                        // await Navigator.push(
-                        //   context,
-                        //   PageTransition(
-                        //     type: PageTransitionType.scale, //화면 전환 시 움직이는거 설정
-                        //     child: ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
-                        //       invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                        //       userId: userProvider.uid),
-                        //   ),
-                        // ); // - 에러남
-                        await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
-                            invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                            userId: userProvider.uid));
+            child:  OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: themeColor.getColor(),)
+                ),
+                onPressed: () async {
+                  await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                      invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                      userId: _uid));
 
-                      },
-                      child: Text('초대받기',style: TextStyle(color: themeColor.getColor()),)
-                  );
-                }
-            ),
+                },
+                child: Text('초대받기',style: TextStyle(color: themeColor.getColor()),)
+            )
+              
           )
 
         ],

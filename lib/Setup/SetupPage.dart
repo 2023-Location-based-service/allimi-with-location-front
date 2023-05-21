@@ -67,7 +67,6 @@ class _SetupPageState extends State<SetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("@@@@userRole: " + _userRole);
     return Scaffold(
       appBar: AppBar(title: Text('설정')),
       body: ListView(
@@ -95,13 +94,10 @@ class _SetupPageState extends State<SetupPage> {
 
   //입소자 정보 - 보호자일 때
   Widget appProtectorInmateProfile() {
-    return Consumer<UserProvider>(
-        builder: (context, userProvider, child) {
-          return ListTile(
-              title: Text('입소자 정보'),
-              leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
-              onTap: () { pageAnimation(context, ProtectorInmateProfilePage(uid: userProvider.uid,)); });
-        }
+    return ListTile(
+      title: Text('입소자 정보'),
+      leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
+      onTap: () { pageAnimation(context, ProtectorInmateProfilePage(uid: _userId)); }
     );
   }
 

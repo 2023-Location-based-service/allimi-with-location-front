@@ -63,7 +63,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     invitationFacilityName = widget.invitationFacilityName;
     _userId = widget.userId;
     if (invitationUserRole != 'PROTECTOR') {
-      test(_userId);
+      addWorker(_userId);
     }
       
   }
@@ -206,74 +206,72 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                       //   ),
                       // ),
                       SizedBox(height: 100),
-                      Consumer<UserProvider>(
-                          builder: (context, userProvider, child) {
-                            return TextButton(child: Container(
-                                width: double.infinity,
-                                child: Text('확인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
-                                style: ButtonStyle(
-                                    overlayColor: MaterialStateProperty.all(Colors.white10),
-                                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
-                                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
-                                ),
-                                onPressed: () async {
-                                  if (checkClick.isRedundentClick(DateTime.now())) {
-                                    return;
-                                  }
-                                  if (validateAndSave()) {
-                                    var data;
-                                    try {
-                                      data = await addResident(userProvider.uid);
-                                      var json_data = json.decode(data);
+                      TextButton(
+                        child: Container(
+                          width: double.infinity,
+                          child: Text('확인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                          style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all(Colors.white10),
+                              backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                              padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                          ),
+                          onPressed: () async {
+                            if (checkClick.isRedundentClick(DateTime.now())) {
+                              return;
+                            }
+                            if (validateAndSave()) {
+                              var data;
+                              try {
+                                data = await addResident(_userId);
+                                var json_data = json.decode(data);
 
-                                      if (json_data['resident_id'] != null) {
-                                        Provider.of<ResidentProvider>(context, listen:false)
-                                            .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
-                                            invitationUserRole,_birthdate, healthInfo);
+                                if (json_data['resident_id'] != null) {
+                                  Provider.of<ResidentProvider>(context, listen:false)
+                                      .setInfo(json_data['resident_id'], invitationFacilityId, invitationFacilityName, _residentname,
+                                      invitationUserRole,_birthdate, healthInfo);
 
-                                        Provider.of<UserProvider>(context, listen:false)
-                                            .setRole(invitationUserRole);
+                                  Provider.of<UserProvider>(context, listen:false)
+                                      .setRole(invitationUserRole);
 
-                                        Navigator.pop(context);
-                                      }
+                                  Navigator.pop(context);
+                                }
 
-                                      Provider.of<UserProvider>(context,listen:false).getData();
+                                Provider.of<UserProvider>(context,listen:false).getData();
 
-                                    } catch(e) {
-                                      String errorMessage = '';
+                              } catch(e) {
+                                String errorMessage = '';
 
-                                      if (e.runtimeType == FormatException)  //중복된 아이디
-                                        errorMessage = '중복된 아이디입니다';
-                                      else
-                                        errorMessage = '회원가입에 실패하였습니다';
+                                if (e.runtimeType == FormatException)  //중복된 아이디
+                                  errorMessage = '중복된 아이디입니다';
+                                else
+                                  errorMessage = '회원가입에 실패하였습니다';
 
 
-                                      showDialog(
-                                          context: context,
-                                          barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              content: Text(errorMessage),
-                                              insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                              actions: [
-                                                TextButton(
-                                                  child: const Text('확인'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          }
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text(errorMessage),
+                                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text('확인'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
                                       );
                                     }
+                                );
+                              }
 
-                                  }
-                                }
-                            );
+                            }
                           }
-                      ),
+                      )
+                         
                     ],
                   ),
                 ),
@@ -290,7 +288,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     }
       
   }
-  Future<void> test(int uid) async {
+  Future<void> addWorker(int uid) async {
     debugPrint("@@요양보호사 추가 백엔드 요청 보냄");
 
     var data;
