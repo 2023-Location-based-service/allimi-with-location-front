@@ -111,9 +111,9 @@ class _InviteListPageState extends State<InviteListPage> {
                     Container(
                       padding: EdgeInsets.all(2),
                       child: OutlinedButton(
-                          // style: OutlinedButton.styleFrom(
-                          //     side: BorderSide(color: themeColor.getColor(),)
-                          // ),
+                          style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: themeColor.getColor(),)
+                          ),
                           onPressed: () async {
                             showDialog(
                                 context: context,
@@ -145,7 +145,7 @@ class _InviteListPageState extends State<InviteListPage> {
                                 }
                             );
                           },
-                          child: Text('취소하기',style: TextStyle(color: Colors.grey))
+                          child: Text('취소하기',style: TextStyle(color: themeColor.getColor(),),)
                       ),
                     ),
                   ],

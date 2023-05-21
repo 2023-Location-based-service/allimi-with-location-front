@@ -4,6 +4,7 @@ import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:flutter/material.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/CustomWidget.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -63,24 +64,25 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                     await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
                     Navigator.pop(context);
                   } catch(e) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Text("한마디 업로드 실패! 다시 시도해주세요"),
-                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                            actions: [
-                              TextButton(
-                                child: const Text('확인'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        }
-                    );
+                    showToast('한마디 업로드 실패! 다시 시도해주세요');
+                    // showDialog(
+                    //     context: context,
+                    //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                    //     builder: (BuildContext context) {
+                    //       return AlertDialog(
+                    //         content: Text("한마디 업로드 실패! 다시 시도해주세요"),
+                    //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                    //         actions: [
+                    //           TextButton(
+                    //             child: const Text('확인'),
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //             },
+                    //           ),
+                    //         ],
+                    //       );
+                    //     }
+                    // );
                   }
                 }},
               body: commentWrite(),
@@ -108,9 +110,12 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                 ),
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: text(currentDate),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
+                child: Text(currentDate),
+                ),
+              ),
             ),
-          ),
           SizedBox(height: 10,),
           text('한마디 작성'),
           Padding(

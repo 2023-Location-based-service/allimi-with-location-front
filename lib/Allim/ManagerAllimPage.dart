@@ -181,13 +181,8 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                       ],
                     ),
                     onTap: () async {
-
                       //상세보기 화면으로 이동
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole)),
-                      );
+                      await awaitPageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole));
                       getNotice(_residentId);
                     },
                   ),
