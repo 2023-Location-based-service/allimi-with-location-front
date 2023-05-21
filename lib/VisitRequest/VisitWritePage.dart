@@ -63,12 +63,10 @@ class _VisitWritePageState extends State<VisitWritePage> {
     String datetimeConvert = date.replaceAll('.', '-') + 'T' + time + ":00.000Z";
 
     debugPrint("@@@@@ 면회신청 추가하는 백앤드 url 보냄");
-    var url = Uri.parse(Backend.getDomain() + 'visit');
+    var url = Uri.parse(Backend.getUrl() + 'visit');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
-      "user_id": _userId,
-      "nhresident_id": _residentId,
-      "facility_id": _facilityId,
+      "protector_id": _residentId,
       "texts": _text, 
       "dateTime": datetimeConvert 
     });

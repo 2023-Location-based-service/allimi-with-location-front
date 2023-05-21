@@ -55,12 +55,12 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
     _residentId = widget.residentId;
     _facilityId = widget.facilityId;
     _userRole = widget.userRole;
-    getVisitList(_userId);
+    getVisitList();
   }
 
   // 서버에 면회신청 상태변경 WAITING -> REJECTED, APPROVED, COMPLETED
   Future<void> editState(int visit_id, String state) async {
-    var url = Uri.parse(Backend.getDomain() + 'visit/approval');
+    var url = Uri.parse(Backend.getUrl() + 'visit/approval');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
         "visit_id": visit_id,
@@ -69,6 +69,26 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
     });
 
     final response = await http.post(url, headers: headers, body: body);
+
+    debugPrint("@@@" + response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      print("성공");
+    } else {
+      throw Exception();
+    }
+  }
+
+  
+  // 서버에 면회신청 삭제요청
+  Future<void> deleteVisit(int visit_id) async {
+    var url = Uri.parse(Backend.getUrl() + 'visit');
+    var headers = {'Content-type': 'application/json'};
+    var body = json.encode({
+        "visit_id": visit_id
+    });
+
+    final response = await http.delete(url, headers: headers, body: body);
 
     debugPrint("@@@" + response.statusCode.toString());
 
@@ -94,11 +114,11 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
     await editState(visit_id, "COMPLETED");
   }
 
-  Future<void> getVisitList(int userId) async {
+  Future<void> getVisitList() async {
     debugPrint("@@@@@ 면회신청목록 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(Backend.getUrl() + "visit/" + userId.toString()),
+      Uri.parse(Backend.getUrl() + "visit/" + _residentId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -190,7 +210,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                           // visit approve event
                                           await approve(_visitList[index]['visit_id']);
                                           setState(() {
-                                            getVisitList(_userId);
+                                            getVisitList();
                                           });
                                           showDialog(
                                             context: context,
@@ -278,7 +298,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
 
                                             await reject(_visitList[index]['visit_id']);
                                             setState(() {
-                                              getVisitList(_userId);
+                                              getVisitList();
                                             });
                                             Navigator.pop(context);
                                           } catch(e) {
@@ -314,7 +334,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                       ]
                       ),
                     
-                    if (_userRole == 'PROTECTOR')
+                    if (_userRole == 'PROTECTOR' && _visitList[index]['state'] == 'WAITING')
                       OutlinedButton(
                         child: Text('취소', style: TextStyle(color: Colors.grey),),
                         onPressed: (){
@@ -333,14 +353,15 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                   TextButton(child: Text('예',
                                       style: TextStyle(color: themeColor.getMaterialColor())),
                                       style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                      onPressed: () {
+                                      onPressed: () async{
                                         try {
-                                          // visit approve event
-                                          // await addAllim(userProvider.uid, residentProvider.facility_id);
-
+                                          // 면회신청 취소(삭제)
+                                        
                                           if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
                                             return ;
                                           }
+
+                                          await deleteVisit(_visitList[index]['visit_id']);
 
                                           showDialog(
                                             context: context,
@@ -382,11 +403,11 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                             }
                                           );
                                         }
-                                        Navigator.pop(context);
                                       }),
                                   ],
                                 ),
                             );
+                            getVisitList();
                           },
                         ),
                   
@@ -425,7 +446,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                       try {
                                         await complete(_visitList[index]['visit_id']);
                                         setState(() {
-                                          getVisitList(_userId);
+                                          getVisitList();
                                         });
 
                                         Navigator.of(context).pop();
@@ -454,8 +475,8 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                   Text('면회 수락되었습니다. 제때 방문하세요.', style: TextStyle(color: themeColor.getColor())),
                 if (_visitList[index]['state'] == 'REJECTED')
                   Text("거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
-                // if (_visitList[index]['state'] != 'REJECTED')
-                //   Text(_visitList[index]['state'], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
+                if (_visitList[index]['state'] == 'COMPLETED')
+                  Text("방문완료", style: TextStyle(color: Colors.grey)), //TODO: 수락/거절 출력
               ],
               //'2022.12.23'
               // '16:00'
@@ -484,7 +505,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
           // await Navigator.push(context,
           //     MaterialPageRoute(builder: (context) => VisitWritePage(userId: _userId, residentId: _residentId, facilityId: _facilityId)));
 
-          getVisitList(_userId);
+          getVisitList();
         },
       );
     } else {
