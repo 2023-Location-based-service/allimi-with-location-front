@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/exception/InvitAlreadyExistsException.dart';
 import 'package:test_data/exception/ResidentAlreadyExistsException.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -203,44 +204,46 @@ class _InvitePageState extends State<InvitePage> {
                   await getUserByPhoneNum(_phone_num);
                   setState(() {});
                   if(_phoneNumUsers.length == 0){
-                    return showDialog(
-                        context: context,
-                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Text("회원가입을 하지 않은 전화번호입니다. \n다시 확인해주세요."),
-                            insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                            actions: [
-                              TextButton(
-                                child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        }
-                    );
+                    return showToast('회원가입을 하지 않은 전화번호입니다! 다시 확인해주세요');
+                    // return showDialog(
+                    //     context: context,
+                    //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                    //     builder: (BuildContext context) {
+                    //       return AlertDialog(
+                    //         content: Text("회원가입을 하지 않은 전화번호입니다. \n다시 확인해주세요."),
+                    //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                    //         actions: [
+                    //           TextButton(
+                    //             child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //             },
+                    //           ),
+                    //         ],
+                    //       );
+                    //     }
+                    // );
                   }
                 } catch(e) {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text("초대 실패! 다시 시도해주세요"),
-                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                          actions: [
-                            TextButton(
-                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      }
-                  );
+                  showToast('초대 실패! 다시 시도해주세요');
+                  // showDialog(
+                  //     context: context,
+                  //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                  //     builder: (BuildContext context) {
+                  //       return AlertDialog(
+                  //         content: Text("초대 실패! 다시 시도해주세요"),
+                  //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                  //         actions: [
+                  //           TextButton(
+                  //             child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                  //             onPressed: () {
+                  //               Navigator.of(context).pop();
+                  //             },
+                  //           ),
+                  //         ],
+                  //       );
+                  //     }
+                  // );
                 }
               }},
             body: inviteFormat(),

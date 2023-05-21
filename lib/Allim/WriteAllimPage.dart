@@ -178,24 +178,25 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                             Navigator.of(context).pop();
 
                           } catch(e) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Text("알림장 업로드 실패! 다시 시도해주세요"),
-                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('확인'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
+                            showToast('알림장 업로드 실패! 다시 시도해주세요');
+                            // showDialog(
+                            //   context: context,
+                            //   barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                            //   builder: (BuildContext context) {
+                            //     return AlertDialog(
+                            //       content: Text("알림장 업로드 실패! 다시 시도해주세요"),
+                            //       insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                            //       actions: [
+                            //         TextButton(
+                            //           child: const Text('확인'),
+                            //           onPressed: () {
+                            //             Navigator.of(context).pop();
+                            //           },
+                            //         ),
+                            //       ],
+                            //     );
+                            //   }
+                            // );
                           }
                           },
                         ),
