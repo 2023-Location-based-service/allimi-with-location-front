@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Notice/ModificationNoticePage.dart';
+import 'package:test_data/Notice/NoticeDetailPage.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/NoticeTempProvider.dart';
 import '../provider/ResidentProvider.dart';
@@ -56,7 +58,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
       throw Exception();
   }
 
-  //공지사항 받아옴옴
+  //공지사항 받아옴
  Future<void> getNotice(int facility_id) async {
     debugPrint("@@@@@ 공지사항 받아오는 백앤드 url 보냄");
 
@@ -94,6 +96,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('공지사항')),
+      backgroundColor: Color(0xfff8f8f8), //배경색
       body: ListView(
         children: [
           noticeList(),
@@ -108,18 +111,12 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     if (_userRole == 'PROTECTOR') {
       return Container();
     } else {
-      return FloatingActionButton(
-        onPressed: () async {
-          //글쓰기 화면으로 이동
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WriteNoticePage()),
-          );
-          getNotice(_facilityId);
-        },
-        child: const Icon(Icons.create),
-      );
+      return writeButton(
+          context: context,
+          onPressed: () async {
+            await awaitPageAnimation(context, WriteNoticePage());
+            getNotice(_facilityId);
+          });
     }
   }
 
@@ -144,38 +141,68 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시
-                      SizedBox(height: 5),
-                      Container(
-                          child: Text(_noticeList[index]['title'], overflow: TextOverflow.ellipsis), //TODO: 공지사항 제목
-                          width: MediaQuery.of(context).size.width * 0.5),
-                      Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //TODO: 공지사항 날짜
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시
+                        SizedBox(height: 5),
+
+                        Text(_noticeList[index]['title'], maxLines: 1, overflow: TextOverflow.ellipsis), //공지 제목
+                        Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: 1.0,), //TODO: 공지사항 날짜
+                      ],
+                    ),
                   ),
 
                   //TODO: 이미지
-                  if (imgList.length != 0)
-                    Container(
-                        width: 100,
-                        height: 100,
-                        child: Container(
-                          child: Image.network(
-                            imgList[0], 
-                            fit: BoxFit.fill,
-                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                ),
-                              );
-                            },),
-                        )
-                    ),
+                  Container(
+                    width: 100,
+                    height: 100,
+                    color: imgList.length != 0 ? null : Colors.white,
+                    child: imgList.length != 0
+                        ? Image.network(
+                      imgList[0],
+                      fit: BoxFit.fill,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    )
+                        : null,
+                  ),
+
+
+
+
+
+                  // if (imgList.length != 0)
+                  //   Container(
+                  //       width: 100,
+                  //       height: 100,
+                  //       child: Container(
+                  //         child: Image.network(
+                  //           imgList[0],
+                  //           fit: BoxFit.fill,
+                  //           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  //             if (loadingProgress == null) return child;
+                  //             return Center(
+                  //               child: CircularProgressIndicator(
+                  //                 value: loadingProgress.expectedTotalBytes != null
+                  //                     ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                  //               ),
+                  //             );
+                  //           },),
+                  //       )
+                  //   ),
+                  //
+                  // if(imgList.length == 0)
+                  //   Container(width: 100, height: 100, color: Colors.red,)
                 ],
               ),
               onTap: () {
@@ -188,7 +215,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
 
         else
-          return Container(width: 100, height: 100);
+          return Container();
 
       },
       separatorBuilder: (context, index) {
@@ -229,8 +256,19 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     );
   }
 
-  //공지 상세 내용
+
   Widget noticeManagerPage(int index) {
+    return NoticeDetailPage(
+        index: index,
+        userRole: _userRole,
+        noticeList: _noticeList,
+        getNotice: getNotice,
+        facilityId: _facilityId,
+        deleteNotice: deleteNotice);
+  }
+
+  //공지 상세 내용 - 원래 되던 거
+  Widget TestnoticeManagerPage(int index) {
     List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
 
     return Scaffold(
@@ -260,12 +298,12 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                         onPressed: () async {
                           int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
                           await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'],
-                                    facility_id: facility_id, noticeList: _noticeList[index], imageUrls: imgList))
-                                    //EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'],
+                                          facility_id: facility_id, noticeList: _noticeList[index], imageUrls: imgList))
+                            //EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
 
                           );
                         },
@@ -350,16 +388,16 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
               //TODO: 공지사항 본문 사진
               Container(
-                  margin: EdgeInsets.fromLTRB(0,10,0,0),
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Column(
-                      children: [
-                        for (int i =0; i< imgList.length; i++ ) ...[
-                          Image.network(imgList[i], fit: BoxFit.fill,),
-                        ]
+                margin: EdgeInsets.fromLTRB(0,10,0,0),
+                width: double.infinity,
+                color: Colors.white,
+                child: Column(
+                    children: [
+                      for (int i =0; i< imgList.length; i++ ) ...[
+                        Image.network(imgList[i], fit: BoxFit.fill,),
                       ]
-                  ),
+                    ]
+                ),
               ),
 
               //TODO: 공지사항 세부 내용
@@ -378,3 +416,5 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   }
 
 }
+
+

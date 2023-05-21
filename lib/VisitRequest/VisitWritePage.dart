@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/VisitRequest/SelectedTimePage.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
-
+import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
@@ -36,13 +37,13 @@ class VisitWritePage extends StatefulWidget {
 }
 
 class _VisitWritePageState extends State<VisitWritePage> {
-
-    late final TextEditingController bodyController = TextEditingController(text: '면회 신청합니다.');
+  CheckClick checkClick = new CheckClick();
+  late final TextEditingController bodyController = TextEditingController(text: '면회 신청합니다.');
   late final TextEditingController refusalController = TextEditingController();
-    String _text = '';
-    final formKey = GlobalKey<FormState>();
+  String _text = '';
+  final formKey = GlobalKey<FormState>();
 
-    late int _userId;
+  late int _userId;
   late int _residentId;
   late int _facilityId;
 
@@ -78,6 +79,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
     if (response.statusCode == 200) {
       print("성공");
     } else {
+      print(response.statusCode);
       throw Exception();
     }
   }
@@ -95,111 +97,125 @@ class _VisitWritePageState extends State<VisitWritePage> {
       title: '면회 신청',
       buttonName: '접수',
       onPressed: () {
-        String bodyTemp = bodyController.text.replaceAll(' ', '');
-        if(bodyTemp.isEmpty){
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('할 말 내용을 입력해주세요.')));
-          return;
-        }
+        if(this.formKey.currentState!.validate()) {
+          this.formKey.currentState!.save();
 
-        this.formKey.currentState!.save();
+          final visitTempProvider = context.read<VisitTempProvider>();
+          final String selectedDate = visitTempProvider.selectedDate;
+          final String selectedTime = visitTempProvider.selectedTime;
 
-        showDialog(
-          context: context,
-          barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-          builder: (BuildContext context) {
-            return Consumer<VisitTempProvider>(
-              builder: (context, visitProvider, child) {
-                return AlertDialog(
-                  content: Text("면회를 신청하시겠습니까?"),
-                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                  actions: [
-                    TextButton(
-                      child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                      onPressed: () async {
-                        try {
-                          await addVisit(visitProvider.selectedDate, visitProvider.selectedTime);
-
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                            builder: (BuildContext context3) {
-                              return AlertDialog(
-                                content: Text('작성 완료'),
-                                insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('확인'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            }
-                          );
-                        } catch(e) {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Text("면회 신청 실패! 다시 시도해주세요"),
-                                insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('확인'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            }
-                          );
-                        }
+          if(selectedDate == '방문 날짜 선택') {
+            showDialog(
+                context: context,
+                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text("방문 날짜를 선택하세요"),
+                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                    actions: [
+                      TextButton(
+                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                        onPressed: () {
+                          Navigator.of(context).pop();
                         },
                       ),
                     ],
                   );
-              
-              }
+                }
             );
-            }
-        );
+          } else if(selectedTime == '방문 시간 선택') {
+            showDialog(
+                context: context,
+                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text("방문 시간을 선택하세요"),
+                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                    actions: [
+                      TextButton(
+                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                }
+            );
+          } else {
+            showDialog(
+                context: context,
+                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                builder: (BuildContext context) {
+                  return Consumer<VisitTempProvider>(
+                      builder: (context, visitProvider, child) {
+                        return AlertDialog(
+                          content: Text("면회를 신청하시겠습니까?"),
+                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          actions: [
+                            TextButton(
+                              child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                              onPressed: () async {
+                                try {
+                                  if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                    return ;
+                                  }
+                                  await addVisit(visitProvider.selectedDate, visitProvider.selectedTime);
 
-        // //TODO: ------------------------ 면회신청 완료 누르면 실행되어야 할 부분
-        // Navigator.pop(context);
+                                  showToast('작성 완료');
+                                  Navigator.of(context).pop();
+                                } catch(e) {
+                                  showToast('면회 신청 실패! 다시 시도해주세요');
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                            ),
+                          ],
+                        );
 
-        //TODO: ------------------------
-        // Future.delayed(Duration(milliseconds: 300), () {
-        //   bodyController.text = '면회 신청합니다.'; //TextFormField 처음으로 초기화
-        // });
+                      }
+                  );
+                }
+            );
+          }
+
+
+        }
+
       },
-      body: ListView(
-        children: [
-          //TODO: 날짜, 할말(메모) 만들기
-          text('날짜'),
-          SelectedDatePage(),
-          text('방문 시간'),
-          SelectedTimePage(),
-          text('할 말'),
-          textFormField(),
-        ],
-      ),
+      body: Container(
+        color: Colors.white,
+        child: ListView(
+          children: [
+            //TODO: 날짜, 할말(메모) 만들기
+            text('방문 날짜'),
+            SelectedDatePage(),
+            SizedBox(height: 10,),
+            text('방문 시간'),
+            SelectedTimePage(),
+            SizedBox(height: 10,),
+            text('할 말 (최대 500글자까지 작성 가능)'),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: textFormField(),
+            ),
+
+          ],
+        ),
+      )
     );
       
   }
 
-    //할 말
+  //할 말
   Widget textFormField() {
     return Form(
       // padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -211,23 +227,25 @@ class _VisitWritePageState extends State<VisitWritePage> {
           maxLines: 100,
           inputFormatters: [LengthLimitingTextInputFormatter(500)], //최대 500글자까지 작성 가능
           textAlignVertical: TextAlignVertical.center,
-          decoration: const InputDecoration(
-            labelStyle: TextStyle(color: Colors.black54),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(width: 2, color: Colors.red),
+              ),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(width: 1, color: Colors.transparent),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            filled: true,
-            fillColor: Color(0xfff2f3f6),
-            //fillColor: Colors.greenAccent,
-          ),
+            validator: (value) {
+              if(value!.isEmpty) { return '내용을 입력하세요'; }
+              else { return null; }
+            },
           onSaved: (value) {
             _text = value!;
           }
@@ -239,24 +257,12 @@ class _VisitWritePageState extends State<VisitWritePage> {
     //글자 출력
   Widget text(String text) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 6),
-      child: Text('$text'),
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
+      child: Text('$text',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        //textScaleFactor: 1.2,
+      ),
     );
   }
-
-  
-  // //글쓰기 버튼
-  // Widget writeButton(){
-  //   return FloatingActionButton(
-  //     focusColor: Colors.white54,
-  //     backgroundColor: themeColor.getColor(),
-  //     elevation: 0,
-  //     focusElevation: 0,
-  //     highlightElevation: 0,
-  //     hoverElevation: 0,
-  //     onPressed: () { pageAnimation(context, VisitWritePage()); },
-  //     child: Icon(Icons.create_rounded, color: Colors.white),
-  //   );
-  // }
 
 }

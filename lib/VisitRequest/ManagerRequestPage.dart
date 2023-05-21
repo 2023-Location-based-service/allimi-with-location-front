@@ -11,6 +11,7 @@ import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
+import '../Supplementary/CustomClick.dart';
 
 String backendUrl = Backend.getUrl();
 
@@ -36,6 +37,7 @@ class ManagerRequestPage extends StatefulWidget {
 
 class _ManagerRequestPageState extends State<ManagerRequestPage> {
   final formKey = GlobalKey<FormState>();
+  CheckClick checkClick = new CheckClick();
   late final TextEditingController bodyController = TextEditingController(text: '면회 신청합니다.');
   late final TextEditingController refusalController = TextEditingController();
   String selectedHour = '시간 선택';
@@ -45,6 +47,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
   late int _facilityId;
   late String _userRole;
   String _rejectReason = '';
+  String? stateText;
 
   @override
   void initState() {
@@ -117,8 +120,9 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('면회 목록')),
+      backgroundColor: Color(0xfff8f8f8), //배경색
       body: RequestList(),
-      floatingActionButton: writeButton(),
+      floatingActionButton: getButton()
     );
   }
 
@@ -236,7 +240,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                     child: TextFormField(
                                       controller: refusalController,
                                       validator: (value) {
-                                        if(value!.isEmpty) return '면회 거절 사유를 입력하세요.';
+                                        if(value!.isEmpty) return '면회 거절 사유를 입력하세요';
                                       },
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
                                       minLines: 1,
@@ -257,16 +261,22 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                   actions: [
                                     TextButton(child: Text('취소',
                                       style: TextStyle(color: themeColor.getMaterialColor())),
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       }),
                                     TextButton(child: Text('예',
                                       style: TextStyle(color: themeColor.getMaterialColor())),
+                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                       onPressed: () async {
                                         if(this.formKey.currentState!.validate()) {
                                           this.formKey.currentState!.save();
 
                                           try {
+                                            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                              return ;
+                                            }
+
                                             await reject(_visitList[index]['visit_id']);
                                             setState(() {
                                               getVisitList(_userId);
@@ -278,7 +288,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                               barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
-                                                  content: Text("실패하였습니다. 다시 시도해주세요"),
+                                                  content: Text("실패하였습니다 다시 시도해주세요"),
                                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                   actions: [
                                                     TextButton(
@@ -307,7 +317,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                     
                     if (_userRole == 'PROTECTOR')
                       OutlinedButton(
-                        child: Text('취소'),
+                        child: Text('취소', style: TextStyle(color: Colors.grey),),
                         onPressed: (){
                           showDialog(
                             context: context,
@@ -315,17 +325,23 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                               AlertDialog(
                                 content: const Text('면회 신청을 취소하시겠습니까?'),
                                 actions: [
-                                  TextButton(child: Text('아니요',
+                                  TextButton(child: Text('아니오',
                                       style: TextStyle(color: themeColor.getMaterialColor())),
+                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       }),
                                   TextButton(child: Text('예',
                                       style: TextStyle(color: themeColor.getMaterialColor())),
+                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                       onPressed: () {
                                         try {
                                           // visit approve event
                                           // await addAllim(userProvider.uid, residentProvider.facility_id);
+
+                                          if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                            return ;
+                                          }
 
                                           showDialog(
                                             context: context,
@@ -428,13 +444,19 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                       
                   ],
                 ),
+
+
                 Text(_visitList[index]['residentName'].toString() + " 님(" + _visitList[index]['visitorName'] + " 보호자님)"), //TODO: ㅇㅇㅇ 보호자님 출력
                 Text(_visitList[index]['texts']), //TODO: 할 말 출력
                 Divider(thickness: 0.5),
+                if (_visitList[index]['state'] == 'WAITING')
+                  Text('면회 수락 대기 중입니다.', style: TextStyle(color: Colors.grey)),
+                if (_visitList[index]['state'] == 'APPROVED')
+                  Text('면회 수락되었습니다. 제때 방문하세요.', style: TextStyle(color: themeColor.getColor())),
                 if (_visitList[index]['state'] == 'REJECTED')
-                  Text(_visitList[index]['state'] + ": " + _visitList[index]['rejReason'], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
-                if (_visitList[index]['state'] != 'REJECTED')
-                  Text(_visitList[index]['state'], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
+                  Text("거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
+                // if (_visitList[index]['state'] != 'REJECTED')
+                //   Text(_visitList[index]['state'], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
               ],
               //'2022.12.23'
               // '16:00'
@@ -452,25 +474,20 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
   }
 
   //글쓰기 버튼
-  Widget writeButton(){
+  Widget getButton(){
 
     if (_userRole == 'PROTECTOR') {
-      return FloatingActionButton(
-      focusColor: Colors.white54,
-      backgroundColor: themeColor.getColor(),
-      elevation: 0,
-      focusElevation: 0,
-      highlightElevation: 0,
-      hoverElevation: 0,
-      onPressed: () async { 
+      return writeButton(
+          context: context,
+        onPressed: () async {
+            await awaitPageAnimation(context, VisitWritePage(userId: _userId, residentId: _residentId, facilityId: _facilityId));
 
-        final value = await Navigator.push(context, 
-          MaterialPageRoute(builder: (context) => VisitWritePage(userId: _userId, residentId: _residentId, facilityId: _facilityId)));
+          // await Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => VisitWritePage(userId: _userId, residentId: _residentId, facilityId: _facilityId)));
 
-        getVisitList(_userId);
-      },
-      child: Icon(Icons.create_rounded, color: Colors.white),
-    );
+          getVisitList(_userId);
+        },
+      );
     } else {
       return Container();
     }

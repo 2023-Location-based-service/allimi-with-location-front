@@ -39,6 +39,7 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
     return Container(
       child:
       DropdownButton<String>(
+        dropdownColor: Colors.white,
         value: selectedValue,
         items: items.map((e) => DropdownMenuItem(
             value: e,
@@ -97,6 +98,7 @@ class _AllimSecondDropdownState extends State<AllimSecondDropdown> {
     return Container(
       child:
       DropdownButton<String>(
+        dropdownColor: Colors.white,
         value: selectedValue,
         items: items.map((e) => DropdownMenuItem(
             value: e,
@@ -154,6 +156,7 @@ class _NoticeDropdownState extends State<NoticeDropdown> {
       color: Colors.white,
       child: DropdownButton<String>(
         isExpanded: true,
+        dropdownColor: Colors.white,
         value: selectedValue,
         underline: SizedBox.shrink(),
         items: items.map((e) => DropdownMenuItem(

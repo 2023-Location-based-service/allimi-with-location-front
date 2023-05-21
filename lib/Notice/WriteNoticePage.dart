@@ -8,13 +8,14 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/Supplementary/DropdownWidget.dart';
 import 'package:test_data/provider/NoticeTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
-
+import '../Supplementary/CustomClick.dart';
 ThemeColor themeColor = ThemeColor();
 
 String backendUrl = "https://allimi-fydfi.run.goorm.site/v2/";
@@ -27,7 +28,7 @@ class WriteNoticePage extends StatefulWidget {
 }
 
 class _WriteNoticePageState extends State<WriteNoticePage> {
-
+  CheckClick checkClick = new CheckClick();
   final formKey = GlobalKey<FormState>();
   String _title = '';
   String _contents = '';
@@ -109,61 +110,50 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                           actions: [
                             TextButton(
                               child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             TextButton(
                               child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                               onPressed: () async {
                                 try {
+                                  if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                    return ;
+                                  }
                                   bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
                                   await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);
                                   
                                   _pickedImgs = [];
 
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context3) {
-                                        return AlertDialog(
-                                          content: Text('작성 완료'),
-                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('확인'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                  );
+                                  showToast('작성이 완료되었습니다');
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 } catch(e) {
 
                                   print(e);
 
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          content: Text("공지사항 업로드 실패! 다시 시도해주세요"),
-                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('확인'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                  );
+                                  showToast('공지사항 업로드 실패! 다시 시도해주세요');
+                                  // showDialog(
+                                  //     context: context,
+                                  //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                  //     builder: (BuildContext context) {
+                                  //       return AlertDialog(
+                                  //         content: Text("공지사항 업로드 실패! 다시 시도해주세요"),
+                                  //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                  //         actions: [
+                                  //           TextButton(
+                                  //             child: const Text('확인'),
+                                  //             onPressed: () {
+                                  //               Navigator.of(context).pop();
+                                  //             },
+                                  //           ),
+                                  //         ],
+                                  //       );
+                                  //     }
+                                  // );
                                 }
                               },
                             ),
@@ -182,12 +172,12 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                 children: [
 
                   Container(
-                    padding: EdgeInsets.fromLTRB(8, 0, 10, 0),
+                    padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
                     color: Colors.white,
                     child: Row(
                       children: [
-                        Icon(Icons.info_rounded, size: 18, color: Colors.grey),
-                        Text(' 중요한 공지는 중요 태그를 사용해보세요', style: TextStyle(color: Colors.grey)),
+                        Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                        Text(' 중요한 공지는 중요 태그를 사용해보세요', style: TextStyle(color: themeColor.getColor())),
                       ],
                     ),
                   ),
@@ -197,9 +187,9 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                   //getTitle(),
                   //SizedBox(height: 8),
                   getBody(),
-
+                  SizedBox(height: 8),
                   getPicture(context),
-
+                  SizedBox(height: 20),
                 ],
               ),
               buttonName: '완료'
@@ -278,13 +268,15 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
               width: 100,
               height: 100,
               child: DottedBorder(
-                  color: Colors.grey,
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(5),
+                  color: Colors.grey.shade300,
                   child: Container(
                     child: (index == 0)? Center(child: addImages(context)) : Stack(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(5),
                             image: (index == 0)? null : DecorationImage(
                                 fit: BoxFit.cover,
                                 image: FileImage(File(_pickedImgs[index - 1].path))
@@ -296,7 +288,13 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                             right: 3,
                             child: GestureDetector(
                               child: Container(
-                                child: Icon(Icons.cancel_rounded, color: Colors.black54,),
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(Icons.cancel_rounded, color: Colors.black54, size: 20,),
                               ),
                               onTap: () {
                                 _pickedImgs.removeAt(index - 1);

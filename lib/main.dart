@@ -64,6 +64,8 @@ class _MyAppState extends State<MyApp> {
         textTheme: TextTheme(
           bodyText1: TextStyle(color: Colors.black),
         ),
+        // splashColor: Colors.grey.shade300, //물결효과 적용
+        // highlightColor: Colors.grey.shade300,
       ),
       debugShowCheckedModeBanner: false,
       home: Consumer<UserProvider>(

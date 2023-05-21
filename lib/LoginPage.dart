@@ -189,9 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                         Spacer(),
                         TextButton (
                           child: Text('회원가입', style: TextStyle(color: Colors.grey)),
-                          style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
-                          ),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
                           onPressed: () async {
                             await Navigator.push(
                               context,

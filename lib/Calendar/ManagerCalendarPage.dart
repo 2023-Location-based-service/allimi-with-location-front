@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
+import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
+import '../Supplementary/CustomClick.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
@@ -28,6 +31,8 @@ class Schedule {
 }
 
 class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
+  final formKey = GlobalKey<FormState>();
+  CheckClick checkClick = new CheckClick();
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDate;
@@ -149,17 +154,29 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
             lastDay: DateTime(2100),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
+            daysOfWeekHeight: 20,
             headerStyle: HeaderStyle(
               titleCentered: true,
               titleTextFormatter: (date, locale) => DateFormat.yMMMMd(locale).format(date),
               formatButtonVisible: false,
               titleTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              headerPadding: const EdgeInsets.symmetric(vertical: 4),
+              //headerPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10), // 요일 부분의 여백 설정
+              headerPadding: const EdgeInsets.symmetric(vertical: 0),
               leftChevronIcon: const Icon(Icons.arrow_left, size: 40),
               rightChevronIcon: const Icon(Icons.arrow_right, size: 40),
             ),
             calendarStyle: CalendarStyle(
-              markerDecoration : const BoxDecoration(
+              markersMaxCount: 1,
+              //cellPadding  : const EdgeInsets.all(0),
+              todayDecoration : BoxDecoration( //오늘 날짜
+                color: Color(0xff5BB193).withOpacity(0.6),
+                shape: BoxShape.circle,
+              ),
+              selectedDecoration : const BoxDecoration( //선택 날짜
+                color: Color(0xff5BB193),
+                shape: BoxShape.circle,
+              ),
+              markerDecoration: const BoxDecoration(
                 color: Colors.red,
                 shape: BoxShape.circle,
               ),
@@ -215,66 +232,43 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
       );
     } else {
       return OutlinedButton(
-        child: Text('삭제'),
+        child: Text('삭제', style: TextStyle(color: Colors.grey)),
+        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
         onPressed: () {
           showDialog(
             context: context,
             barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
             builder: (BuildContext context) {
               return AlertDialog(
-                content: Text("정말 삭제하시겠습니까?"),
+                content: Text('삭제하시겠습니까?'),
                 insetPadding:
                     const EdgeInsets.fromLTRB(0, 80, 0, 80),
                 actions: [
                   TextButton(
-                    child: Text(
-                      '취소',
-                      style: TextStyle(
-                        color: themeColor.getColor(),
-                      ),
-                    ),
+                    child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
                   TextButton(
-                    child: Text(
-                      '삭제',
-                      style: TextStyle(
-                        color: themeColor.getColor(),
-                      ),
-                    ),
+                    child: Text('삭제', style: TextStyle(color: themeColor.getColor())),
+                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                     onPressed: () async {
                       try {
+                        if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                          return ;
+                        }
+
                         await deleteSchedule(sc.scheduleId);
                         setState(() {
                           mySelectedEvents = {};
                           getSchedules();
                         });
-                        
 
-                        showDialog(
-                          context: context,
-                          barrierDismissible:
-                              false, // 바깥 영역 터치시 닫을지 여부
-                          builder: (BuildContext context3) {
+                        showToast('삭제되었습니다');
+                        Navigator.of(context).pop();
 
-                            return AlertDialog(
-                              content: Text('삭제되었습니다'),
-                              insetPadding:
-                                  const EdgeInsets.fromLTRB(
-                                      0, 80, 0, 80),
-                              actions: [
-                                TextButton(
-                                  child: const Text('확인'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          });
                       } catch (e) {
                         debugPrint("@@@@@ososfdo");
                       }
@@ -328,37 +322,44 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              controller: titleController,
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(
-                labelText: '내용',
+            Form(
+              key: formKey,
+              child: TextFormField(
+                controller: titleController,
+                validator: (value) {
+                  if(value!.isEmpty) return '내용을 입력하세요';
+                },
+                textCapitalization: TextCapitalization.words,
+                minLines: 1,
+                maxLines: 10,
+                decoration: const InputDecoration(
+                  hintText: '내용',
+                  filled: true,
+                  fillColor: Colors.white,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
               ),
-            ),
-            // TextField(
-            //   controller: descpController,
-            //   textCapitalization: TextCapitalization.words,
-            //   decoration: const InputDecoration(labelText: 'Description'),
-            // ),
+            )
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('취소'),
+            child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
           ),
           TextButton(
-            child: const Text('추가'),
+            child: Text('추가', style: TextStyle(color: themeColor.getColor())),
+            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
             onPressed: () async {
-              if (titleController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('내용을 입력하세요'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-                return;
-              } else {
+
+              if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                return ;
+              }
+
+              if(this.formKey.currentState!.validate()) {
+
                 await addSchedule(_selectedDate, titleController.text);
 
                 setState(() {
@@ -370,6 +371,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
                 Navigator.pop(context);
                 return;
               }
+
             },
           )
         ],

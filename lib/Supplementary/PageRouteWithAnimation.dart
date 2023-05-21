@@ -37,7 +37,7 @@ void pageAnimation(BuildContext context, Widget page) {
 
 Future<void> awaitPageAnimation(BuildContext context, Widget page) async {
   PageRouteWithAnimation pageRouteWithAnimation = PageRouteWithAnimation(page);
-  Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
+  await Navigator.push(context, pageRouteWithAnimation.slideRitghtToLeft());
 }
 
 //커스텀 페이지 위젯
@@ -48,7 +48,7 @@ Widget customPage({
   required String buttonName,
 }) {
   return Scaffold(
-    //backgroundColor: Colors.white,
+    backgroundColor: Color(0xfff8f8f8), //배경색
     appBar: AppBar(
       title: Text(title),
       actions: [
@@ -58,11 +58,10 @@ Widget customPage({
             width: 50,
             height: 10,
             child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Color(0xff5BB193),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
+              style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.white10),
+                  backgroundColor: MaterialStateProperty.all(Color(0xff5BB193)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)))
               ),
               child: Text('$buttonName', style: TextStyle(color: Colors.white), textScaleFactor: 1.0,),
               onPressed: onPressed,
@@ -86,8 +85,9 @@ Widget display({
         height: 50,
         margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
         decoration: BoxDecoration(
-          color: Color(0xfff2f3f6),
-          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: Colors.grey.shade300, width: 1)
         ),
         child: Padding(
           padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
@@ -105,15 +105,18 @@ Widget display({
 }
 
 //FloatingActionButton 커스텀
-Widget writeButton(BuildContext context, Widget widget ){
+Widget writeButton({
+  required BuildContext context,
+  required VoidCallback onPressed,
+    }){
   return FloatingActionButton(
     focusColor: Colors.white54,
-    backgroundColor:  Color(0xff5BB193),
+    backgroundColor: Color(0xff5BB193),
     elevation: 0,
     focusElevation: 0,
     highlightElevation: 0,
     hoverElevation: 0,
-    onPressed: () { pageAnimation(context, widget); },
+    onPressed: onPressed,
     child: Icon(Icons.create_rounded, color: Colors.white),
   );
 }

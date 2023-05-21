@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
@@ -14,7 +15,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http; //http 사용
-
+import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 String backendUrl = Backend.getUrl();
 
@@ -28,7 +29,7 @@ class WriteAllimPage extends StatefulWidget {
 }
 
 class _WriteAllimPageState extends State<WriteAllimPage> {
-
+  CheckClick checkClick = new CheckClick();
   final formKey = GlobalKey<FormState>();
   String selectedPerson = "수급자 선택";
   int selectedPersonId = 0;
@@ -124,7 +125,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                     actions: [
                       TextButton(
-                        child: const Text('확인'),
+                        child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -148,14 +150,20 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                     actions: [
                       TextButton(
-                        child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                        child: Text('취소',style: TextStyle(color: themeColor.getColor())),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                       TextButton(
-                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                        child: Text('확인',style: TextStyle(color: themeColor.getColor())),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () async {
+                          if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                            return ;
+                          }
+
                           _subContents = '';
                           _subContents += allimTempProvider.morning + '\n';
                           _subContents += allimTempProvider.launch + '\n';
@@ -166,26 +174,10 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                             await addAllim(userProvider.uid, residentProvider.facility_id);
                             _pickedImgs = [];
 
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              builder: (BuildContext context3) {
-                                return AlertDialog(
-                                  content: Text('작성 완료'),
-                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('확인'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
+                            showToast('작성 완료되었습니다');
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+
                           } catch(e) {
                             showDialog(
                               context: context,
@@ -288,7 +280,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
               children: [
                 Icon(Icons.info_rounded, color: Colors.grey),
                 SizedBox(width: 5),
-                Text('알림장을 전송할 수급자를 선택해주세요.'),
+                Text('알림장을 전송할 수급자를 선택해주세요'),
               ],
             ),
           ),
@@ -395,6 +387,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                 ],
               ),
             ),
+
+
             dropList('아침', AllimFirstDropdown(menu: "아침")),
             dropList('점심', AllimFirstDropdown(menu: "점심")),
             dropList('저녁', AllimFirstDropdown(menu: "저녁")),
@@ -403,97 +397,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         )
     );
   }
-
-  // //사진
-  // Widget testpicture() {
-  //   return Container(
-  //     height: 130,
-  //     color: Colors.white,
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         //사진 추가하는 버튼
-  //         GestureDetector(
-  //           child: Padding(
-  //             padding: EdgeInsets.fromLTRB(8, 8, 8, 3),
-  //             child: Row(
-  //               children: [
-  //                 Icon(Icons.camera_alt_rounded, size: 18, color: themeColor.getColor()),
-  //                 Text(' 사진 추가', style: TextStyle(color: themeColor.getColor())),
-  //               ],
-  //             ),
-  //           ),
-  //           onTap: () {
-
-  //             //TODO: 사진 추가 기능
-  //             print('사진 추가하기 Tap');
-  //             showModalBottomSheet(
-  //                 context: context,
-  //                 builder: (context) {
-  //                   return Wrap(
-  //                     children: [
-  //                       ListTile(leading: Icon(Icons.camera_alt, color: Colors.grey), title: Text('카메라'),
-  //                         onTap: () {
-  //                           //TODO: 카메라 누르면 실행되어야 할 부분
-  //                         },
-  //                       ),
-  //                       ListTile(leading: Icon(Icons.photo_library, color: Colors.grey), title: Text('갤러리'),
-  //                         onTap: () {
-  //                           //TODO: 갤러리 누르면 실행되어야 할 부분
-  //                         },
-  //                       ),
-  //                     ],
-  //                   );
-  //                 }
-  //             );
-
-  //           },
-  //         ),
-
-
-  //         //사진 리스트 출력
-  //         // Container(
-  //         //   height: 96,
-  //         //   color: Colors.white,
-  //         //   child: ListView.builder(
-  //         //       shrinkWrap: true,
-  //         //       scrollDirection: Axis.horizontal,
-  //         //       itemCount: imgList.length,
-  //         //       itemBuilder: (BuildContext context, int index) {
-  //         //         return Container(
-  //         //             margin: EdgeInsets.fromLTRB(3,8,3,8),
-  //         //             child: Stack(
-  //         //               children: [
-  //         //                 ClipRRect(
-  //         //                   child: Image.asset(
-  //         //                     width: 80,
-  //         //                     height: 80,
-  //         //                     imgList[index], //TODO: 사진 리스트
-  //         //                     fit: BoxFit.cover,
-  //         //                   ),
-  //         //                 ),
-  //         //                 Positioned(
-  //         //                   top: 3,
-  //         //                   right: 3,
-  //         //                   child: GestureDetector(
-  //         //                     child: Container(
-  //         //                       child: Icon(Icons.cancel_rounded, color: Colors.black54),
-  //         //                     ),
-  //         //                     onTap: () {
-  //         //                       print('사진 삭제 Tap'); //TODO: 사진 삭제 기능
-  //         //                     },
-  //         //                   ),
-  //         //                 ),
-  //         //               ],
-  //         //             )
-  //         //         );
-  //         //       }
-  //         //   ),
-  //         // ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget getPicture(BuildContext context) {
     return Container(
@@ -512,13 +415,15 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
               width: 100,
               height: 100,
               child: DottedBorder(
-                  color: Colors.grey,
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(5),
+                  color: Colors.grey.shade300,
                   child: Container(
                     child: (index == 0)? Center(child: addImages(context)) : Stack(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(5),
                             image: (index == 0)? null : DecorationImage(
                                 fit: BoxFit.cover,
                                 image: FileImage(File(_pickedImgs[index - 1].path))
@@ -530,7 +435,13 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                             right: 3,
                             child: GestureDetector(
                               child: Container(
-                                child: Icon(Icons.cancel_rounded, color: Colors.black54,),
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                ),
+                                child: Icon(Icons.cancel_rounded, color: Colors.black54, size: 20,),
                               ),
                               onTap: () {
                                 _pickedImgs.removeAt(index - 1);

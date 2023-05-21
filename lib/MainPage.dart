@@ -9,7 +9,6 @@ import 'Notice/ManagerNoticePage.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'Allim/ManagerAllimPage.dart';
-import 'VisitRequest/UserRequestPage.dart';
 import 'VisitRequest/ManagerRequestPage.dart';
 import 'AddPersonPage.dart';
 import 'Comment/UserCommentPage.dart';
@@ -43,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
-        title: Text('요양원 알리미', textScaleFactor: 1.0, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text('요양원 알리미'),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
