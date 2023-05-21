@@ -227,15 +227,18 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                       ),
                       onPressed: () async {
                         
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.scale, //화면 전환 시 움직이는거 설정
-                            child: ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
-                              invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                              userId: userProvider.uid),
-                          ),
-                        );
+                        // await Navigator.push(
+                        //   context,
+                        //   PageTransition(
+                        //     type: PageTransitionType.scale, //화면 전환 시 움직이는거 설정
+                        //     child: ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                        //       invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                        //       userId: userProvider.uid),
+                        //   ),
+                        // ); // - 에러남
+                        await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                            invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                            userId: userProvider.uid));
 
                       },
                       child: Text('초대받기',style: TextStyle(color: themeColor.getColor()),)

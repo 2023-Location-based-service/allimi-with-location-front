@@ -15,6 +15,7 @@ class SelectedTimePage extends StatefulWidget {
 class _SelectedTimePageState extends State<SelectedTimePage> {
   String selectedTime = '방문 시간 선택';
 
+
   @override
   Widget build(BuildContext context) {
     return selectedCalendar();
@@ -32,19 +33,21 @@ class _SelectedTimePageState extends State<SelectedTimePage> {
             child: ListView.builder(
               itemCount: 24,
               itemBuilder: (BuildContext context, int index) {
-                String hour = index < 10 ? '0$index' : '$index';
-                return ListTile(
-                  title: Text('$hour:00'),
-                  onTap: () {
-                    setState(() {
-                      selectedTime = '$hour:00';
-                      Provider.of<VisitTempProvider>(context, listen: false).setTime(selectedTime);
-                      //04:00
-                    });
-                    
-                    Navigator.of(context).pop();
-                  },
-                );
+                if (index >= 9 && index <= 18) {
+                  String hour = index < 10 ? '0$index' : '$index';
+                  return ListTile(
+                    title: Text('$hour:00'),
+                    onTap: () {
+                      setState(() {
+                        selectedTime = '$hour:00';
+                        Provider.of<VisitTempProvider>(context, listen: false).setTime(selectedTime); //04:00
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  );
+                } else {
+                  return Container(); // 범위 이외의 시간은 빈 컨테이너로 반환하여 표시되지 않게 함
+                }
               },
             ),
           ),
@@ -64,7 +67,7 @@ class _SelectedTimePageState extends State<SelectedTimePage> {
         title: selectedTime,
         onTap: () async {
           await _showTimePicker(context);
-          
+          //Provider.of<VisitTempProvider>(context, listen: false).setDate(selectedTime);
         }
     );
   }

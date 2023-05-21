@@ -11,7 +11,7 @@ class SelectedDatePage extends StatefulWidget {
 }
 
 class _SelectedDatePageState extends State<SelectedDatePage> {
-  String selectedDate = '날짜 선택';
+  String selectedDate = '방문 날짜 선택';
 
   @override
   Widget build(BuildContext context) {
