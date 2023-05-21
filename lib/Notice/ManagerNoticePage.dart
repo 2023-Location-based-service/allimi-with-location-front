@@ -117,7 +117,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
       return writeButton(
           context: context,
           onPressed: () async {
-            await awaitPageAnimation(context, WriteNoticePage());
+            await awaitPageAnimation(context, WriteNoticePage(residentId: _residentId));
             getNotice(_facilityId);
           });
     }

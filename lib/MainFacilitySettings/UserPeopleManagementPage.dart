@@ -67,13 +67,13 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
   }
 
   //추가
-  Future<void> addInmate(residentId, uid, facilityId) async {
-    debugPrint("@@입소자를 내가 담당하는 입소자로 추가 백엔드 요청 보냄: " + residentId.toString() + "/" + uid.toString() + "/" + facilityId.toString());
+  Future<void> addInmate(targetId, workerId, facilityId) async {
+    debugPrint("@@입소자를 내가 담당하는 입소자로 추가 백엔드 요청 보냄: ");
     var url = Uri.parse(Backend.getUrl() + 'nhResidents/manage');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
-      "nhresident_id": residentId,
-      "user_id": uid,
+      "resdient_id": targetId,
+      "worker_id": workerId,
       "facility_id": facilityId,
     });
   
@@ -82,7 +82,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
     debugPrint("@@추가에서 statuscode: " + response.statusCode.toString());
   
     if (response.statusCode == 200) {
-      print("성공: $residentId $uid $facilityId"); //39 10 1
+      print("성공: "); //39 10 1
     } else {
       throw Exception();
     }
@@ -190,7 +190,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
                                           child: Text('예',style: TextStyle(color: themeColor.getColor())),
                                           onPressed: () async {
                                             try {
-                                              await addInmate(_residents[index]['id'], userProvider.uid, residentProvider.facility_id);
+                                              await addInmate(_residents[index]['id'], residentProvider.resident_id, residentProvider.facility_id);
                                             } catch(e) { print('에러@@@@@@@@@@@@@@@@@@@' + e.toString()); }
 
                                             Navigator.of(context).pop();

@@ -112,7 +112,7 @@ class _SetupPageState extends State<SetupPage> {
           return ListTile(
               title: Text('입소자 정보'),
               leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
-              onTap: () { pageAnimation(context, WorkerInmateProfilePage(uid: userProvider.uid, facilityId: residentProvider.facility_id)); });
+              onTap: () { pageAnimation(context, WorkerInmateProfilePage(uid: userProvider.uid, facilityId: residentProvider.facility_id , residentId: residentProvider.resident_id,)); });
         }
     );
   }

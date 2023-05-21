@@ -11,10 +11,11 @@ import '../provider/ResidentProvider.dart';
 import 'package:test_data/Backend.dart';
 
 class WorkerInmateProfilePage extends StatefulWidget {
-  const WorkerInmateProfilePage({Key? key, required this.facilityId, required this.uid}) : super(key: key);
+  const WorkerInmateProfilePage({Key? key, required this.facilityId, required this.uid, required this.residentId}) : super(key: key);
 
   final int facilityId;
   final int uid;
+  final int residentId;
 
   @override
   State<WorkerInmateProfilePage> createState() => _WorkerInmateProfilePageState();
@@ -23,6 +24,7 @@ class WorkerInmateProfilePage extends StatefulWidget {
 class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
   late int _userId;
   late int _facilityId;
+  late int _residentId;
   List<Map<String, dynamic>> _residentList = [];
 
   @override
@@ -30,19 +32,15 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
     super.initState();
     _userId = widget.uid;
     _facilityId = widget.facilityId;
-    addInmate(_facilityId, _userId);
+    _residentId = widget.residentId;
+    addInmate();
   }
 
-  Future<void> addInmate(facilityId, uid) async {
+  Future<void> addInmate() async {
     debugPrint("@@내가 담당하는 입소자 정보 받아오는 백엔드 요청 ");
-    var url = Uri.parse(Backend.getUrl() + 'nhResidents/manage/list');
+    var url = Uri.parse(Backend.getUrl() + 'nhResidents/manage/' + _residentId.toString());
     var headers = {'Content-type': 'application/json'};
-    var body = json.encode({
-      "facility_id": facilityId,
-      "user_id": uid,
-    });
-
-    final response = await http.post(url, headers: headers, body: body);
+    final response = await http.get(url, headers: headers);
 
     debugPrint("@@statusCode: " + response.statusCode.toString());
 

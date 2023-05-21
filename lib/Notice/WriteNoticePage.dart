@@ -20,7 +20,8 @@ import '../Supplementary/CustomClick.dart';
 ThemeColor themeColor = ThemeColor();
 
 class WriteNoticePage extends StatefulWidget {
-  const WriteNoticePage({Key? key}) : super(key: key);
+  const WriteNoticePage({Key? key, required this.residentId}) : super(key: key);
+  final int residentId;
 
   @override
   State<WriteNoticePage> createState() => _WriteNoticePageState();
@@ -31,9 +32,18 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   final formKey = GlobalKey<FormState>();
   String _title = '';
   String _contents = '';
+    late int _residentId = 0;
+
 
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _residentId = widget.residentId;
+  }
+
 
 
   // 앨범
@@ -57,15 +67,14 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   }
 
   // 서버에 이미지, 공지사항 업로드
-  Future<void> addNotice(userId, facilityId, importantTest) async {
+  Future<void> addNotice(importantTest) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path,
         contentType: MediaType("image", "jpg"))).toList();
 
     var formData = FormData.fromMap({
       "allnotice": MultipartFile.fromString(
         jsonEncode({
-          "user_id": userId,
-          "facility_id": facilityId,
+          "writer_id": _residentId,
           "title": _title,
           "contents": _contents,
           "important": importantTest}),
@@ -123,7 +132,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                                 return ;
                               }
                               bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
-                              await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);
+                              await addNotice(_importantTest);
                               
                               _pickedImgs = [];
 

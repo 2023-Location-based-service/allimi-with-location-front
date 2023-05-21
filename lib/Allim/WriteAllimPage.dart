@@ -80,12 +80,12 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
   }
 
   // 서버에 알림장 업로드 + 사진 업로드
-  Future<void> addAllim(userId, facilityId) async {
+  Future<void> addAllim(int residentId) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
     var formData = FormData.fromMap({
       "notice": MultipartFile.fromString(
         jsonEncode(
-          {"user_id": userId, "nhresident_id": selectedPersonId, "facility_id": facilityId, 
+          {"writer_id": residentId, "target_id": selectedPersonId,
            "contents": _contents, "sub_contents": _subContents}),
         contentType: MediaType.parse('application/json'),
       ),
@@ -106,8 +106,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<UserProvider, ResidentProvider,AllimTempProvider> (
-      builder: (context, userProvider, residentProvider,allimTempProvider, child) {
+    return Consumer2<ResidentProvider,AllimTempProvider> (
+      builder: (context, residentProvider,allimTempProvider, child) {
         return customPage(
           title: '알림장 작성',
           buttonName: '완료',
@@ -170,7 +170,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                           _subContents += allimTempProvider.medication;
 
                           try {
-                            await addAllim(userProvider.uid, residentProvider.facility_id);
+                            await addAllim(residentProvider.resident_id);
                             _pickedImgs = [];
 
                             showToast('작성 완료되었습니다');
