@@ -169,6 +169,7 @@ class _SignupPageState extends State<SignupPage> {
                           
 
                               showToast(errorMessage);
+                              return;
                             }
 
                             showDialog(
