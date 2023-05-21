@@ -194,7 +194,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 2:
         print('일정표 Tap');
-        pageAnimation(context, new ManagerCalendarPage(userId: _userId, userRole: _userRole,  facility_id: _facility_id)); //일단은 요양보호사 버전으로
+        pageAnimation(context, new ManagerCalendarPage(userId: _userId, userRole: _userRole, residentId: _resident_id, facility_id: _facility_id)); //일단은 요양보호사 버전으로
         break;
       case 3:
         print('면회신청 Tap');

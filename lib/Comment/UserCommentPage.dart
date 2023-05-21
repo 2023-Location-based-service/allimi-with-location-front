@@ -135,7 +135,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                       ),
                       Row(
                       children: [
-                        Text(_CommentList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')),
+                        Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.')),
                         Spacer(),
                         if (_userRole == 'PROTECTOR')
                           Container(

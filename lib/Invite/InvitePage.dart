@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/exception/InvitAlreadyExistsException.dart';
+import 'package:test_data/exception/ResidentAlreadyExistsException.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
@@ -73,9 +75,13 @@ class _InvitePageState extends State<InvitePage> {
     });
 
     final response = await http.post(url, headers: headers, body: body);
-
+    
     if (response.statusCode == 200) {
       print("성공");
+    } else if (response.statusCode == 409) { //이미 같은 초대장이 존재
+      throw InvitAlreadyExistsException("이미 존재하는 초대장");
+    } else if (response.statusCode == 406) { //이미 존재하는 입소자(초대장 보낼 이유가 없지)
+      throw ResidentAlreadyExistsException("이미 존재하는 입소자");
     } else {
       throw Exception();
     }
@@ -129,13 +135,21 @@ class _InvitePageState extends State<InvitePage> {
                                           try {
                                             await addInvite(_phoneNumUsers[index]['user_id'], residentProvider.facility_id, result);
                                           } catch(e) {
-                                            Navigator.of(context, rootNavigator: true).pop();
+                                            String errorMessage = '';
+
+                                            if (e.runtimeType == InvitAlreadyExistsException)  //중복된 아이디
+                                              errorMessage = '이미 동일한 초대장이 존재합니다';
+                                            else if (e.runtimeType == ResidentAlreadyExistsException)
+                                              errorMessage = '이미 등록된 사용자입니다';
+                                            else
+                                              errorMessage = '초대하기에 실패하였습니다';
+
                                             showDialog(
                                                 context: context,
                                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                                 builder: (BuildContext context) {
                                                   return AlertDialog(
-                                                    content: Text("초대하기에 실패하였습니다."),
+                                                    content: Text(errorMessage),
                                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                     actions: [
                                                       TextButton(
@@ -149,6 +163,8 @@ class _InvitePageState extends State<InvitePage> {
                                                   );
                                                 }
                                             );
+
+                                            return;
                                           }
                                           
                                           Navigator.of(context, rootNavigator: true).pop();

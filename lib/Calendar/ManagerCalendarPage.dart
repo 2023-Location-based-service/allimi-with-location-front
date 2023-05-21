@@ -12,8 +12,9 @@ import 'package:test_data/Backend.dart';
 ThemeColor themeColor = ThemeColor();
 
 class ManagerCalendarPage extends StatefulWidget {
-  const ManagerCalendarPage({Key? key, required this.userId, required this.userRole, required this.facility_id}) : super(key: key);
+  const ManagerCalendarPage({Key? key, required this.userId, required this.residentId, required this.userRole, required this.facility_id}) : super(key: key);
 
+  final int residentId;
   final int facility_id;
   final String userRole;
     final int userId;
@@ -41,6 +42,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
   late int _facility_id;
   late int _userId;
   late String _userRole;
+    late int _resident_id;
 
   final titleController = TextEditingController();
   final descpController = TextEditingController();
@@ -51,6 +53,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
     super.initState();
     _selectedDate = _focusedDay;
     _facility_id = widget.facility_id;
+    _resident_id = widget.residentId;
     _userId = widget.userId;
     _userRole = widget.userRole;
     loadPreviousEvents();
@@ -126,8 +129,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
     var url = Uri.parse(Backend.getUrl() + 'schedule');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
-      "user_id": _userId,
-      "facility_id": _facility_id,
+      "writer_id": _resident_id,
       "date": DateFormat('yyyy-MM-dd').format(date),
       "texts": texts,
     });

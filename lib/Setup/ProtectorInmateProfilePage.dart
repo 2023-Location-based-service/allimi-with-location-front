@@ -34,7 +34,7 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
     debugPrint("@@@@@ 유저의 입소자들 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-        Uri.parse('https://allimi-fydfi.run.goorm.site/v3/' + 'nhResidents/users/' + _userId.toString()),
+        Uri.parse(Backend.getUrl() + 'nhResidents/users/' + _userId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

@@ -19,8 +19,10 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
   static List<Map<String, dynamic>> _employee = [];
 
   Future<void> getFacilityEmployee(int facilityId) async {
+        debugPrint("@@@@@@@직원목록 받아오기 백엔드 요청/" + facilityId.toString());
+
     http.Response response = await http.get(
-        Uri.parse(Backend.getUrl() + "nhResidents/facility/" + facilityId.toString()),
+        Uri.parse(Backend.getUrl() + "nhResidents/workers/" + facilityId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
