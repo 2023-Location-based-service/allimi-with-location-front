@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/CustomLoading.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
+import 'MainFacilitySettings/UserPeopleManagementPage.dart';
 import 'MainPage.dart';
 import 'SignupPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
@@ -128,6 +129,9 @@ class _LoginPageState extends State<LoginPage> {
                           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                         ),
                         onPressed: () async {
+                          if (checkClick.isRedundentClick(DateTime.now())) {
+                            return;
+                          }
                           if (validateAndSave() == true) {
                             var data;
 

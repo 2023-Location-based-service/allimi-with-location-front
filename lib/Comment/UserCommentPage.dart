@@ -68,22 +68,14 @@ class _UserCommentPageState extends State<UserCommentPage> {
   }
 
   Widget _getFAB() {
-    debugPrint("@@@ UserRole: " + _userRole);
     if (_userRole == 'PROTECTOR') {
-      return FloatingActionButton(
-        backgroundColor: themeColor.getColor(),
+      return writeButton(
+        context: context,
         onPressed: () async {
           //글쓰기 화면으로 이동
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WriteCommentPage()),
-            );
-
+          await awaitPageAnimation(context, WriteCommentPage());
           getComment(_residentId);
-        
         },
-        child: const Icon(Icons.create),
       );
     }
     else
@@ -134,74 +126,71 @@ class _UserCommentPageState extends State<UserCommentPage> {
                         child: Text(_CommentList[index]['nhr_name'] + " 보호자님"),
                       ),
                       Row(
-                      children: [
-                        Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.')),
-                        Spacer(),
-                        if (_userRole == 'PROTECTOR')
-                          Container(
-                            child: OutlinedButton(
-                                // style: OutlinedButton.styleFrom(
-                                //     side: BorderSide(color: themeColor.getColor(),)
-                                // ),
-                                onPressed: () async {
-                                  _letterId = _CommentList[index]['letter_id'];
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: Text("정말 삭제하시겠습니까?"),
-                                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                        actions: [
-                                          TextButton(
-                                            child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
-                                            onPressed: () async {
-                                              if (checkClick.isRedundentClick(DateTime.now())) {
-                                                return;
-                                              }
-                                              try {
-                                                await deleteComment(_letterId);
-
-                                                showDialog(
-                                                context: context,
-                                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                                builder: (BuildContext context3) {
-                                                  return AlertDialog(
-                                                    content: Text('삭제되었습니다'),
-                                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                    actions: [
-                                                      TextButton(
-                                                        child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                          Navigator.of(context).pop();
-
-                                                        },
-                                                      ),
-                                                    ],
-                                                  );
-                                                }
-                                              );
-                                              } catch(e) {
-                                              }
-
+                        children: [
+                          Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.')),
+                          Spacer(),
+                          if (_userRole == 'PROTECTOR')
+                            Container(
+                              child: OutlinedButton(
+                                  onPressed: () async {
+                                    _letterId = _CommentList[index]['letter_id'];
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Text("정말 삭제하시겠습니까?"),
+                                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                          actions: [
+                                            TextButton(
+                                              child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
                                               },
                                             ),
-                                          ],
-                                        );
-                                      }
-                                  );
-                                },
-                                child: Text('삭제',style: TextStyle(color: Colors.grey))
+                                            TextButton(
+                                              child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                                              onPressed: () async {
+                                                if (checkClick.isRedundentClick(DateTime.now())) {
+                                                  return;
+                                                }
+                                                try {
+                                                  await deleteComment(_letterId);
+
+                                                  showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                  builder: (BuildContext context3) {
+                                                    return AlertDialog(
+                                                      content: Text('삭제되었습니다'),
+                                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                      actions: [
+                                                        TextButton(
+                                                          child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                            Navigator.of(context).pop();
+
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                                );
+                                                } catch(e) {
+                                                }
+
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    );
+                                  },
+                                  child: Text('삭제',style: TextStyle(color: Colors.grey))
+                              ),
                             ),
-                          ),
-                      ],
+                        ],
                     ),
                     Column(
                       children: [

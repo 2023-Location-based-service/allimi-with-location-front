@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:test_data/exception/LoginIdAlreadyExistsException.dart';
 import 'LoginPage.dart';
+import 'MainFacilitySettings/UserPeopleManagementPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
@@ -152,6 +153,9 @@ class _SignupPageState extends State<SignupPage> {
                             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                         ),
                         onPressed: () async {
+                          if (checkClick.isRedundentClick(DateTime.now())) {
+                            return;
+                          }
                           if (validateAndSave() == true) {
                             var data;
                             //회원가입 요청
@@ -181,7 +185,7 @@ class _SignupPageState extends State<SignupPage> {
                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                   actions: [
                                     TextButton(
-                                      child: const Text('확인'),
+                                      child: Text('확인',style: TextStyle(color: themeColor.getColor()),),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop();

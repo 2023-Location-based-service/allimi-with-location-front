@@ -76,19 +76,13 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       return Container();
     }
     else {
-      return FloatingActionButton(
-        backgroundColor: themeColor.getColor(),
+      return writeButton(
+        context: context,
         onPressed: () async{
           //글쓰기 화면으로 이동
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WriteAllimPage()),
-          );
-
+          await awaitPageAnimation(context, WriteAllimPage());
           getNotice(_residentId);
         },
-        child: const Icon(Icons.create),
     );
     }
   }
@@ -127,7 +121,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                     //어떤 보호자에게 썼는지
                                     Container(
                                       child: Text(
-                                        _noticeList[index]['target_name'] + " 입소자님",
+                                        _noticeList[index]['target_name'] + " 보호자님",
                                         //textScaleFactor: 0.9,
                                         //style: TextStyle(fontSize: 12,),
                                       ),
