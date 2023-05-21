@@ -12,7 +12,6 @@ import '../provider/ResidentProvider.dart'; //http 사용
 import 'package:test_data/Backend.dart';
 
 import '../provider/UserProvider.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 CheckClick checkClick = new CheckClick();
 class userPeopleManagementPage extends StatefulWidget {
@@ -29,7 +28,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
 
   Future<void> getFacilityResident(int facilityId) async {
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "nhResidents/protectors/" + facilityId.toString()),
+        Uri.parse(Backend.getUrl() + "nhResidents/protectors/" + facilityId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -47,7 +46,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
 
   Future<void> getResidentDetail(int nhrId) async {
     http.Response response = await http.get(
-        Uri.parse("https://allimi-fydfi.run.goorm.site/v3/nhResidents/" + nhrId.toString()),
+        Uri.parse(Backend.getUrl() + nhrId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -70,7 +69,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
   //추가
   Future<void> addInmate(residentId, uid, facilityId) async {
     debugPrint("@@입소자를 내가 담당하는 입소자로 추가 백엔드 요청 보냄: " + residentId.toString() + "/" + uid.toString() + "/" + facilityId.toString());
-    var url = Uri.parse(backendUrl + 'nhResidents/manage');
+    var url = Uri.parse(Backend.getUrl() + 'nhResidents/manage');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "nhresident_id": residentId,
@@ -92,7 +91,7 @@ class _userPeopleManagementPageState extends State<userPeopleManagementPage> wit
   //삭제
   Future<void> deleteresident(int userId, int nhresidentId) async {
     http.Response response = await http.delete(
-        Uri.parse(backendUrl + 'nhResidents'),
+        Uri.parse(Backend.getUrl() + 'nhResidents'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

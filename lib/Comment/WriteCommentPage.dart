@@ -9,7 +9,6 @@ import '/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class WriteCommentPage extends StatefulWidget {
@@ -26,7 +25,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
 
   // 서버에 한마디 업로드
   Future<void> addComment(userId, nhresidentid, facilityId) async {
-    var url = Uri.parse(backendUrl + 'letters');
+    var url = Uri.parse(Backend.getUrl() + 'letters');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "user_id": userId,

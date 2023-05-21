@@ -9,7 +9,6 @@ import '../Supplementary/CustomClick.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class ManagerCalendarPage extends StatefulWidget {
@@ -61,7 +60,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
   Future<void> deleteSchedule(int scheduleId) async {
     debugPrint("@@@스케줄 삭제 요청 보냄");
     http.Response response = await http.delete(
-      Uri.parse(backendUrl+ 'schedule'),
+      Uri.parse(Backend.getUrl()+ 'schedule'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -83,7 +82,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
   Future<void> getSchedules() async {
     debugPrint("월별 일정표 목록 요청 보냄");
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "schedule/" + _facility_id.toString()+ "/" + _focusedDay.toString().substring(0, 7)),
+      Uri.parse(Backend.getUrl() + "schedule/" + _facility_id.toString()+ "/" + _focusedDay.toString().substring(0, 7)),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -124,7 +123,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
 
   // 서버에 스케줄 업로드
   Future<void> addSchedule(date, texts) async {
-    var url = Uri.parse(backendUrl + 'schedule');
+    var url = Uri.parse(Backend.getUrl() + 'schedule');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "user_id": _userId,

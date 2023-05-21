@@ -13,7 +13,6 @@ import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import '../Supplementary/CustomClick.dart';
 
-String backendUrl = Backend.getUrl();
 
 ThemeColor themeColor = ThemeColor();
 
@@ -99,7 +98,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
     debugPrint("@@@@@ 면회신청목록 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "visit/" + userId.toString()),
+      Uri.parse(Backend.getUrl() + "visit/" + userId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

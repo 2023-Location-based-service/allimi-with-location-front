@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
 ThemeColor themeColor = ThemeColor();
-String backendUrl = Backend.getUrl();
 //사용자의 초대대기 화면
 
 class InvitationListPage extends StatefulWidget {
@@ -44,7 +43,7 @@ class _InvitationListPageState extends State<InvitationListPage> {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "users/invitations/" + userId.toString()),
+      Uri.parse(Backend.getUrl() + "users/invitations/" + userId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

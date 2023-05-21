@@ -9,7 +9,6 @@ import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 
 class WorkerInmateProfilePage extends StatefulWidget {
   const WorkerInmateProfilePage({Key? key, required this.facilityId, required this.uid}) : super(key: key);
@@ -36,7 +35,7 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
 
   Future<void> addInmate(facilityId, uid) async {
     debugPrint("@@내가 담당하는 입소자 정보 받아오는 백엔드 요청 ");
-    var url = Uri.parse(backendUrl + 'nhResidents/manage/list');
+    var url = Uri.parse(Backend.getUrl() + 'nhResidents/manage/list');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "facility_id": facilityId,

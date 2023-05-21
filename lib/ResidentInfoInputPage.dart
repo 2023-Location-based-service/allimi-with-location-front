@@ -12,7 +12,6 @@ import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 //입소자 정보 입력 화면
 
 class ResidentInfoInputPage extends StatefulWidget {
@@ -100,7 +99,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     //입소자추가 psot
     http.Response response1 = await http.post(
       
-      Uri.parse(backendUrl+ 'nhResidents'),
+      Uri.parse(Backend.getUrl()+ 'nhResidents'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -121,7 +120,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
       debugPrint("@@@@@ 초대 수락하는 백앤드 url 보냄");
 
     http.Response response2 = await http.post(
-      Uri.parse(backendUrl+ 'invitations/approve'),
+      Uri.parse(Backend.getUrl()+ 'invitations/approve'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

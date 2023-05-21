@@ -20,7 +20,6 @@ import 'package:http/http.dart' as http; //http 사용
 import 'package:test_data/Backend.dart';
 import '../Supplementary/CustomClick.dart';
 
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class ModificationNoticePage extends StatefulWidget {
@@ -153,7 +152,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
 
     var response = null;
     try {
-      response = await dio.patch(backendUrl + 'all-notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+      response = await dio.patch(Backend.getUrl() + 'all-notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
     }catch(e) {
       debugPrint("@@response .. : " + e.toString());
       throw new Exception();

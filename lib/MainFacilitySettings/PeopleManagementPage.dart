@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import '../provider/ResidentProvider.dart';
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 class PeopleManagementPage extends StatefulWidget {
   const PeopleManagementPage({Key? key}) : super(key: key);
 
@@ -21,7 +20,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
 
   Future<void> getFacilityEmployee(int facilityId) async {
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "nhResidents/facility/" + facilityId.toString()),
+        Uri.parse(Backend.getUrl() + "nhResidents/facility/" + facilityId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -40,7 +39,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
   //삭제
   Future<void> deleteEmployee(int userId,int nhresidentId) async {
     http.Response response = await http.delete(
-        Uri.parse(backendUrl+ 'nhResidents'),
+        Uri.parse(Backend.getUrl()+ 'nhResidents'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

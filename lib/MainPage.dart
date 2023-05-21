@@ -117,8 +117,6 @@ class _MainPageState extends State<MainPage> {
                 userRoleString = '직원님';
               else if (userProvider.urole == 'MANAGER')
                 userRoleString = '시설장님';
-              else if (userProvider.urole == 'ADMIN')
-                userRoleString = '관리자님';
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +186,7 @@ class _MainPageState extends State<MainPage> {
     switch(index) {
       case 0:
         print('공지사항 Tap');
-        pageAnimation(context, new ManagerNoticePage(userRole: _userRole, facilityId: _facility_id)); //일단은 요양보호사 버전으로
+        pageAnimation(context, new ManagerNoticePage(userRole: _userRole,  residentId: _resident_id, facilityId: _facility_id)); //일단은 요양보호사 버전으로
         break;
       case 1:
         print('알림장 Tap');

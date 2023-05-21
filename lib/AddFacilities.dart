@@ -17,7 +17,6 @@ import 'package:test_data/Backend.dart';
 
 import 'Supplementary/PageRouteWithAnimation.dart';
 ThemeColor themeColor = ThemeColor();
-String backendUrl = Backend.getUrl();
 
 class AddFacilities extends StatefulWidget {
   const AddFacilities({Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
     debugPrint("@@@@ 시설 추가하는 백엔드 url보냄: " + _personName);
     //입소자추가 psot
     http.Response response1 = await http.post(
-      Uri.parse(backendUrl+ 'facilities'),
+      Uri.parse(Backend.getUrl() + 'facilities'),
       headers: <String, String>{
         'Content-Type': 'application/json;charset=UTF-8',
         'Accept-Charset': 'utf-8'
@@ -72,7 +71,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
     debugPrint("@@@@ 시설장 resident 추가하는 백엔드 url보냄");
 
     http.Response response2 = await http.post(
-      Uri.parse(backendUrl+ 'nhResidents'),
+      Uri.parse(Backend.getUrl()+ 'nhResidents'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

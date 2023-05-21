@@ -8,7 +8,6 @@ import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 
 // List<String> home =['금오요양원', '빛나요양원', '강아지요양원'];
 // List<String> person =['구현진 님', '주효림 님', '권태연 님'];
@@ -44,7 +43,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
     debugPrint("@@@@@ 유저의 입소자들 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl+ 'nhResidents/' + _userId.toString()),
+      Uri.parse(Backend.getUrl()+ 'nhResidents/' + _userId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -71,7 +70,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
   Future<void> changeResident(int residentId) async {
     debugPrint("@@@@@ 유저의 현재 입소자를 변경하는 백앤드 url 보냄");
     http.Response response = await http.patch(
-      Uri.parse(backendUrl+ 'users/nhrs'),
+      Uri.parse(Backend.getUrl()+ 'users/nhrs'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

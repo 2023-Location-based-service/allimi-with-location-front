@@ -16,7 +16,6 @@ import 'package:http/http.dart' as http; //http 사용
 
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class ManagerNoticePage extends StatefulWidget {
@@ -24,11 +23,12 @@ class ManagerNoticePage extends StatefulWidget {
     Key? key,
     required this.userRole,
     required this.facilityId,
-
+    required this.residentId,
   }) : super(key: key);
 
   final String userRole;
   final int facilityId;
+  final int residentId;
 
   @override
   State<ManagerNoticePage> createState() => _ManagerNoticePageState();
@@ -36,13 +36,22 @@ class ManagerNoticePage extends StatefulWidget {
 
 class _ManagerNoticePageState extends State<ManagerNoticePage> {
   late int _facilityId;
+  late int _residentId;
   String _userRole = '';
   List<Map<String, dynamic>> _noticeList = [];
+
+    @override
+  void initState() {
+    _userRole = widget.userRole;
+    _facilityId = widget.facilityId;
+    _residentId = widget.residentId;
+    getNotice(_facilityId);
+  }
 
   //삭제
   Future<void> deleteNotice(int allnoticeId) async {
     http.Response response = await http.delete(
-        Uri.parse(backendUrl+ 'all-notices'),
+        Uri.parse(Backend.getUrl()+ 'all-notices'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -63,7 +72,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     debugPrint("@@@@@ 공지사항 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "all-notices/" + facility_id.toString()),
+        Uri.parse(Backend.getUrl() + "all-notices/facilities/" + facility_id.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -85,12 +94,6 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     });
   }
 
-  @override
-  void initState() {
-    _userRole = widget.userRole;
-    _facilityId = widget.facilityId;
-    getNotice(_facilityId);
-  }
 
   @override
   Widget build(BuildContext context) {

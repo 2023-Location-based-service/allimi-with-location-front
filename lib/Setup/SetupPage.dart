@@ -18,7 +18,6 @@ import 'package:test_data/provider/UserProvider.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 
 ThemeColor themeColor = ThemeColor();
 
@@ -42,7 +41,7 @@ class _SetupPageState extends State<SetupPage> {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "users/invitations/" + _userId.toString()),
+        Uri.parse(Backend.getUrl() + "users/invitations/" + _userId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

@@ -7,7 +7,6 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 //시설 기본정보 설정 화면
 
 class ResidentDetailPage extends StatefulWidget {
@@ -25,7 +24,7 @@ class _ResidentDetailPageState extends State<ResidentDetailPage> {
     debugPrint("@@@@입소자 상세정보 받아오기 백엔드");
 
     http.Response response = await http.get(
-        Uri.parse('https://allimi-fydfi.run.goorm.site/v3/' + 'nhResidents/' + _residentId.toString()),
+        Uri.parse(Backend.getUrl() + 'nhResidents/' + _residentId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

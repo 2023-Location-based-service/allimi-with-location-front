@@ -1,8 +1,8 @@
 class Backend {
-    static String url = "https://allimi-fydfi.run.goorm.site/";
+    static String url = "http://13.125.215.50:8080/";
 
     static String getUrl() {
-        return url + "v2/";
+        return url + "v4/";
     }
 
     static String getDomain() {

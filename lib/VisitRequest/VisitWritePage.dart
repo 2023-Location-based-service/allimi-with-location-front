@@ -12,7 +12,6 @@ import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 // List<String> dateList =['2022.12.23','2022.12.24','2022.12.25'];
 // List<String> timeList =['16:00', '13:00', '11:00'];

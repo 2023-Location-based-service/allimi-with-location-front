@@ -11,7 +11,6 @@ import 'WriteNoticePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:test_data/Backend.dart';
 import '../Supplementary/CustomClick.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class NoticeDetailPage extends StatefulWidget {

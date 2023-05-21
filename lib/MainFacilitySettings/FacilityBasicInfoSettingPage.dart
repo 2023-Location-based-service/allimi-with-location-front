@@ -7,7 +7,6 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 //시설 기본정보 설정 화면
 
 class FacilityBasicInfoPage extends StatefulWidget {
@@ -26,7 +25,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
 
     debugPrint("@@@love" + _facilityId.toString());
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "facilities/" + _facilityId.toString()),
+        Uri.parse(Backend.getUrl() + "facilities/" + _facilityId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

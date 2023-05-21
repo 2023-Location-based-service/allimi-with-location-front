@@ -17,7 +17,6 @@ import '/Supplementary/CustomWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 ThemeColor themeColor = ThemeColor();
-String backendUrl = Backend.getUrl();
 
 class LoginPage extends StatefulWidget {
   @override
@@ -220,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
 Future<String> getResidentInfo(int userId) async {
   debugPrint("@@@@@ 입소자 정보 받아오는 백앤드 url 보냄");
   http.Response response = await http.get(
-    Uri.parse(backendUrl+ 'users/nhrs/' + userId.toString()),
+    Uri.parse(Backend.getUrl()+ 'users/nhrs/' + userId.toString()),
     headers: <String, String>{
       'Content-Type': 'application/json',
       'Accept-Charset': 'utf-8'
@@ -235,7 +234,7 @@ Future<String> loginRequest(String id, String password) async {
     debugPrint("@@@@@ 로그인 백앤드 url 보냄");
 
   http.Response response = await http.post(
-    Uri.parse(backendUrl+"login"),
+    Uri.parse(Backend.getUrl()+"login"),
     headers: <String, String>{
       'Content-Type': 'application/json',
       'Accept-Charset': 'utf-8'

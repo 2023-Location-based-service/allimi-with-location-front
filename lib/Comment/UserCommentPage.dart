@@ -8,7 +8,6 @@ import 'WriteCommentPage.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class UserCommentPage extends StatefulWidget {
@@ -35,7 +34,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
   Future<void> getComment(int residentId) async {
     debugPrint("한마디 목록 요청 보냄");
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "letters/" + residentId.toString()),
+        Uri.parse(Backend.getUrl() + "letters/" + residentId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -93,7 +92,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
 
   Future<void> deleteComment(int letterid) async {
     http.Response response = await http.delete(
-        Uri.parse(backendUrl+ 'letters'),
+        Uri.parse(Backend.getUrl()+ 'letters'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

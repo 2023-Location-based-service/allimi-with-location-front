@@ -9,7 +9,6 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 //초대목록화면
 
 ThemeColor themeColor = ThemeColor();
@@ -27,7 +26,7 @@ class _InviteListPageState extends State<InviteListPage> {
 
   Future<void> getInvitation(int facilityId) async {
     http.Response response = await http.get(
-        Uri.parse(backendUrl + "invitations/" + facilityId.toString()),
+        Uri.parse(Backend.getUrl() + "invitations/" + facilityId.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
@@ -45,7 +44,7 @@ class _InviteListPageState extends State<InviteListPage> {
 
   Future<void> deleteInvitation(int invitId) async {
     http.Response response = await http.delete(
-        Uri.parse(backendUrl+ 'invitations'),
+        Uri.parse(Backend.getUrl()+ 'invitations'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'

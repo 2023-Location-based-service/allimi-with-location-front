@@ -10,7 +10,6 @@ import 'package:test_data/Backend.dart';
 
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/ThemeColor.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class ManagerSecondAllimPage extends StatefulWidget {
@@ -43,7 +42,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   Future<void> deleteNotice(int noticeId) async {
 
     http.Response response = await http.delete(
-      Uri.parse(backendUrl+ 'notices'),
+      Uri.parse(Backend.getUrl()+ 'notices'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -63,7 +62,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
       debugPrint("@@@@@ 공지사항 상세정보 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl+ 'notices/detail/' + _noticeId.toString()),
+      Uri.parse(Backend.getUrl()+ 'notices/detail/' + _noticeId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

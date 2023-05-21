@@ -15,7 +15,6 @@ import '../Supplementary/ThemeColor.dart';
 import 'package:google_fonts/google_fonts.dart';
 ThemeColor themeColor = ThemeColor();
 
-String backendUrl = Backend.getUrl();
 //사용자의 초대대기 화면
 
 class InviteWaitPage extends StatefulWidget {
@@ -47,7 +46,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "users/invitations/" + userId.toString()),
+      Uri.parse(Backend.getUrl() + "users/invitations/" + userId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

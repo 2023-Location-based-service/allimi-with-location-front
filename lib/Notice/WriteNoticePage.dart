@@ -8,6 +8,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:test_data/Backend.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/Supplementary/DropdownWidget.dart';
 import 'package:test_data/provider/NoticeTempProvider.dart';
@@ -17,8 +18,6 @@ import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '../Supplementary/CustomClick.dart';
 ThemeColor themeColor = ThemeColor();
-
-String backendUrl = "https://allimi-fydfi.run.goorm.site/v2/";
 
 class WriteNoticePage extends StatefulWidget {
   const WriteNoticePage({Key? key}) : super(key: key);
@@ -77,7 +76,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
-    final response = await dio.post(backendUrl + 'all-notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+    final response = await dio.post(Backend.getUrl() + 'all-notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
 
     if (response.statusCode == 200) {
       print("성공");
@@ -91,108 +90,110 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
     return Consumer2<UserProvider, ResidentProvider> (
         builder: (context, userProvider, residentProvider, child) {
           return customPage(
-              title: '공지사항 작성',
-              onPressed: () async {
-                print('공지사항 작성 완료버튼 누름');
+            title: '공지사항 작성',
+            onPressed: () async {
+              print('공지사항 작성 완료버튼 누름');
 
 
-                if(this.formKey.currentState!.validate()) {
-                  this.formKey.currentState!.save();
+              if(this.formKey.currentState!.validate()) {
+                this.formKey.currentState!.save();
 
 
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text("공지사항을 업로드하시겠습니까?"),
-                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                          actions: [
-                            TextButton(
-                              child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                              onPressed: () async {
-                                try {
-                                  if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                    return ;
-                                  }
-                                  bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
-                                  await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);
-                                  
-                                  _pickedImgs = [];
+                showDialog(
+                  context: context,
+                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Text("공지사항을 업로드하시겠습니까?"),
+                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                      actions: [
+                        TextButton(
+                          child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                          onPressed: () async {
+                            try {
+                              if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                return ;
+                              }
+                              bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
+                              await addNotice(userProvider.uid, residentProvider.facility_id, _importantTest);
+                              
+                              _pickedImgs = [];
 
-                                  showToast('작성이 완료되었습니다');
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                } catch(e) {
+                              showToast('작성이 완료되었습니다');
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            } catch(e) {
 
-                                  print(e);
+                              print(e);
 
-                                  showToast('공지사항 업로드 실패! 다시 시도해주세요');
-                                  // showDialog(
-                                  //     context: context,
-                                  //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                  //     builder: (BuildContext context) {
-                                  //       return AlertDialog(
-                                  //         content: Text("공지사항 업로드 실패! 다시 시도해주세요"),
-                                  //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  //         actions: [
-                                  //           TextButton(
-                                  //             child: const Text('확인'),
-                                  //             onPressed: () {
-                                  //               Navigator.of(context).pop();
-                                  //             },
-                                  //           ),
-                                  //         ],
-                                  //       );
-                                  //     }
-                                  // );
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      }
-                  );
-
-
-
-                }
-
-
-              },
-              body: ListView(
-                children: [
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                        Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
-                        Text(' 중요한 공지는 중요 태그를 사용해보세요', style: TextStyle(color: themeColor.getColor())),
+                              showToast('공지사항 업로드 실패! 다시 시도해주세요');
+                              // showDialog(
+                              //     context: context,
+                              //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              //     builder: (BuildContext context) {
+                              //       return AlertDialog(
+                              //         content: Text("공지사항 업로드 실패! 다시 시도해주세요"),
+                              //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                              //         actions: [
+                              //           TextButton(
+                              //             child: const Text('확인'),
+                              //             onPressed: () {
+                              //               Navigator.of(context).pop();
+                              //             },
+                              //           ),
+                              //         ],
+                              //       );
+                              //     }
+                              // );
+                            }
+                          },
+                        ),
                       ],
-                    ),
-                  ),
-                  NoticeDropdown(menu: '공지사항', selected: '공지사항',),
+                    );
+                  }
+              
+                );
 
-                  SizedBox(height: 8),
-                  //getTitle(),
-                  //SizedBox(height: 8),
-                  getBody(),
-                  SizedBox(height: 8),
-                  getPicture(context),
-                  SizedBox(height: 20),
-                ],
-              ),
-              buttonName: '완료'
+
+
+              }
+
+
+            },
+            body: ListView(
+              children: [
+
+                Container(
+                  padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                      Text(' 중요한 공지는 중요 태그를 사용해보세요', style: TextStyle(color: themeColor.getColor())),
+                    ],
+                  ),
+                ),
+                NoticeDropdown(menu: '공지사항', selected: '공지사항',),
+
+                SizedBox(height: 8),
+                //getTitle(),
+                //SizedBox(height: 8),
+                getBody(),
+                SizedBox(height: 8),
+                getPicture(context),
+                SizedBox(height: 20),
+              ],
+            ),
+            buttonName: '완료'
+        
           );
         }
     );
@@ -201,52 +202,52 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   //제목 및 내용
   Widget getBody() {
     return Form(
-        key: formKey,
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: TextFormField(
-                validator: (value) {
-                  if(value!.isEmpty) { return '제목을 입력하세요'; }
-                  else { return null; }
-                },
-                decoration: const InputDecoration(
-                  hintText: '제목',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                ),
-                onSaved: (value) {
-                  _title = value!;
-                },
+      key: formKey,
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: TextFormField(
+              validator: (value) {
+                if(value!.isEmpty) { return '제목을 입력하세요'; }
+                else { return null; }
+              },
+              decoration: const InputDecoration(
+                hintText: '제목',
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
+              onSaved: (value) {
+                _title = value!;
+              },
             ),
-            SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              height: 430,
-              child: TextFormField(
-                validator: (value) {
-                  if(value!.isEmpty) { return '내용을 입력하세요'; }
-                  else { return null; }
-                },
-                maxLines: 1000,
-                decoration: const InputDecoration(
-                  hintText: '내용을 입력하세요',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                ),
-                onSaved: (value) {
-                  _contents = value!;
-                },
+          ),
+          SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            height: 430,
+            child: TextFormField(
+              validator: (value) {
+                if(value!.isEmpty) { return '내용을 입력하세요'; }
+                else { return null; }
+              },
+              maxLines: 1000,
+              decoration: const InputDecoration(
+                hintText: '내용을 입력하세요',
+                filled: true,
+                fillColor: Colors.white,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
+              onSaved: (value) {
+                _contents = value!;
+              },
             ),
-          ],
-        )
+          ),
+        ],
+      )
 
     );
   }

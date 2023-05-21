@@ -9,7 +9,6 @@ import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 
 class ProtectorInmateProfilePage extends StatefulWidget {
   const ProtectorInmateProfilePage({Key? key, required this.uid}) : super(key: key);

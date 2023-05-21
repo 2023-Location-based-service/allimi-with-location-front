@@ -17,7 +17,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http; //http 사용
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 
 ThemeColor themeColor = ThemeColor();
 
@@ -44,7 +43,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     debugPrint("@@@@@ 시설의 입소자 정보 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "nhResidents/protectors/" + facilityId.toString()),
+      Uri.parse(Backend.getUrl() + "nhResidents/protectors/" + facilityId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -95,7 +94,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
-    final response = await dio.post(backendUrl + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+    final response = await dio.post(Backend.getUrl() + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
 
     if (response.statusCode == 200) {
       print("성공");

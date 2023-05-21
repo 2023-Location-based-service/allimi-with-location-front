@@ -8,7 +8,6 @@ import 'ManagerSecondAllimPage.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 ThemeColor themeColor = ThemeColor();
 
 class ManagerAllimPage extends StatefulWidget {
@@ -36,7 +35,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       debugPrint("@@@@@ 공지사항 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "notices/" + residentId.toString()),
+      Uri.parse(Backend.getUrl() + "notices/" + residentId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'

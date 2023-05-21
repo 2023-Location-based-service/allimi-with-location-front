@@ -14,12 +14,11 @@ import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 ThemeColor themeColor = ThemeColor();
-String backendUrl = Backend.getUrl();
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
     debugPrint("@@@@@ 회원가입 백앤드 url 보냄");
 
   http.Response response = await http.post(
-    Uri.parse(backendUrl+"users"),
+    Uri.parse(Backend.getUrl()+"users"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

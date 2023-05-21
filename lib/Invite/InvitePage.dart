@@ -11,7 +11,6 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
 import 'package:test_data/Backend.dart';
-String backendUrl = Backend.getUrl();
 //초대하기 화면
 
 ThemeColor themeColor = ThemeColor();
@@ -47,7 +46,7 @@ class _InvitePageState extends State<InvitePage> {
     debugPrint("@@@@@ 전화번호로 user목록 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "users/phone-num/" + phoneNum),
+      Uri.parse(Backend.getUrl() + "users/phone-num/" + phoneNum),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -65,7 +64,7 @@ class _InvitePageState extends State<InvitePage> {
 
   // 서버에 초대하기 업로드
   Future<void> addInvite(phone_userId, facilityId, userRole) async {
-    var url = Uri.parse(backendUrl + 'invitations');
+    var url = Uri.parse(Backend.getUrl() + 'invitations');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
       "user_id": phone_userId,
