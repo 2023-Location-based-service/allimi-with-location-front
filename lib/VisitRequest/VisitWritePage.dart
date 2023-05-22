@@ -96,7 +96,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    content: Text("방문 날짜를 선택하세요"),
+                    content: Text("방문 날짜를 선택하세요!"),
                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                     actions: [
                       TextButton(
@@ -115,7 +115,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    content: Text("방문 시간을 선택하세요"),
+                    content: Text("방문 시간을 선택하세요!"),
                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                     actions: [
                       TextButton(

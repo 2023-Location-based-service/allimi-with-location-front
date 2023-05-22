@@ -11,7 +11,7 @@ import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart'; //http 사용
 import 'package:google_fonts/google_fonts.dart';
 import '../Supplementary/ThemeColor.dart';
-
+import '../Supplementary/CustomClick.dart';
 
 import 'package:test_data/Backend.dart';
 
@@ -33,7 +33,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   TextEditingController locationController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   TextEditingController personNameController = TextEditingController();
-
+  CheckClick checkClick = new CheckClick();
   String postCode = '우편번호';
   String _facilityName = '';
   String _location = '';
@@ -219,15 +219,18 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                 actions: [
                                   TextButton(
                                     child: Text('취소', style: TextStyle(color: themeColor.getColor())),
-                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   TextButton(
                                     child: Text('확인', style: TextStyle(color: themeColor.getColor())),
-                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                     onPressed: () async {
+                                      if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                        return ;
+                                      }
                                       try {
                                         await facilityRequest(_uid);
                                         showToast('시설 등록에 성공하였습니다');
