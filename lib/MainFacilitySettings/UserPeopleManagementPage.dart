@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/ThemeColor.dart';
@@ -8,19 +7,17 @@ import '../Supplementary/CustomClick.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/ResidentProvider.dart'; //http 사용
-
 import 'package:test_data/Backend.dart';
-
 import '../provider/UserProvider.dart';
+
 ThemeColor themeColor = ThemeColor();
 CheckClick checkClick = new CheckClick();
+
 class UserPeopleManagementPage extends StatefulWidget {
   const UserPeopleManagementPage({Key? key}) : super(key: key);
-
   @override
   State<UserPeopleManagementPage> createState() => _UserPeopleManagementPageState();
 }
-
 
 class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> with TickerProviderStateMixin {
   static List<Map<String, dynamic>> _residents = [];
@@ -46,7 +43,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
 
   Future<void> getResidentDetail(int nhrId) async {
     http.Response response = await http.get(
-      Uri.parse(Backend.getUrl() + nhrId.toString()),
+      Uri.parse(Backend.getUrl() + "nhResidents/" + nhrId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8'
@@ -60,6 +57,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
     setState(() {
       _residentsdetail =  parsedJson;
     });
+    print(response.statusCode);
     if (response.statusCode == 200)
       print('성공');
     else
@@ -260,11 +258,8 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                             },
                             child: Text('삭제',style: TextStyle(color: Colors.grey))
                         ),
-
                       ],
                     )
-
-
                   ],
                 ),
                 onTap: () async {
@@ -294,13 +289,13 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('입소자 이름'),),
+              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('입소자 이름'),),
               myDetailBox(_residentsdetail['resident_name']),
-              Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('입소자 생년월일'),),
+              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('입소자 생년월일'),),
               myDetailBox(_residentsdetail['birth']),
-              Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('보호자 이름'),),
+              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('보호자 이름'),),
               myDetailBox(_residentsdetail['protector_name']),
-              Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),child: Text('보호자 연락처'),),
+              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('보호자 연락처'),),
               myDetailBox(_residentsdetail['protector_phone_num'])
             ],
           )
@@ -313,7 +308,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
     return Container(
       width: double.infinity,
       height: 50,
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       decoration: BoxDecoration(
         color: Color(0xfff2f3f6),
         borderRadius: BorderRadius.circular(8),
