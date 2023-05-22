@@ -43,157 +43,164 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('💫', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
-                    SizedBox(height: 10),
-                    Text('요양원 알리미', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('로그인을 진행해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 50),
-                    TextFormField(
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
-                      ],
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.person_rounded, color: Colors.grey),
-                        hintText: '아이디',
-                        hintStyle: TextStyle(fontSize: 15),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+    return WillPopScope(
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('💫', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
+                      SizedBox(height: 10),
+                      Text('요양원 알리미', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('로그인을 진행해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 50),
+                      TextFormField(
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
+                        ],
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person_rounded, color: Colors.grey),
+                          hintText: '아이디',
+                          hintStyle: TextStyle(fontSize: 15),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(width: 2, color: Colors.red),
+                          ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        validator: (value) =>
+                        value!.isEmpty ? '아이디를 입력하세요' : null,
+                        onSaved: (value) => _id = value!,
+                      ), //아이디
+                      SizedBox(height: 7),
+                      TextFormField(
+                        obscureText: true,
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')), //한글 빼고 전부 입력 가능
+                        ],
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey,),
+                          hintText: '비밀번호',
+                          hintStyle: TextStyle(fontSize: 15),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(width: 2, color: Colors.red),
+                          ),
                         ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(width: 2, color: Colors.red),
-                        ),
-                      ),
-                      validator: (value) =>
-                      value!.isEmpty ? '아이디를 입력하세요' : null,
-                      onSaved: (value) => _id = value!,
-                    ), //아이디
-                    SizedBox(height: 7),
-                    TextFormField(
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.deny(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')), //한글 빼고 전부 입력 가능
-                      ],
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey,),
-                        hintText: '비밀번호',
-                        hintStyle: TextStyle(fontSize: 15),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(width: 2, color: Colors.red),
-                        ),
-                      ),
-                      validator: (value) =>
-                      value!.isEmpty ? '비밀번호를 입력하세요' : null,
-                      onSaved: (value) => _password = value!,
-                    ), //비번
-                    SizedBox(height: 100),
-                    TextButton (
-                        child: Container(
-                            width: double.infinity,
-                            child: Text('로그인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all(Colors.white10),
-                          backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
-                          padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
-                        ),
-                        onPressed: () async {
-                          if (checkClick.isRedundentClick(DateTime.now())) {
-                            return;
-                          }
-                          if (validateAndSave() == true) {
-                            var data;
-
-                            try {
-                              data = await loginRequest(_id, _password);
-                            } catch(e) {
-                              showToast('아이디 또는 비밀번호가 일치하지 않습니다');
+                        validator: (value) =>
+                        value!.isEmpty ? '비밀번호를 입력하세요' : null,
+                        onSaved: (value) => _password = value!,
+                      ), //비번
+                      SizedBox(height: 100),
+                      TextButton (
+                          child: Container(
+                              width: double.infinity,
+                              child: Text('로그인', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                          style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all(Colors.white10),
+                              backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                              padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                          ),
+                          onPressed: () async {
+                            if (checkClick.isRedundentClick(DateTime.now())) {
                               return;
                             }
+                            if (validateAndSave() == true) {
+                              var data;
 
-                            var json_data = json.decode(data);
+                              try {
+                                data = await loginRequest(_id, _password);
+                              } catch(e) {
+                                showToast('아이디 또는 비밀번호가 일치하지 않습니다');
+                                return;
+                              }
 
-                            var userRole = '';
-                            if (json_data['user_role'] != null) {
-                              userRole = json_data['user_role'];
+                              var json_data = json.decode(data);
+
+                              var userRole = '';
+                              if (json_data['user_role'] != null) {
+                                userRole = json_data['user_role'];
+                                var residentData = await getResidentInfo(json_data['user_id']);
+                                var jsonResidentData = json.decode(residentData);
+
+                                Provider.of<ResidentProvider>(context, listen:false)
+                                    .setInfo(jsonResidentData['nhr_id'], jsonResidentData['facility_id'], jsonResidentData['facility_name'], jsonResidentData['resident_name'],
+                                    json_data['user_role'],'', '');
+
+                              }
+
                               var residentData = await getResidentInfo(json_data['user_id']);
                               var jsonResidentData = json.decode(residentData);
 
-                              Provider.of<ResidentProvider>(context, listen:false)
-                                  .setInfo(jsonResidentData['nhr_id'], jsonResidentData['facility_id'], jsonResidentData['facility_name'], jsonResidentData['resident_name'],
-                                  json_data['user_role'],'', '');
+                              Provider.of<UserProvider>(context, listen:false)
+                                  .setInfo(json_data['user_id'], userRole, _id, json_data['phone_num'], json_data['user_name']);
 
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .getData();
                             }
-
-                            var residentData = await getResidentInfo(json_data['user_id']);
-                            var jsonResidentData = json.decode(residentData);
-
-                            Provider.of<UserProvider>(context, listen:false)
-                                .setInfo(json_data['user_id'], userRole, _id, json_data['phone_num'], json_data['user_name']);
-
-                            Provider.of<UserProvider>(context, listen: false)
-                                .getData();
                           }
-                        }
-                    ),
-                    Row(
-                      children: [
-                        Text('처음 오셨나요?', style: TextStyle(color: Colors.grey)),
-                        Spacer(),
-                        TextButton (
-                          child: Text('회원가입', style: TextStyle(color: Colors.grey)),
-                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: SignupPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        Icon(Icons.chevron_right_rounded, color: Colors.grey,),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Row(
+                        children: [
+                          Text('처음 오셨나요?', style: TextStyle(color: Colors.grey)),
+                          Spacer(),
+                          TextButton (
+                            child: Text('회원가입', style: TextStyle(color: Colors.grey)),
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                            onPressed: () async {
+                              await Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: SignupPage(),
+                                ),
+                              );
+                            },
+                          ),
+                          Icon(Icons.chevron_right_rounded, color: Colors.grey,),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      )
-    );
+        )
+    ),
+      onWillPop: () async {
+        // 휴대폰의 뒤로 가기 버튼 눌렀을 때 앱을 종료하도록 설정
+        // 또는 원하는 다른 동작 수행
+        SystemNavigator.pop();
+        return false; // false를 반환하여 기본 동작인 이전 화면으로 돌아가는 것을 막음
+      },);
   }
 }
 
