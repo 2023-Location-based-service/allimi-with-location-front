@@ -158,14 +158,12 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
               titleTextFormatter: (date, locale) => DateFormat.yMMMMd(locale).format(date),
               formatButtonVisible: false,
               titleTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              //headerPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10), // 요일 부분의 여백 설정
               headerPadding: const EdgeInsets.symmetric(vertical: 0),
               leftChevronIcon: const Icon(Icons.arrow_left, size: 40),
               rightChevronIcon: const Icon(Icons.arrow_right, size: 40),
             ),
             calendarStyle: CalendarStyle(
               markersMaxCount: 1,
-              //cellPadding  : const EdgeInsets.all(0),
               todayDecoration : BoxDecoration( //오늘 날짜
                 color: Color(0xff5BB193).withOpacity(0.6),
                 shape: BoxShape.circle,
@@ -252,11 +250,10 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
                     child: Text('삭제', style: TextStyle(color: themeColor.getColor())),
                     style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                     onPressed: () async {
+                      if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                        return ;
+                      }
                       try {
-                        if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                          return ;
-                        }
-
                         await deleteSchedule(sc.scheduleId);
                         setState(() {
                           mySelectedEvents = {};

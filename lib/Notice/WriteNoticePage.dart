@@ -122,10 +122,10 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                     child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                     style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                     onPressed: () async {
+                      if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                        return ;
+                      }
                       try {
-                        if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                          return ;
-                        }
                         bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
                         await addNotice(_importantTest);
                         
@@ -138,6 +138,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                         print(e);
 
                         showToast('공지사항 업로드 실패! 다시 시도해주세요');
+                        Navigator.of(context).pop();
                         
                       }
                     },

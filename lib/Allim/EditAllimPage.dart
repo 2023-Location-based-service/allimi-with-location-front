@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
+import '../Supplementary/CustomWidget.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/DropdownWidget.dart';
@@ -16,7 +17,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http; //http 사용
-
+import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -48,6 +49,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
   late int _facility_id;
   String _contents = '';
   String _subContents = '';
+  CheckClick checkClick = new CheckClick();
 
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
@@ -198,6 +200,10 @@ class _EditAllimPageState extends State<EditAllimPage> {
         return customPage(
           title: '알림장 수정',
           onPressed: () async {
+            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+              return ;
+            }
+
             //수급자 선택 안하면 다이얼로그 띄우기
             if (selectedPersonId == 0) {
               showDialog(
@@ -209,7 +215,8 @@ class _EditAllimPageState extends State<EditAllimPage> {
                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                     actions: [
                       TextButton(
-                        child: const Text('확인'),
+                        child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -231,29 +238,13 @@ class _EditAllimPageState extends State<EditAllimPage> {
               _subContents += allimTempProvider.medication;
 
               try {
+
                 await editAllim(userProvider.uid, residentProvider.facility_id);
                 _pickedImgs = [];
                 setState(() {});
                 Navigator.pop(context);
               } catch(e) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Text("알림장 업로드 실패! 다시 시도해주세요"),
-                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                      actions: [
-                        TextButton(
-                          child: const Text('확인'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  }
-                );
+                showToast('알림장 업로드 실패! 다시 시도해주세요');
               }
             }
           },
@@ -278,7 +269,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
         getDropdown(),
         SizedBox(height: 8),
         //사진
-        //testpicture(),
         getPicture(context),
         SizedBox(height: 20)
       ],
@@ -331,7 +321,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
               children: [
                 Icon(Icons.info_rounded, color: Colors.grey),
                 SizedBox(width: 5),
-                Text('알림장을 전송할 수급자를 선택해주세요.'),
+                Text('알림장을 전송할 수급자를 선택해주세요'),
               ],
             ),
           ),
@@ -506,13 +496,15 @@ class _EditAllimPageState extends State<EditAllimPage> {
               width: 100,
               height: 100,
               child: DottedBorder(
-                color: Colors.grey,
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(5),
+                  color: Colors.grey.shade300,
                 child: Container(
                   child: (index == 0)? Center(child: addImages(context)) : Stack(
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(5),
                           image: (index == 0)? null : DecorationImage(
                             fit: BoxFit.cover,
                             image: FileImage(File(_pickedImgs[index - 1].path))
@@ -524,7 +516,13 @@ class _EditAllimPageState extends State<EditAllimPage> {
                           right: 3,
                           child: GestureDetector(
                             child: Container(
-                              child: Icon(Icons.cancel_rounded, color: Colors.black54,),
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(Icons.cancel_rounded, color: Colors.black54, size: 20,),
                             ),
                             onTap: () {
                               _pickedImgs.removeAt(index - 1);

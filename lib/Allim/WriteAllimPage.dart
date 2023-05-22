@@ -162,7 +162,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                               if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
                                 return ;
                               }
-
                               _subContents = '';
                               _subContents += allimTempProvider.morning + '\n';
                               _subContents += allimTempProvider.launch + '\n';
@@ -170,15 +169,17 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                               _subContents += allimTempProvider.medication;
 
                               try {
+
                                 await addAllim(residentProvider.resident_id);
                                 _pickedImgs = [];
 
-                                showToast('작성 완료되었습니다');
+                                showToast('작성이 완료되었습니다');
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
 
                               } catch(e) {
                                 showToast('알림장 업로드 실패! 다시 시도해주세요');
+                                Navigator.of(context).pop();
                               }
                               },
                             );
