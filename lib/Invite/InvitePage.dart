@@ -169,29 +169,9 @@ class _InvitePageState extends State<InvitePage> {
 
                                             return;
                                           }
-                                          
-                                          Navigator.of(context, rootNavigator: true).pop();
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Text("초대를 완료하였습니다"),
-                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                  actions: [
-                                                    TextButton(
-                                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                                      child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                          );
-
+                                          showToast('초대하였습니다');
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
                                         })
                                   ],
                                 );
@@ -229,7 +209,7 @@ class _InvitePageState extends State<InvitePage> {
               Container(
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(20),
-                  title: const Text('초대하실 유형을 선택해주세요'),
+                  title: Text('초대하실 유형을 선택해주세요'),
                   subtitle: Column(
                     children: [
                       SizedBox(height: 25,),
