@@ -196,10 +196,11 @@ class _LoginPageState extends State<LoginPage> {
         )
     ),
       onWillPop: () async {
-        // 휴대폰의 뒤로 가기 버튼 눌렀을 때 앱을 종료하도록 설정
-        // 또는 원하는 다른 동작 수행
-        SystemNavigator.pop();
-        return false; // false를 반환하여 기본 동작인 이전 화면으로 돌아가는 것을 막음
+        bool shouldClose = onWillPop();
+        if (shouldClose) {
+          SystemNavigator.pop();
+        }
+        return false;
       },);
   }
 }
