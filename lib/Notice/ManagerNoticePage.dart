@@ -11,6 +11,8 @@ import '../provider/ResidentProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'WriteNoticePage.dart';
 import 'package:http/http.dart' as http; //http 사용
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 
@@ -157,55 +159,50 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                     ),
                   ),
 
+
+                  // Container(
+                  //   width: 100,
+                  //   height: 100,
+                  //   color: imgList.length != 0 ? null : Colors.white,
+                  //   child: imgList.length != 0
+                  //       ? Image.network(
+                  //     imgList[0],
+                  //     fit: BoxFit.fill,
+                  //     loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  //       if (loadingProgress == null) return child;
+                  //       return Center(
+                  //         child: CircularProgressIndicator(
+                  //           value: loadingProgress.expectedTotalBytes != null
+                  //               ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                  //               : null,
+                  //         ),
+                  //       );
+                  //     },
+                  //   )
+                  //       : null,
+                  // ),
                   //TODO: 이미지
                   Container(
                     width: 100,
                     height: 100,
                     color: imgList.length != 0 ? null : Colors.white,
                     child: imgList.length != 0
-                        ? Image.network(
-                      imgList[0],
-                      fit: BoxFit.fill,
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
+                        ? ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: CachedNetworkImage(
+                        imageUrl: imgList[0],
+                        fit: BoxFit.fill,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            SpinKitFadingCircle(
+                              color: Colors.grey,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     )
                         : null,
-                  ),
+                  )
 
-
-
-
-
-                  // if (imgList.length != 0)
-                  //   Container(
-                  //       width: 100,
-                  //       height: 100,
-                  //       child: Container(
-                  //         child: Image.network(
-                  //           imgList[0],
-                  //           fit: BoxFit.fill,
-                  //           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                  //             if (loadingProgress == null) return child;
-                  //             return Center(
-                  //               child: CircularProgressIndicator(
-                  //                 value: loadingProgress.expectedTotalBytes != null
-                  //                     ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                  //               ),
-                  //             );
-                  //           },),
-                  //       )
-                  //   ),
-                  //
-                  // if(imgList.length == 0)
-                  //   Container(width: 100, height: 100, color: Colors.red,)
                 ],
               ),
               onTap: () {
