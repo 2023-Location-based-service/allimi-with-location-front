@@ -16,7 +16,7 @@ import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:http/http.dart' as http;
-
+import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -32,7 +32,7 @@ class SetupPage extends StatefulWidget {
 }
 
 class _SetupPageState extends State<SetupPage> {
-
+  CheckClick checkClick = new CheckClick();
   late String _userRole;
   late int _userId;
   int _count = 0;
@@ -79,6 +79,7 @@ class _SetupPageState extends State<SetupPage> {
             appWorkerInmateProfile(),
 
           appInvitation(),
+          Divider(thickness: 8, color: Color(0xfff8f8f8)),
           appLogout()
         ],
       ),
@@ -116,7 +117,7 @@ class _SetupPageState extends State<SetupPage> {
   Widget appInvitation() {
     return ListTile(
         title: Text('초대받기'),
-        leading: Icon(Icons.person_rounded, color: Colors.grey),
+        leading: Icon(Icons.favorite_rounded, color: Colors.grey),
         onTap: () { pageAnimation(context, InvitationListPage(uid:_userId)); },
         trailing: inviteCount()
     );
@@ -128,7 +129,7 @@ class _SetupPageState extends State<SetupPage> {
         padding: EdgeInsets.all(5),
         width: 37, height: 37,
         child: CircleAvatar(
-          backgroundColor: Color(0xffF3959D),
+          backgroundColor: Color(0xfff3727c),
           child: Text(
             '$_count',
             style: TextStyle(fontSize: 13, color: Colors.white),
@@ -153,6 +154,7 @@ class _SetupPageState extends State<SetupPage> {
                   actions: [
                     TextButton(child: Text('아니오',
                         style: TextStyle(color: themeColor.getMaterialColor())),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () {
                           Navigator.pop(context);
                         }),
@@ -160,7 +162,11 @@ class _SetupPageState extends State<SetupPage> {
                         builder: (context, userProvider, child) {
                           return TextButton(child: Text('예',
                               style: TextStyle(color: themeColor.getMaterialColor())),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                               onPressed: () {
+                                if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                  return ;
+                                }
                                 userProvider.logout();
                                 userProvider.getData();
                                 Navigator.pop(context);

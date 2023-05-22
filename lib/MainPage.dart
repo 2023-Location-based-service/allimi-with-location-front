@@ -49,6 +49,7 @@ class _MainPageState extends State<MainPage> {
       body: ListView(
         children: [
           //TODO: 위젯 작성
+
           myCard(),
           menuList(context),
         ],
@@ -63,10 +64,7 @@ class _MainPageState extends State<MainPage> {
         return GestureDetector(
           child: Container(
             padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.white,
-                border: Border.all(color: themeColor.getColor(), width: 0.5)),
+            color: Colors.white,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -108,9 +106,9 @@ class _MainPageState extends State<MainPage> {
 
               String userRoleString = '';
               if (userProvider.urole == 'PROTECTOR')
-                userRoleString = '보호자님' + '(' + residentProvider.resident_name + '님)';
+                userRoleString = '보호자님 ' + '(' + residentProvider.resident_name + ' 님)';
               else if (userProvider.urole == 'WORKER')
-                userRoleString = '직원님';
+                userRoleString = '직원';
               else if (userProvider.urole == 'MANAGER')
                 userRoleString = '시설장님';
 
@@ -119,7 +117,7 @@ class _MainPageState extends State<MainPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(residentProvider.facility_name, textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-                  Text(userProvider.name + ' ' + userRoleString), //TODO: 내 역할
+                  Text(userProvider.name + ' ' + userRoleString, textScaleFactor: 1.05), //TODO: 내 역할
                 ],
               );
             }

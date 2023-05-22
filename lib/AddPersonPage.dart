@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -90,6 +91,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
     if (_residentList.length != 0) {
       return Scaffold(
       appBar: AppBar(title: Text('등록된 요양원 목록')),
+      backgroundColor: Color(0xfff8f8f8), //배경색
       body: ListView.separated(
         itemCount: _residentList.length, //면회 목록 출력 개수
         itemBuilder: (context, index) {
@@ -104,10 +106,10 @@ class _AddPersonPageState extends State<AddPersonPage> {
             userRoleString = '알 수 없음';
 
           return Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             color: Colors.white,
             child: ListTile(
-              leading: Icon(Icons.home_rounded, size: 50),
+              leading: Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 50)),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -115,12 +117,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
                   Row(
                     children: [
                       if (_residentList[index]['user_role'] == 'PROTECTOR')
-                        Row(
-                          children: [
-                            Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']+"님":"null"),
-                            SizedBox(width: 10),
-                          ]
-                        ),
+                        Text(_residentList[index]['resident_name'] != null?_residentList[index]['resident_name']+" 님 ":"null"),
                       Text("("+ userRoleString +")"),
                     ],
                   ), //사람 이름

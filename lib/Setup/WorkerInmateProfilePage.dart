@@ -5,10 +5,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 
 import 'package:test_data/Backend.dart';
+
+import 'ResidentDetailPage.dart';
 
 class WorkerInmateProfilePage extends StatefulWidget {
   const WorkerInmateProfilePage({Key? key, required this.facilityId, required this.uid, required this.residentId}) : super(key: key);
@@ -96,7 +99,8 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
                       Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
                     ],
                   ),
-                  onTap: () {
+                  onTap: () async {
+                    await awaitPageAnimation(context, ResidentDetailPage(residentId: _residentList[index]['resident_id']));
                     print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
 
                   },

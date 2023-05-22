@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:test_data/ResidentDetailPage.dart';
+import 'package:test_data/Setup/ResidentDetailPage.dart';
+import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
 import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 
@@ -95,13 +96,7 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
                       ],
                     ),
                     onTap: () async{
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: ResidentDetailPage(residentId: _residentList[index]['resident_id']),
-                        ),
-                      );
+                      await awaitPageAnimation(context, ResidentDetailPage(residentId: _residentList[index]['resident_id']));
                       print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
 
                     },
@@ -115,5 +110,6 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
       ),
     );
   }
+
 
 }

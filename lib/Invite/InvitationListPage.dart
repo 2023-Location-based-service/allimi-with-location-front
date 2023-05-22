@@ -8,7 +8,7 @@ import '/LoginPage.dart';
 import '/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
-
+import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
 ThemeColor themeColor = ThemeColor();
@@ -29,7 +29,7 @@ class InvitationListPage extends StatefulWidget {
 class _InvitationListPageState extends State<InvitationListPage> {
   int _count =0 ;
   int uid = 0;
-
+  CheckClick checkClick = new CheckClick();
   List<Map<String, dynamic>> _residentList = [];
 
   @override
@@ -63,64 +63,53 @@ class _InvitationListPageState extends State<InvitationListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("초대받은 리스트")),
+      appBar: AppBar(title: Row(
+        children: [
+          Text("초대받은 요양원 목록"),
+          SizedBox(width: 7),
+          Container(
+            padding: EdgeInsets.all(5),
+            width: 37, height: 37,
+            child: CircleAvatar(
+              backgroundColor: Color(0xfff3727c),
+              child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
+            ),
+          ),
+          IconButton(onPressed: () { getResidentList(uid); }, icon: Icon(Icons.restart_alt))
+      ],)),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(10)
       ),
-      body: Scrollbar(
-        child: ListView(
-          children: [
-            Container(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '초대 대기목록',
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          width: 37, height: 37,
-                          child: CircleAvatar(
-                            backgroundColor: Color(0xffF3959D),
-                            child: Text(
-                              '$_count',
-                              style: TextStyle(fontSize: 13, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        IconButton(onPressed: () {
-                          getResidentList(uid);
-                        }, icon: Icon(Icons.restart_alt))
-                        
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(4),
+      body: ListView(
+        children: [
+          Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                children: [
+                  Container(
                       child: Column(
                         children:[
                           for (var i=0; i< _residentList.length; i++)... [
-                            addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date'])
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 0),
+                              child: addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date'])
+                            ),
+                            Divider(thickness: 0.5),
                           ]
                         ],
                       )
-                    ),
-                  ],
-                )
-                
-            ),
-          ],
-        )
-      ),
+                  ),
+                ],
+              )
+
+          ),
+        ],
+      )
     );
   }
 
 
-  Card addList(int id, int facilityId, String name, String facility_name, String userRole, String date){
+  Container addList(int id, int facilityId, String name, String facility_name, String userRole, String date){
     String userRoleString = '';
 
     if (userRole == 'PROTECTOR')
@@ -132,31 +121,29 @@ class _InvitationListPageState extends State<InvitationListPage> {
     else
       userRoleString = '누구세요';
 
-    return Card(
+    return Container(
         child: Container(
-          padding: EdgeInsets.only(right: 7, left: 7),
           child: Row(
             children: [
-              Text(
-                facility_name + ": " + userRoleString
-              ),
+              Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(" " + userRoleString),
               Spacer(),
               Container(
-                padding: EdgeInsets.all(2),
                 child: Consumer<UserProvider>(
                   builder: (context, userProvider, child) {
                     return OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: themeColor.getColor(),)
-                        ),
+                      style: ButtonStyle(
+                          side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
+                          overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
+                      ),
                         onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole, 
-                                      invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                                      userId: userProvider.uid)),
-                          );
+                          if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                            return ;
+                          }
+
+                          await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                              invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                              userId: userProvider.uid));
 
                           getResidentList(uid);
 
