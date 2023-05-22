@@ -11,6 +11,8 @@ import 'WriteNoticePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:test_data/Backend.dart';
 import '../Supplementary/CustomClick.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 ThemeColor themeColor = ThemeColor();
 
 class NoticeDetailPage extends StatefulWidget {
@@ -174,19 +176,43 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
               ),
 
               //TODO: 공지사항 본문 사진
+              // Container(
+              //   margin: EdgeInsets.fromLTRB(0,10,0,0),
+              //   width: double.infinity,
+              //   color: Colors.white,
+              //   child: Column(
+              //       children: [
+              //         for (int i =0; i< imgList.length; i++ ) ...[
+              //           Image.network(imgList[i], fit: BoxFit.fill,),
+              //           SizedBox(height: 10), // 사진 위에 간격 추가
+              //         ]
+              //       ]
+              //   ),
+              // ),
+
               Container(
-                margin: EdgeInsets.fromLTRB(0,10,0,0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 width: double.infinity,
                 color: Colors.white,
                 child: Column(
-                    children: [
-                      for (int i =0; i< imgList.length; i++ ) ...[
-                        Image.network(imgList[i], fit: BoxFit.fill,),
-                        SizedBox(height: 10), // 사진 위에 간격 추가
-                      ]
-                    ]
+                  children: [
+                    for (int i = 0; i < imgList.length; i++) ...[
+                      CachedNetworkImage(
+                        imageUrl: imgList[i],
+                        fit: BoxFit.fill,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            SpinKitFadingCircle(
+                              color: Colors.grey,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) => Icon(Icons.error_rounded, color: Colors.grey),
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  ],
                 ),
               ),
+
 
               SizedBox(height: 10),
               //TODO: 공지사항 세부 내용
