@@ -152,7 +152,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                                                 debugPrint("@@@삭제 오류 $e");
 
                                                 showToast('공지사항 삭제 실패! 다시 시도해주세요');
-
+                                                Navigator.of(context).pop();
                                               }
                                             },
                                           ),

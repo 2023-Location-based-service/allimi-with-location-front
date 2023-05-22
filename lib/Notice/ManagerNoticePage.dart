@@ -271,152 +271,152 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   }
 
   //공지 상세 내용 - 원래 되던 거
-  Widget TestnoticeManagerPage(int index) {
-    List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
-
-    return Scaffold(
-      appBar: AppBar(title: Text('공지사항 내용')),
-      body: ListView(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
-                width: double.infinity,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_noticeList[index]['title']), //공지 제목
-                        Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //공지 게시한 날짜
-                      ],
-                    ),
-                    const Spacer(),
-                    if (_userRole != 'PROTECTOR')
-                      OutlinedButton(
-                        child: Text('수정'),
-                        onPressed: () async {
-                          int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'], residentId: _residentId,
-                                          facility_id: facility_id, noticeList: _noticeList[index], imageUrls: imgList))
-                            //EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
-
-                          );
-                        },
-                      ),
-                    if (_userRole != 'PROTECTOR')
-                      OutlinedButton(
-                        child: Text('삭제'),
-                        onPressed: () async {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Text("정말 삭제하시겠습니까?"),
-                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('삭제'),
-                                      onPressed: () async {
-                                        try {
-                                          await deleteNotice(_noticeList[index]['allNoticeId']);
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                              builder: (BuildContext context3) {
-                                                return AlertDialog(
-                                                  content: Text('삭제 완료'),
-                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text('확인'),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                        Navigator.of(context).pop();
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                          );
-                                        } catch(e) {
-                                          debugPrint("@@@삭제 오류 $e");
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Text("공지사항 삭제 실패! 다시 시도해주세요"),
-                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text('확인'),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: const Text('취소'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                          );
-                        },
-
-                      ),
-
-                  ],
-                ),
-              ),
-
-              //TODO: 공지사항 본문 사진
-              Container(
-                margin: EdgeInsets.fromLTRB(0,10,0,0),
-                width: double.infinity,
-                color: Colors.white,
-                child: Column(
-                    children: [
-                      for (int i =0; i< imgList.length; i++ ) ...[
-                        Image.network(imgList[i], fit: BoxFit.fill,),
-                      ]
-                    ]
-                ),
-              ),
-
-              //TODO: 공지사항 세부 내용
-              Container(
-                width: double.infinity,
-                color: Colors.white,
-                padding: EdgeInsets.fromLTRB(7,7,7,7),
-
-                child: Text('공지사항 내용: ${_noticeList[index]['content']}'),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+  // Widget TestnoticeManagerPage(int index) {
+  //   List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
+  //
+  //   return Scaffold(
+  //     appBar: AppBar(title: Text('공지사항 내용')),
+  //     body: ListView(
+  //       children: [
+  //         Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Container(
+  //               padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+  //               width: double.infinity,
+  //               color: Colors.white,
+  //               child: Row(
+  //                 children: [
+  //                   Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(_noticeList[index]['title']), //공지 제목
+  //                       Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.')), //공지 게시한 날짜
+  //                     ],
+  //                   ),
+  //                   const Spacer(),
+  //                   if (_userRole != 'PROTECTOR')
+  //                     OutlinedButton(
+  //                       child: Text('수정'),
+  //                       onPressed: () async {
+  //                         int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
+  //                         await Navigator.push(
+  //                             context,
+  //                             MaterialPageRoute(
+  //                                 builder: (context) =>
+  //                                     ModificationNoticePage(noticeId: _noticeList[index]['allNoticeId'], residentId: _residentId,
+  //                                         facility_id: facility_id, noticeList: _noticeList[index], imageUrls: imgList))
+  //                           //EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
+  //
+  //                         );
+  //                       },
+  //                     ),
+  //                   if (_userRole != 'PROTECTOR')
+  //                     OutlinedButton(
+  //                       child: Text('삭제'),
+  //                       onPressed: () async {
+  //                         showDialog(
+  //                             context: context,
+  //                             barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+  //                             builder: (BuildContext context) {
+  //                               return AlertDialog(
+  //                                 content: Text("삭제하시겠습니까?"),
+  //                                 insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+  //                                 actions: [
+  //                                   TextButton(
+  //                                     child: const Text('삭제'),
+  //                                     onPressed: () async {
+  //                                       try {
+  //                                         await deleteNotice(_noticeList[index]['allNoticeId']);
+  //                                         showDialog(
+  //                                             context: context,
+  //                                             barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+  //                                             builder: (BuildContext context3) {
+  //                                               return AlertDialog(
+  //                                                 content: Text('삭제 완료'),
+  //                                                 insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+  //                                                 actions: [
+  //                                                   TextButton(
+  //                                                     child: const Text('확인'),
+  //                                                     onPressed: () {
+  //                                                       Navigator.of(context).pop();
+  //                                                       Navigator.of(context).pop();
+  //                                                       Navigator.of(context).pop();
+  //                                                     },
+  //                                                   ),
+  //                                                 ],
+  //                                               );
+  //                                             }
+  //                                         );
+  //                                       } catch(e) {
+  //                                         debugPrint("@@@삭제 오류 $e");
+  //                                         showDialog(
+  //                                             context: context,
+  //                                             barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+  //                                             builder: (BuildContext context) {
+  //                                               return AlertDialog(
+  //                                                 content: Text("공지사항 삭제 실패! 다시 시도해주세요"),
+  //                                                 insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+  //                                                 actions: [
+  //                                                   TextButton(
+  //                                                     child: const Text('확인'),
+  //                                                     onPressed: () {
+  //                                                       Navigator.of(context).pop();
+  //                                                     },
+  //                                                   ),
+  //                                                 ],
+  //                                               );
+  //                                             }
+  //                                         );
+  //                                       }
+  //                                     },
+  //                                   ),
+  //                                   TextButton(
+  //                                     child: const Text('취소'),
+  //                                     onPressed: () {
+  //                                       Navigator.of(context).pop();
+  //                                     },
+  //                                   ),
+  //                                 ],
+  //                               );
+  //                             }
+  //                         );
+  //                       },
+  //
+  //                     ),
+  //
+  //                 ],
+  //               ),
+  //             ),
+  //
+  //             //TODO: 공지사항 본문 사진
+  //             Container(
+  //               margin: EdgeInsets.fromLTRB(0,10,0,0),
+  //               width: double.infinity,
+  //               color: Colors.white,
+  //               child: Column(
+  //                   children: [
+  //                     for (int i =0; i< imgList.length; i++ ) ...[
+  //                       Image.network(imgList[i], fit: BoxFit.fill,),
+  //                     ]
+  //                   ]
+  //               ),
+  //             ),
+  //
+  //             //TODO: 공지사항 세부 내용
+  //             Container(
+  //               width: double.infinity,
+  //               color: Colors.white,
+  //               padding: EdgeInsets.fromLTRB(7,7,7,7),
+  //
+  //               child: Text('공지사항 내용: ${_noticeList[index]['content']}'),
+  //             ),
+  //           ],
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
 }
 

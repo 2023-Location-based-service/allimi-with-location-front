@@ -47,14 +47,14 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       builder: (context, child){
         final MediaQueryData data = MediaQuery.of(context);
-        return MediaQuery(data: data.copyWith(textScaleFactor: 1.05), child: child!);
+        return MediaQuery(data: data.copyWith(textScaleFactor: 1.03), child: child!);
       },
       title: '요양원 알리미',
       theme: ThemeData(
         fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white, //기본 배경색Color(0xfff8f8f8)
         appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(fontFamily: 'NotoSans', color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18.5), //앱바 텍스트 색상
+          titleTextStyle: TextStyle(fontFamily: 'NotoSans', color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18), //앱바 텍스트 색상
           backgroundColor: Colors.white, //앱바 배경색
           elevation: 0,
           iconTheme: IconThemeData(
@@ -64,8 +64,6 @@ class _MyAppState extends State<MyApp> {
         textTheme: TextTheme(
           bodyText1: TextStyle(color: Colors.black),
         ),
-        // splashColor: Colors.grey.shade300, //물결효과 적용
-        // highlightColor: Colors.grey.shade300,
       ),
       debugShowCheckedModeBanner: false,
       home: Consumer<UserProvider>(
