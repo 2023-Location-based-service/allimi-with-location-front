@@ -1,7 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../Backend.dart';
+import '../LoginPage.dart';
+import '../Supplementary/CustomWidget.dart';
+import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/UserProvider.dart';
 import 'PhoneNumberFormatter.dart';
+import '/Supplementary/ThemeColor.dart';
+import '../Supplementary/CustomClick.dart';
+import 'package:http/http.dart' as http;
+
+ThemeColor themeColor = ThemeColor();
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({Key? key}) : super(key: key);
@@ -11,7 +23,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-
+  CheckClick checkClick = new CheckClick();
   @override
   void initState() {
     super.initState();
@@ -63,7 +75,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        // style: TextStyle(fontWeight: FontWeight.bold),
         //textScaleFactor: 1.2,
       ),
     );

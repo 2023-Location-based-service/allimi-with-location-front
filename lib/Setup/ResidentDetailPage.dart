@@ -7,6 +7,8 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:test_data/Backend.dart';
+
+import 'PhoneNumberFormatter.dart';
 //시설 기본정보 설정 화면
 
 class ResidentDetailPage extends StatefulWidget {
@@ -50,26 +52,7 @@ class _ResidentDetailPageState extends State<ResidentDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children:[
-            Text('입소자 상세 정보'),
-            Spacer(),
-            OutlinedButton(
-              onPressed: () {
-                // await Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EditAllimPage(noticeId: _noticeId, noticeDetail: _noticeDetail, imageUrls: _imageUrls,facility_id: residentProvider.facility_id,)),
-                // );
-                // getNoticeDetail();
-              },
-              child: Text('수정',style: TextStyle(color: Colors.grey))
-          )
-          ] 
-        ),
-        
-      ),
+      appBar: AppBar(title: Text('입소자 상세 정보')),
       body: appSetting(),
     );
   }
@@ -90,14 +73,19 @@ class _ResidentDetailPageState extends State<ResidentDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
 
-                text('입소자 성함'),
+                text('입소자 이름'),
                 myProfileBox(_residentInfo['resident_name']), //입소자 이름
 
-                text('생일'),
+                text('입소자 생년월일'),
                 myProfileBox(_residentInfo['birth']), //입소자 생일
                 
-                text('건강정보'),
-                myProfileBox('건강정보 데이터?'), //건강정보?
+                text('보호자 이름'),
+                myProfileBox(_residentInfo['protector_name']),
+
+                text('보호자 연락처'),
+                myProfileBox(PhoneNumberFormatter.format(_residentInfo['protector_phone_num'])),
+
+
 
             ],
           );
@@ -111,7 +99,7 @@ class _ResidentDetailPageState extends State<ResidentDetailPage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
-        style: TextStyle(fontWeight: FontWeight.bold),
+
         //textScaleFactor: 1.2,
       ),
     );
