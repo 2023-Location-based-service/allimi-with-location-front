@@ -60,30 +60,45 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
 
                 if(this.formKey.currentState!.validate()) {
                   this.formKey.currentState!.save();
-                  try {
-                    await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
-                    Navigator.pop(context);
-                  } catch(e) {
-                    showToast('한마디 업로드 실패! 다시 시도해주세요');
-                    // showDialog(
-                    //     context: context,
-                    //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                    //     builder: (BuildContext context) {
-                    //       return AlertDialog(
-                    //         content: Text("한마디 업로드 실패! 다시 시도해주세요"),
-                    //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                    //         actions: [
-                    //           TextButton(
-                    //             child: const Text('확인'),
-                    //             onPressed: () {
-                    //               Navigator.of(context).pop();
-                    //             },
-                    //           ),
-                    //         ],
-                    //       );
-                    //     }
-                    // );
-                  }
+
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text("한마디를 업로드하시겠습니까?"),
+                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          actions: [
+                            TextButton(
+                              child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                              onPressed: () async {
+                                try {
+                                  if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                    return ;
+                                  }
+                                  await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
+                                  showToast('작성이 완료되었습니다');
+                                  Navigator.pop(context);
+
+                                  Navigator.of(context).pop();
+                                } catch(e) {
+                                  print(e);
+                                  showToast('한마디 업로드 실패! 다시 시도해주세요');
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                  );
                 }},
               body: commentWrite(),
               buttonName: '완료',
