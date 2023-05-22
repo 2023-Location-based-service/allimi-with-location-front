@@ -5,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Allim/EditAllimPage.dart';
 import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
-
 import 'package:test_data/Backend.dart';
-
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
@@ -39,6 +37,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     getNoticeDetail();
   }
 
+  //삭제
   Future<void> deleteNotice(int noticeId) async {
     http.Response response = await http.delete(
         Uri.parse(Backend.getUrl() + 'notices'),
@@ -53,8 +52,9 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     if (response.statusCode != 200) throw Exception();
   }
 
+  //알림장 상세정보
   Future<void> getNoticeDetail() async {
-    debugPrint("@@@@@ 공지사항 상세정보 받아오는 백앤드 url 보냄");
+    debugPrint("@@@@@ 알림장 상세정보 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
         Uri.parse(Backend.getUrl() + 'notices/detail/' + _noticeId.toString()),
@@ -72,7 +72,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
 
     Map<String, dynamic> parsedJson = Map<String, dynamic>.from(decodedJson);
     _noticeDetail = parsedJson;
-
     _imageUrls = List<String>.from(parsedJson['image_url']);
 
     setState(() {});
@@ -100,166 +99,162 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
-          width: double.infinity,
-          color: Colors.white,
-          child: Stack(
-            children: [
-              if (_userRole != 'PROTECTOR')
-                SizedBox(
-                  width: (MediaQuery.of(context).size.width) / 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_noticeDetail['target_name'] + ' 보호자님'),
-                      Text(
-                        _noticeDetail['create_date']
-                            .toString()
-                            .substring(0, 10)
-                            .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
-                      ),
-                    ],
+          Container(
+            padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+            width: double.infinity,
+            color: Colors.white,
+            child: Stack(
+              children: [
+                if (_userRole != 'PROTECTOR')
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width) * 0.56,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_noticeDetail['target_name'] + ' 님'),
+                        Text(
+                          _noticeDetail['create_date']
+                              .toString()
+                              .substring(0, 10)
+                              .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              if (_userRole == 'PROTECTOR')
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_noticeDetail['target_name'] + ' 보호자님'),
-                      Text(
-                        _noticeDetail['create_date']
-                            .toString()
-                            .substring(0, 10)
-                            .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
-                      ),
-                    ],
+                if (_userRole == 'PROTECTOR')
+                  SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_noticeDetail['target_name'] + ' 님'),
+                        Text(
+                          _noticeDetail['create_date']
+                              .toString()
+                              .substring(0, 10)
+                              .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              Positioned(
-                top: -10,
-                right: 5,
-                child: Row(
-                  children: [
-                    if (_userRole != 'PROTECTOR')
-                      Container(
-                        child: Consumer<ResidentProvider>(
-                            builder: (context, residentProvider, child) {
-                          return OutlinedButton(
+                Positioned(
+                  top: -10,
+                  right: 5,
+                  child: Row(
+                    children: [
+                      if (_userRole != 'PROTECTOR')
+                        Container(
+                          child: Consumer<ResidentProvider>(
+                              builder: (context, residentProvider, child) {
+                            return OutlinedButton(
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
+                                onPressed: () async {
+                                  //수정 화면으로 이동
+                                  await awaitPageAnimation(context, EditAllimPage(
+                                    noticeId: _noticeId,
+                                    residentId:
+                                    residentProvider.resident_id,
+                                    noticeDetail: _noticeDetail,
+                                    imageUrls: _imageUrls,
+                                    facility_id:
+                                    residentProvider.facility_id,
+                                  ));
+                                  getNoticeDetail();
+                                },
+                                child: Text('수정',
+                                    style: TextStyle(color: Colors.grey)));
+                          }),
+                        ),
+                      if (_userRole != 'PROTECTOR')
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          child: OutlinedButton(
                               style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                               onPressed: () async {
-                                //수정 화면으로 이동
-                                await awaitPageAnimation(context, EditAllimPage(
-                                  noticeId: _noticeId,
-                                  residentId:
-                                  residentProvider.resident_id,
-                                  noticeDetail: _noticeDetail,
-                                  imageUrls: _imageUrls,
-                                  facility_id:
-                                  residentProvider.facility_id,
-                                ));
-                                getNoticeDetail();
-                              },
-                              child: Text('수정',
-                                  style: TextStyle(color: Colors.grey)));
-                        }),
-                      ),
-                    if (_userRole != 'PROTECTOR')
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        child: OutlinedButton(
-                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
-                            onPressed: () async {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: Text("정말 삭제하시겠습니까?"),
-                                      insetPadding: const EdgeInsets.fromLTRB(
-                                          0, 80, 0, 80),
-                                      actions: [
-                                        TextButton(
-                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                          child: Text(
-                                            '취소',
-                                            style: TextStyle(
-                                                color: themeColor.getColor()),
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text("정말 삭제하시겠습니까?"),
+                                        insetPadding: const EdgeInsets.fromLTRB(
+                                            0, 80, 0, 80),
+                                        actions: [
+                                          TextButton(
+                                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                            child: Text('취소', style: TextStyle(color: themeColor.getColor()),),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        TextButton(
-                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                          child: Text('삭제', style: TextStyle(color: themeColor.getColor(),),),
-                                          onPressed: () async {
-                                            try {
-                                              if (checkClick.isRedundentClick(DateTime.now())) {
-                                                return;
+                                          TextButton(
+                                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                            child: Text('삭제', style: TextStyle(color: themeColor.getColor(),),),
+                                            onPressed: () async {
+                                              try {
+                                                if (checkClick.isRedundentClick(DateTime.now())) {
+                                                  return;
+                                                }
+                                                await deleteNotice(_noticeId);
+                                                showToast('삭제가 완료되었습니다');
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                              } catch (e) {
+                                                showToast('알림장 삭제 실패! 다시 시도해주세요');
                                               }
-                                              await deleteNotice(_noticeId);
-                                              showToast('삭제가 완료되었습니다');
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            } catch (e) {
-                                              showToast('알림장 삭제 실패! 다시 시도해주세요');
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: Text('삭제',
-                                style: TextStyle(color: Colors.grey))),
-                      ),
-                  ],
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              child: Text('삭제',
+                                  style: TextStyle(color: Colors.grey))),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Container(
-          width: double.infinity,
-          color: Colors.white,
-          child: Column(children: [
-            for (int i = 0; i < _imageUrls.length; i++) ...[
-              Image.network(
-                _imageUrls[i],
-                fit: BoxFit.fill,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  );
-                },
-              ),
-            ]
-          ]),
-        ),
-
-        //알림장 세부 내용
-        Container(
-          width: double.infinity,
-          color: Colors.white,
-          padding: EdgeInsets.fromLTRB(7, 7, 7, 7),
-          margin: EdgeInsets.only(bottom: 10),
-          child: Text(
-            _noticeDetail['content'].toString(),
+          Container(
+            width: double.infinity,
+            color: Colors.white,
+            child: Column(children: [
+              for (int i = 0; i < _imageUrls.length; i++) ...[
+                Image.network(
+                  _imageUrls[i],
+                  fit: BoxFit.fill,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                ),
+              ]
+            ]),
           ),
-        ),
 
-        //알림장 안에 있는 어르신의 일일정보
-        informdata(_noticeDetail['sub_content'].toString())
+          //알림장 세부 내용
+          Container(
+            width: double.infinity,
+            color: Colors.white,
+            padding: EdgeInsets.fromLTRB(7, 7, 7, 7),
+            margin: EdgeInsets.only(bottom: 10),
+            child: Text(
+              _noticeDetail['content'].toString(),
+            ),
+          ),
+
+          //알림장 안에 있는 어르신의 일일정보
+          informdata(_noticeDetail['sub_content'].toString())
       ],
     ));
   }

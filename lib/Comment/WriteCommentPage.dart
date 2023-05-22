@@ -54,7 +54,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
               title: '한마디 작성',
               onPressed: () async {
                 print('한마디');
-                if (checkClick.isRedundentClick(DateTime.now())) {
+                if (checkClick.isRedundentClick(DateTime.now())) {  //연타막기
                   return;
                 }
 
@@ -87,8 +87,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                                   await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
                                   showToast('작성이 완료되었습니다');
                                   Navigator.pop(context);
-
-                                  Navigator.of(context).pop();
+                                  Navigator.pop(context);
                                 } catch(e) {
                                   print(e);
                                   showToast('한마디 업로드 실패! 다시 시도해주세요');
@@ -108,6 +107,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
     );
   }
 
+  //한마디 작성페이지
   Widget commentWrite(){
     String currentDate = DateTime.now().toString().substring(0, 10).replaceAll('-', '.');
     return Container(
@@ -141,6 +141,8 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
       ),
     );
   }
+  
+  //한마디 내용
   Widget createField() {
     return Form(
       key: formKey,
