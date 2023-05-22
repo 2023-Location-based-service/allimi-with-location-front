@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'WriteCommentPage.dart';
@@ -127,11 +128,14 @@ class _UserCommentPageState extends State<UserCommentPage> {
                       ),
                       Row(
                         children: [
-                          Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.')),
+                          Expanded(
+                              child: Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.')),
+                          ),
                           Spacer(),
                           if (_userRole == 'PROTECTOR')
                             Container(
                               child: OutlinedButton(
+                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                                   onPressed: () async {
                                     _letterId = _CommentList[index]['letter_id'];
                                     showDialog(
@@ -144,40 +148,24 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                           actions: [
                                             TextButton(
                                               child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
                                             ),
                                             TextButton(
                                               child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                               onPressed: () async {
                                                 if (checkClick.isRedundentClick(DateTime.now())) {
                                                   return;
                                                 }
                                                 try {
                                                   await deleteComment(_letterId);
-
-                                                  showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                                  builder: (BuildContext context3) {
-                                                    return AlertDialog(
-                                                      content: Text('삭제되었습니다'),
-                                                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                      actions: [
-                                                        TextButton(
-                                                          child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                                          onPressed: () {
-                                                            Navigator.of(context).pop();
-                                                            Navigator.of(context).pop();
-
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }
-                                                );
+                                                  Navigator.of(context).pop();
+                                                  showToast('삭제가 완료되었습니다');
                                                 } catch(e) {
+                                                  showToast('한마디 삭제 실패! 다시 시도해주세요');
                                                 }
 
                                                 },

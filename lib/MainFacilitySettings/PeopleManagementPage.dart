@@ -112,9 +112,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                     Container(
                       padding: EdgeInsets.all(2),
                       child: OutlinedButton(
-                          // style: OutlinedButton.styleFrom(
-                          //     side: BorderSide(color: themeColor.getColor(),)
-                          // ),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                           onPressed: () async {
                             //직원 삭제
                             showDialog(
@@ -126,12 +124,14 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                         child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
                                       ),
                                       TextButton(
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                         child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () async {
                                           try {

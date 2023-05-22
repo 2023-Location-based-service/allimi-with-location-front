@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http;
 import '../Supplementary/CustomClick.dart';
+import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/ResidentProvider.dart'; //http 사용
 
@@ -167,8 +168,11 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                       children: [
                         if (_residents[index]['worker_id'] != residentProvider.resident_id)
                           OutlinedButton(
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3)),
+                                side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor()))
+                            ),
                             child: Text('추가',style: TextStyle(color: themeColor.getColor()),),
-                            style: OutlinedButton.styleFrom(side: BorderSide(color: themeColor.getColor())),
                             onPressed: () async {
                               //입소자 추가 시 -> 입소자 정보에 추가
                               await showDialog(
@@ -180,17 +184,26 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                         child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
                                       ),
                                       TextButton(
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                         child: Text('예',style: TextStyle(color: themeColor.getColor())),
                                         onPressed: () async {
                                           try {
+                                            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                              return ;
+                                            }
                                             await addInmate(_residents[index]['id'], residentProvider.resident_id, residentProvider.facility_id);
-                                          } catch(e) { print('에러@@@@@@@@@@@@@@@@@@@' + e.toString()); }
+                                            showToast('추가되었습니다');
+                                          } catch(e) {
+                                            print('에러@@@@@@@@@@@@@@@@@@@' + e.toString());
+                                            showToast('추가 실패! 다시 시도해주세요');
+                                          }
 
                                           Navigator.of(context).pop();
                                         },
@@ -206,9 +219,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
 
                         SizedBox(width: 4,),
                         OutlinedButton(
-                            // style: OutlinedButton.styleFrom(
-                            //     side: BorderSide(color: themeColor.getColor(),)
-                            // ),
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                             onPressed: () async {
                               //입소자 삭제
                               showDialog(
@@ -216,21 +227,28 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                   barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      content: Text("정말 삭제하시겠습니까?"),
+                                      content: Text("삭제하시겠습니까?"),
                                       insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                       actions: [
                                         TextButton(
+                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                           child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
                                         ),
                                         TextButton(
+                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                           child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
                                           onPressed: () async {
                                             try {
+                                              if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                                return ;
+                                              }
                                               await deleteresident(_residents[index]['user_id'], _residents[index]['id']);
+                                              showToast('삭제가 완료되었습니다');
                                             } catch(e) {
+                                              showToast('삭제 실패! 다시 시도해주세요');
                                             }
                                             Navigator.of(context).pop();
                                           },

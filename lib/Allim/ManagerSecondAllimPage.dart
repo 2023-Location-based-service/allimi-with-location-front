@@ -9,6 +9,7 @@ import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/Backend.dart';
 
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -147,20 +148,18 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                         child: Consumer<ResidentProvider>(
                             builder: (context, residentProvider, child) {
                           return OutlinedButton(
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                               onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditAllimPage(
-                                            noticeId: _noticeId,
-                                            residentId:
-                                                residentProvider.resident_id,
-                                            noticeDetail: _noticeDetail,
-                                            imageUrls: _imageUrls,
-                                            facility_id:
-                                                residentProvider.facility_id,
-                                          )),
-                                );
+                                //수정 화면으로 이동
+                                await awaitPageAnimation(context, EditAllimPage(
+                                  noticeId: _noticeId,
+                                  residentId:
+                                  residentProvider.resident_id,
+                                  noticeDetail: _noticeDetail,
+                                  imageUrls: _imageUrls,
+                                  facility_id:
+                                  residentProvider.facility_id,
+                                ));
                                 getNoticeDetail();
                               },
                               child: Text('수정',
@@ -170,8 +169,8 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                     if (_userRole != 'PROTECTOR')
                       Container(
                         padding: EdgeInsets.all(5),
-                        //alignment: Alignment.centerRight,
                         child: OutlinedButton(
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                             onPressed: () async {
                               showDialog(
                                   context: context,
@@ -183,6 +182,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                           0, 80, 0, 80),
                                       actions: [
                                         TextButton(
+                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                           child: Text(
                                             '취소',
                                             style: TextStyle(
@@ -193,88 +193,19 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                           },
                                         ),
                                         TextButton(
-                                          child: Text(
-                                            '삭제',
-                                            style: TextStyle(
-                                              color: themeColor.getColor(),
-                                            ),
-                                          ),
+                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                          child: Text('삭제', style: TextStyle(color: themeColor.getColor(),),),
                                           onPressed: () async {
-                                            if (checkClick.isRedundentClick(
-                                                DateTime.now())) {
-                                              return;
-                                            }
-
                                             try {
+                                              if (checkClick.isRedundentClick(DateTime.now())) {
+                                                return;
+                                              }
                                               await deleteNotice(_noticeId);
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible:
-                                                      false, // 바깥 영역 터치시 닫을지 여부
-                                                  builder:
-                                                      (BuildContext context3) {
-                                                    return AlertDialog(
-                                                      content: Text('삭제되었습니다'),
-                                                      insetPadding:
-                                                          const EdgeInsets
-                                                                  .fromLTRB(
-                                                              0, 80, 0, 80),
-                                                      actions: [
-                                                        TextButton(
-                                                          child: Text(
-                                                            '확인',
-                                                            style: TextStyle(
-                                                              color: themeColor
-                                                                  .getColor(),
-                                                            ),
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  });
+                                              showToast('삭제가 완료되었습니다');
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
                                             } catch (e) {
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible:
-                                                      false, // 바깥 영역 터치시 닫을지 여부
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      content: Text(
-                                                          "알림장 업로드 실패! 다시 시도해주세요"),
-                                                      insetPadding:
-                                                          const EdgeInsets
-                                                                  .fromLTRB(
-                                                              0, 80, 0, 80),
-                                                      actions: [
-                                                        TextButton(
-                                                          child: Text(
-                                                            '확인',
-                                                            style: TextStyle(
-                                                              color: themeColor
-                                                                  .getColor(),
-                                                            ),
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  });
+                                              showToast('알림장 삭제 실패! 다시 시도해주세요');
                                             }
                                           },
                                         ),
