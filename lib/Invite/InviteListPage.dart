@@ -1,18 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
-import '/Invite/InvitePage.dart';
-import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
-
 import 'package:test_data/Backend.dart';
-//초대목록화면
 
+//초대목록화면
 ThemeColor themeColor = ThemeColor();
 
 class InviteListPage extends StatefulWidget {
@@ -44,6 +40,7 @@ class _InviteListPageState extends State<InviteListPage> {
     });
   }
 
+  //삭제
   Future<void> deleteInvitation(int invitId) async {
     http.Response response = await http.delete(
         Uri.parse(Backend.getUrl()+ 'invitations'),
@@ -55,7 +52,6 @@ class _InviteListPageState extends State<InviteListPage> {
           "invit_id": invitId
         })
     );
-
     print(response.statusCode);
     if (response.statusCode == 200){
       setState(() {
@@ -86,6 +82,7 @@ class _InviteListPageState extends State<InviteListPage> {
       )
     );
   }
+
   //전체 구성
   Widget appInviteList(){
     return Container(
@@ -99,15 +96,22 @@ class _InviteListPageState extends State<InviteListPage> {
             physics: NeverScrollableScrollPhysics(),
             itemCount: _inviteDatalist.length,
             itemBuilder: (BuildContext context_, int index) {
+
+              String userRole = '알 수 없음';
+              if(_inviteDatalist[index]['userRole'] == 'PROTECTOR') {
+                userRole = '보호자';
+              } else if(_inviteDatalist[index]['userRole'] == 'WORKER') {
+                userRole = '직원';
+              }
+
               return ListTile(
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    if(_inviteDatalist[index]['userRole'] == 'PROTECTOR')
-                      Text('보호자 '),
-                    if(_inviteDatalist[index]['userRole'] == 'WORKER')
-                      Text('직원 '),
-                    Text(_inviteDatalist[index]['name']), //초대 리스트
+                    Container(
+                      width: (MediaQuery.of(context).size.width) * 0.45,
+                      child: Text(_inviteDatalist[index]['name'] + ' 님 (' + userRole +')'), //초대 리스트
+                    ),
                     Spacer(),
                     Container(
                       padding: EdgeInsets.all(2),
@@ -119,26 +123,26 @@ class _InviteListPageState extends State<InviteListPage> {
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                 builder: (BuildContext context3) {
                                   return AlertDialog(
-                                    content: Text("정말 삭제하시겠습니까?"),
+                                    content: Text("정말 취소하시겠습니까?"),
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
                                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                        child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
+                                        child: Text('아니요',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
                                       ),
                                       TextButton(
                                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                        child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
+                                        child: Text('예',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () async {
                                           try {
                                             if (checkClick.isRedundentClick(DateTime.now())) {
                                               return;
                                             }
                                             await deleteInvitation(_inviteDatalist[index]['id']);
-                                            showToast('삭제가 완료되었습니다');
+                                            showToast('취소되었습니다');
                                             Navigator.of(context).pop();
                                             getInvitation(_facilityId);
                                           } catch(e) {

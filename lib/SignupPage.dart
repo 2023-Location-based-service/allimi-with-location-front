@@ -1,18 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:test_data/exception/LoginIdAlreadyExistsException.dart';
-import 'LoginPage.dart';
 import 'MainFacilitySettings/UserPeopleManagementPage.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 ThemeColor themeColor = ThemeColor();
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
@@ -175,27 +171,8 @@ class _SignupPageState extends State<SignupPage> {
                               showToast(errorMessage);
                               return;
                             }
-
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                              builder: (BuildContext context3) {
-                                return AlertDialog(
-                                  content: Text('회원가입 완료'),
-                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                  actions: [
-                                    TextButton(
-                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                      child: Text('확인',style: TextStyle(color: themeColor.getColor()),),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
+                            showToast('회원가입 완료');
+                            Navigator.of(context).pop();
                           }
                         }
                     ),
