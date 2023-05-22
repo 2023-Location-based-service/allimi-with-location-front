@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http;
+import '../Setup/PhoneNumberFormatter.dart';
 import '../Supplementary/CustomClick.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
@@ -160,7 +161,10 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Text('${_residents[index]['name']} 님'),
+                    Container(
+                      width: (MediaQuery.of(context).size.width) * 0.36,
+                      child: Text('${_residents[index]['name']} 님'),
+                    ),
                     Spacer(),
                     Row(
                       children: [
@@ -202,7 +206,6 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                             print('에러@@@@@@@@@@@@@@@@@@@' + e.toString());
                                             showToast('추가 실패! 다시 시도해주세요');
                                           }
-
                                           Navigator.of(context).pop();
                                         },
                                       ),
@@ -210,11 +213,9 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                   );
                                 }
                               );
-                            
                               getFacilityResident(residentProvider.facility_id);
                             },
                           ),
-
                         SizedBox(width: 4,),
                         OutlinedButton(
                             style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
@@ -277,8 +278,6 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
     );
   }
 
-
-
   //입소자 상세 내용
   Widget residentDetailPage(int index) {
     return Scaffold(
@@ -287,20 +286,31 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
       body: ListView(
         children: [
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('입소자 이름'),),
+              text('입소자 이름'),
               myDetailBox(_residentsdetail['resident_name']),
-              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('입소자 생년월일'),),
+              text('입소자 생년월일'),
               myDetailBox(_residentsdetail['birth']),
-              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('보호자 이름'),),
+              text('보호자 이름'),
               myDetailBox(_residentsdetail['protector_name']),
-              Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text('보호자 연락처'),),
-              myDetailBox(_residentsdetail['protector_phone_num'])
+              text('보호자 연락처'),
+              myDetailBox(PhoneNumberFormatter.format(_residentsdetail['protector_phone_num']))
             ],
           )
         ],
       )
+    );
+  }
+
+  Widget text(String text) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
+      child: Text('$text',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        //textScaleFactor: 1.2,
+      ),
     );
   }
 

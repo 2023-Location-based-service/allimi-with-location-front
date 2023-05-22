@@ -1,11 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../provider/ResidentProvider.dart';
-import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:test_data/Backend.dart';
 //시설 기본정보 설정 화면
 

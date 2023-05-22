@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
@@ -7,8 +6,8 @@ import '../Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'WriteCommentPage.dart';
 import 'package:http/http.dart' as http; //http 사용
-
 import 'package:test_data/Backend.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class UserCommentPage extends StatefulWidget {
@@ -32,6 +31,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
   int _residentId = 0;
   List<Map<String, dynamic>> _CommentList = [];
 
+  //한마디 목록
   Future<void> getComment(int residentId) async {
     debugPrint("한마디 목록 요청 보냄");
     http.Response response = await http.get(
@@ -41,7 +41,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
           'Accept-Charset': 'utf-8'
         }
     );
-
     var data =  utf8.decode(response.bodyBytes);
     dynamic decodedJson = json.decode(data);
     List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
@@ -49,6 +48,27 @@ class _UserCommentPageState extends State<UserCommentPage> {
     setState(() {
       _CommentList = parsedJson;
     });
+  }
+
+  //삭제
+  Future<void> deleteComment(int letterid) async {
+    http.Response response = await http.delete(
+        Uri.parse(Backend.getUrl()+ 'letters'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept-Charset': 'utf-8'
+        },
+        body: jsonEncode({
+          "letter_id": letterid
+        })
+    );
+    if (response.statusCode == 200){
+      setState(() {
+        _CommentList.removeWhere((comment) => comment['letter_id'] == letterid);
+      });
+    } else {
+      throw Exception('Failed to delete comment');
+    }
   }
 
   @override
@@ -83,28 +103,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
       return Container();
   }
 
-  Future<void> deleteComment(int letterid) async {
-    http.Response response = await http.delete(
-        Uri.parse(Backend.getUrl()+ 'letters'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept-Charset': 'utf-8'
-        },
-        body: jsonEncode({
-          "letter_id": letterid
-        })
-    );
-
-    if (response.statusCode == 200){
-      setState(() {
-        _CommentList.removeWhere((comment) => comment['letter_id'] == letterid);
-      });
-      
-    } else {
-      throw Exception('Failed to delete comment');
-    }
-  }
-
   // 보호자 한마디 목록
   Widget userCommentList(){
     return ListView(
@@ -124,7 +122,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   children: [
                     if (_userRole != 'PROTECTOR')
                       Container(
-                        child: Text(_CommentList[index]['nhr_name'] + " 보호자님"),
+                        child: Text(_CommentList[index]['nhr_name'] + " 님"),
                       ),
                       Row(
                         children: [
@@ -190,7 +188,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                         ),
                       ],
                     )
-
                   ],
                 ),
               );

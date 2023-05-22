@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_data/Invite/InvitePage.dart';
-import 'package:provider/provider.dart';
-import 'package:test_data/provider/ResidentProvider.dart';
 import '../Supplementary/ThemeColor.dart';
 import '/MainFacilitySettings/FacilityBasicInfoSettingPage.dart';
 import '/Invite/InviteListPage.dart';

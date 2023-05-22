@@ -1,13 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/ThemeColor.dart';
 import '/Allim/WriteAllimPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
 import 'package:http/http.dart' as http; //http 사용
-
 import 'package:test_data/Backend.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class ManagerAllimPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
   List<Map<String, dynamic>> _noticeList = [];
 
   Future<void> getNotice(int residentId) async {
-      debugPrint("@@@@@ 공지사항 받아오는 백앤드 url 보냄");
+      debugPrint("@@@@@ 알림장 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
       Uri.parse(Backend.getUrl() + "notices/" + residentId.toString()),
@@ -71,7 +71,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
   }
 
   Widget _getFAB() {
-
     if (_userRole == 'PROTECTOR') {
       return Container();
     }
@@ -121,9 +120,8 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                     //어떤 보호자에게 썼는지
                                     Container(
                                       child: Text(
-                                        _noticeList[index]['target_name'] + " 보호자님",
+                                        _noticeList[index]['target_name'] + " 님",
                                         //textScaleFactor: 0.9,
-                                        //style: TextStyle(fontSize: 12,),
                                       ),
                                     ),
                                     //언제 썼는지
@@ -131,8 +129,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                       child: Text(
                                         _noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'),
                                         //textScaleFactor: 0.9,
-                                        //style: TextStyle(fontSize: 10,)
-                                        
                                       ),
                                     ),
                                     Spacer(),
@@ -142,7 +138,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                       child: Text(
                                         _noticeList[index]['content'],
                                         //textScaleFactor: 1.0,
-  
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
@@ -181,6 +176,9 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                       ],
                     ),
                     onTap: () async {
+                      if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                        return ;
+                      }
                       //상세보기 화면으로 이동
                       await awaitPageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId'], userRole: _userRole));
                       getNotice(_residentId);
@@ -188,16 +186,11 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                   ),
               );
             }
-              
-            
             else 
               return Container();
-          
           }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
         ),
-
       ],
-
     );
   }
 }

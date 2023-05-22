@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Allim/WriteAllimPage.dart';
 import 'package:http/http.dart' as http;
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
@@ -109,7 +108,10 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Text('${_employee[index]['name']} 님 (' + userRole +')'),
+                    Container(
+                      width: (MediaQuery.of(context).size.width) * 0.54,
+                      child: Text('${_employee[index]['name']} 님 (' + userRole +')'),
+                    ),
                     Spacer(),
                     Container(
                       padding: EdgeInsets.all(2),
@@ -145,7 +147,6 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                           } catch(e) {
                                             showToast('삭제 실패! 다시 시도해주세요');
                                           }
-
                                           getFacilityEmployee(residentProvider.facility_id);
                                           Navigator.of(context).pop();
                                         },
