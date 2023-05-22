@@ -167,9 +167,9 @@ class _InvitePageState extends State<InvitePage> {
                                             );
                                             return;
                                           }
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
                                           showToast('초대하였습니다');
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
                                         })
                                   ],
                                 );

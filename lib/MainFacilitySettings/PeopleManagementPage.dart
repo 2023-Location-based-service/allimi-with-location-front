@@ -143,7 +143,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                               return ;
                                             }
                                             await deleteEmployee(_employee[index]['user_id'], _employee[index]['id']);
-                                            showToast('삭제가 완료되었습니다');
+                                            showToast('삭제되었습니다');
                                           } catch(e) {
                                             showToast('삭제 실패! 다시 시도해주세요');
                                           }
