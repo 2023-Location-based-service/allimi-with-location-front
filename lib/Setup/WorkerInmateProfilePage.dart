@@ -73,43 +73,68 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
   Widget myInmateProfile() {
     return Scaffold(
       appBar: AppBar(title: Text('입소자 정보')),
-      body: ListView(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Row(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
               children: [
-                Icon(Icons.info_rounded, color: Colors.grey),
-                SizedBox(width: 5),
-                Text('현재 내가 담당하고 있는 입소자 목록입니다'),
+                if(_residentList.length == 0 )
+                  Container(
+                    width: double.infinity,
+                      child: Column(
+                          children: [
+                            Icon(Icons.error_outline_rounded, color: Colors.grey, size: 100),
+                            Text('현재 담당 중인 입소자가 없습니다', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)),
+                            SizedBox(height: 50,),
+                            Text('입소자 담당 방법'),
+                            Text('메인 화면 - 시설 설정 - 입소자 관리 - [추가]'),
+                          ]
+                      )
+                  ),
+
+                if (_residentList.length != 0)
+                  Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_rounded, color: Colors.grey),
+                            SizedBox(width: 5),
+                            Text('현재 내가 담당하고 있는 입소자 목록입니다'),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        color: Colors.white,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: _residentList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              leading: Icon(Icons.person_rounded, color: Colors.grey),
+                              title: Row(
+                                children: [
+                                  Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
+                                ],
+                              ),
+                              onTap: () async {
+                                await awaitPageAnimation(context, ResidentDetailPage(residentId: _residentList[index]['resident_id']));
+                                print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
+
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
               ],
             ),
           ),
-          Container(
-            color: Colors.white,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: _residentList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Icon(Icons.person_rounded, color: Colors.grey),
-                  title: Row(
-                    children: [
-                      Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
-                    ],
-                  ),
-                  onTap: () async {
-                    await awaitPageAnimation(context, ResidentDetailPage(residentId: _residentList[index]['resident_id']));
-                    print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
-
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      )
     );
   }
 }

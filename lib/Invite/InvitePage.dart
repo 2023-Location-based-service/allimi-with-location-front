@@ -176,7 +176,7 @@ class _InvitePageState extends State<InvitePage> {
                                               barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
-                                                  content: Text("초대하기를 완료하였습니다."),
+                                                  content: Text("초대를 완료하였습니다"),
                                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                   actions: [
                                                     TextButton(

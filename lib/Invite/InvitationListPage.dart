@@ -75,7 +75,7 @@ class _InvitationListPageState extends State<InvitationListPage> {
               child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
             ),
           ),
-          IconButton(onPressed: () { getResidentList(uid); }, icon: Icon(Icons.restart_alt))
+          IconButton(onPressed: () { getResidentList(uid); }, icon: Icon(Icons.restart_alt_rounded))
       ],)),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(10)
