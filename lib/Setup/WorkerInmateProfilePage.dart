@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
-
+import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 
 import 'ResidentDetailPage.dart';
@@ -29,6 +29,7 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
   late int _facilityId;
   late int _residentId;
   List<Map<String, dynamic>> _residentList = [];
+  CheckClick checkClick = new CheckClick();
 
   @override
   void initState() {
@@ -66,75 +67,71 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return myInmateProfile();
+    return Scaffold(
+      appBar: AppBar(title: Text('입소자 정보')),
+      body: myInmateProfile(),
+    );
   }
 
   //입소자 정보
   Widget myInmateProfile() {
-    return Scaffold(
-      appBar: AppBar(title: Text('입소자 정보')),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
+    if (_residentList.length != 0) {
+      return ListView(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10),
+            child: Row(
               children: [
-                if(_residentList.length == 0 )
-                  Container(
-                    width: double.infinity,
-                      child: Column(
-                          children: [
-                            Icon(Icons.error_outline_rounded, color: Colors.grey, size: 100),
-                            Text('현재 담당 중인 입소자가 없습니다', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)),
-                            SizedBox(height: 50,),
-                            Text('입소자 담당 방법'),
-                            Text('메인 화면 - 시설 설정 - 입소자 관리 - [추가]'),
-                          ]
-                      )
-                  ),
-
-                if (_residentList.length != 0)
-                  Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Icon(Icons.info_rounded, color: Colors.grey),
-                            SizedBox(width: 5),
-                            Text('현재 내가 담당하고 있는 입소자 목록입니다'),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _residentList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              leading: Icon(Icons.person_rounded, color: Colors.grey),
-                              title: Row(
-                                children: [
-                                  Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
-                                ],
-                              ),
-                              onTap: () async {
-                                await awaitPageAnimation(context, ResidentDetailPage(residentId: _residentList[index]['resident_id']));
-                                print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
-
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  )
+                Icon(Icons.info_rounded, color: Colors.grey),
+                SizedBox(width: 5),
+                Text('현재 내가 담당하고 있는 입소자 목록입니다'),
               ],
             ),
           ),
-        ),
-      )
+          Container(
+            color: Colors.white,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: _residentList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Icon(Icons.person_rounded, color: Colors.grey),
+                  title: Row(
+                    children: [
+                      Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
+                    ],
+                  ),
+                  onTap: () async {
+                    if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                      return ;
+                    }
+                    await awaitPageAnimation(context, ResidentDetailPage(residentId: _residentList[index]['resident_id']));
+                    print('입소자 이름 ${_residentList[index]['resident_name']} Tap');
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    } else {
+    return Center(
+      child: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          child: Column(
+              children: [
+                Icon(Icons.error_outline_rounded, color: Colors.grey, size: 100),
+                Text('현재 담당 중인 입소자가 없습니다', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 50,),
+                Text('입소자 담당 방법'),
+                Text('메인 화면 - 시설 설정 - 입소자 관리 - [추가]'),
+              ]
+          ),
+        )
+      ),
     );
   }
+}
 }

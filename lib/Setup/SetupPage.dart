@@ -8,6 +8,7 @@ import 'package:test_data/Invite/InvitationListPage.dart';
 import 'package:test_data/Invite/InviteListPage.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:test_data/LoginPage.dart';
+import 'package:test_data/Setup/AppRulePage.dart';
 import 'package:test_data/Setup/ProtectorInmateProfilePage.dart';
 import 'package:test_data/Setup/MyProfilePage.dart';
 import 'package:test_data/Setup/WorkerInmateProfilePage.dart';
@@ -22,6 +23,9 @@ import 'package:http/http.dart' as http;
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 
+import 'UserDeletePage.dart';
+
+
 ThemeColor themeColor = ThemeColor();
 
 
@@ -35,6 +39,7 @@ class SetupPage extends StatefulWidget {
 }
 
 class _SetupPageState extends State<SetupPage> {
+  String version = '1.0.0';
   CheckClick checkClick = new CheckClick();
   List<Map<String, dynamic>> _userList = [];
   late String _userRole;
@@ -84,8 +89,11 @@ class _SetupPageState extends State<SetupPage> {
 
           appInvitation(),
           Divider(thickness: 8, color: Color(0xfff8f8f8)),
+          appRule(),
+          appVersion(),
+          appDelete(),
+          Divider(thickness: 8, color: Color(0xfff8f8f8)),
           appLogout(),
-          appDelete()
         ],
       ),
     );
@@ -184,86 +192,43 @@ class _SetupPageState extends State<SetupPage> {
         });
   }
 
-  Widget appDelete() {
+  Widget appRule() {
     return ListTile(
-      title: Text('앱 탈퇴하기'),
-      leading: Icon(Icons.person_remove_alt_1_rounded, color: Colors.grey),
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                content: Column(
-                    mainAxisSize: MainAxisSize.min, // 세로길이 축소
-                    children: [
-                      Text('😭', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
-                      SizedBox(height: 10),
-                      Text('정말 탈퇴하시겠습니까?')
-                    ]),
-
-                actions: [
-                  TextButton(
-                      child: Text('취소',
-                      style: TextStyle(color: themeColor.getMaterialColor())),
-                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                  Consumer<UserProvider>(
-                      builder: (context, userProvider, child) {
-                        return TextButton(child: Text('예',
-                            style: TextStyle(color: themeColor.getMaterialColor())),
-                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                            onPressed: () async {
-                              if (checkClick.isRedundentClick(DateTime.now())) { // 연타 막기
-                                return;
-                              }
-                              try {
-
-                                //await deleteUser(userProvider.uid); // 탈퇴
-                                Navigator.pop(context);
-
-                                if (userProvider.uid == 0) { // userProvider의 uid 값이 0이면 로그인이 되지 않은 상태 -> 로그인 페이지로 감
-                                  redirectToLoginPage(context);
-                                }
-                              } catch (e) {
-                                showToast('탈퇴 처리 중 오류가 발생하였습니다');
-                                Navigator.pop(context);
-                                print("탈퇴 처리 오류: $e");
-                              }
-                            });
-                      }
-                  ),
-                ],
-              ),
-        );
-      },
+        title: Text('앱 이용규칙'),
+        leading: Icon(Icons.rule_rounded, color: Colors.grey),
+        onTap: () {
+          pageAnimation(context, AppRulePage());
+        }
     );
   }
 
-  void redirectToLoginPage(BuildContext context) {
-    pageAnimation(context, LoginPage());
+  Widget appVersion() {
+    return ListTile(
+        title: Text('버전 정보'),
+        leading: Icon(Icons.info_rounded, color: Colors.grey),
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('현재 버전은 $version 입니다'), //내용
+                duration: const Duration(seconds: 2), //올라와 있는 시간
+              )
+          );
+        }
+    );
+  }
+
+  Widget appDelete() {
+    return ListTile(
+      title: Text('계정 탈퇴'),
+      leading: Icon(Icons.person_remove_rounded, color: Colors.grey),
+      onTap: () {
+        pageAnimation(context, UserDeletePage());
+      }
+    );
   }
 
 
-  // 탈퇴 요청
-  Future<void> deleteUser(int user_id) async {
-    var url = Uri.parse(Backend.getUrl() + 'users');
-    var headers = {'Content-type': 'application/json'};
-    var body = json.encode({
-      "user_id": user_id
-    });
 
-    final response = await http.delete(url, headers: headers, body: body);
-
-    debugPrint("@@@" + response.statusCode.toString());
-
-    if (response.statusCode == 200) {
-      print("성공");
-    } else {
-      print(response.statusCode);
-      throw Exception();
-    }
-  }
 }
 
 
