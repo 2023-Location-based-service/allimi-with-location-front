@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
@@ -12,8 +11,8 @@ import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
-
 import 'package:test_data/Backend.dart';
+
 //초대하기 화면
 
 ThemeColor themeColor = ThemeColor();
@@ -120,7 +119,7 @@ class _InvitePageState extends State<InvitePage> {
                             ),
                           ],
                           content: Container(
-                            height: 500,
+                            height: _phoneNumUsers.length >= 8? 400: (50 * _phoneNumUsers.length).toDouble(),
                             width: 300,
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -166,7 +165,6 @@ class _InvitePageState extends State<InvitePage> {
                                                   );
                                                 }
                                             );
-
                                             return;
                                           }
                                           showToast('초대하였습니다');
@@ -284,14 +282,12 @@ class _InvitePageState extends State<InvitePage> {
                         ),
                       ),
                       SizedBox(height: 60,),
-
                     ],
                   )
               ),
             ],
           ),
         );
-
       },
     );
   }
