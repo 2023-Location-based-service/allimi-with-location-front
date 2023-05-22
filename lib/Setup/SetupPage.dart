@@ -2,13 +2,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InvitationListPage.dart';
 import 'package:test_data/Invite/InviteListPage.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
+import 'package:test_data/LoginPage.dart';
 import 'package:test_data/Setup/ProtectorInmateProfilePage.dart';
 import 'package:test_data/Setup/MyProfilePage.dart';
 import 'package:test_data/Setup/WorkerInmateProfilePage.dart';
+import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '../AddFacilities.dart';
@@ -33,6 +36,7 @@ class SetupPage extends StatefulWidget {
 
 class _SetupPageState extends State<SetupPage> {
   CheckClick checkClick = new CheckClick();
+  List<Map<String, dynamic>> _userList = [];
   late String _userRole;
   late int _userId;
   int _count = 0;
@@ -80,7 +84,8 @@ class _SetupPageState extends State<SetupPage> {
 
           appInvitation(),
           Divider(thickness: 8, color: Color(0xfff8f8f8)),
-          appLogout()
+          appLogout(),
+          appDelete()
         ],
       ),
     );
@@ -177,6 +182,87 @@ class _SetupPageState extends State<SetupPage> {
                 ),
           );
         });
+  }
+
+  Widget appDelete() {
+    return ListTile(
+      title: Text('앱 탈퇴하기'),
+      leading: Icon(Icons.person_remove_alt_1_rounded, color: Colors.grey),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Column(
+                    mainAxisSize: MainAxisSize.min, // 세로길이 축소
+                    children: [
+                      Text('😭', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
+                      SizedBox(height: 10),
+                      Text('정말 탈퇴하시겠습니까?')
+                    ]),
+
+                actions: [
+                  TextButton(
+                      child: Text('취소',
+                      style: TextStyle(color: themeColor.getMaterialColor())),
+                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                  Consumer<UserProvider>(
+                      builder: (context, userProvider, child) {
+                        return TextButton(child: Text('예',
+                            style: TextStyle(color: themeColor.getMaterialColor())),
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                            onPressed: () async {
+                              if (checkClick.isRedundentClick(DateTime.now())) { // 연타 막기
+                                return;
+                              }
+                              try {
+
+                                //await deleteUser(userProvider.uid); // 탈퇴
+                                Navigator.pop(context);
+
+                                if (userProvider.uid == 0) { // userProvider의 uid 값이 0이면 로그인이 되지 않은 상태 -> 로그인 페이지로 감
+                                  redirectToLoginPage(context);
+                                }
+                              } catch (e) {
+                                showToast('탈퇴 처리 중 오류가 발생하였습니다');
+                                Navigator.pop(context);
+                                print("탈퇴 처리 오류: $e");
+                              }
+                            });
+                      }
+                  ),
+                ],
+              ),
+        );
+      },
+    );
+  }
+
+  void redirectToLoginPage(BuildContext context) {
+    pageAnimation(context, LoginPage());
+  }
+
+
+  // 탈퇴 요청
+  Future<void> deleteUser(int user_id) async {
+    var url = Uri.parse(Backend.getUrl() + 'users');
+    var headers = {'Content-type': 'application/json'};
+    var body = json.encode({
+      "user_id": user_id
+    });
+
+    final response = await http.delete(url, headers: headers, body: body);
+
+    debugPrint("@@@" + response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      print("성공");
+    } else {
+      print(response.statusCode);
+      throw Exception();
+    }
   }
 }
 
