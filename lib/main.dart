@@ -7,6 +7,7 @@ import 'package:test_data/provider/NoticeTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
+import 'Supplementary/CustomWidget.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
@@ -81,29 +82,35 @@ class _MyAppState extends State<MyApp> {
 
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return Scaffold(
-                  body: getPage(),
-                  bottomNavigationBar: Container(
-                    decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
-                    child: BottomNavigationBar(
-                      onTap: (index) {
-                        setState(() {
-                          _curIndex = index;
-                        });
-                      },
-                      currentIndex: _curIndex,
-                      unselectedItemColor: Colors.grey,
-                      selectedItemColor: themeColor.getColor(),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      selectedFontSize: 12,
-                      items: [
-                        BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-                        BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-                      ],
+
+                return WillPopScope(
+                    child: Scaffold(
+                      body: getPage(),
+                      bottomNavigationBar: Container(
+                        decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+                        child: BottomNavigationBar(
+                          onTap: (index) {
+                            setState(() {
+                              _curIndex = index;
+                            });
+                          },
+                          currentIndex: _curIndex,
+                          unselectedItemColor: Colors.grey,
+                          selectedItemColor: themeColor.getColor(),
+                          elevation: 0,
+                          backgroundColor: Colors.white,
+                          selectedFontSize: 12,
+                          items: [
+                            BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+                            BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                );
+                  onWillPop: () async {
+                    bool result = onWillPop();
+                    return await Future.value(result);
+                  },);
               }
             );
           }

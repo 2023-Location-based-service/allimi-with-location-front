@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/AddFacilities.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/CustomWidget.dart';
 import '/LoginPage.dart';
 import '/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -65,7 +66,8 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      child: Scaffold(
       appBar: AppBar(title: Row(
         children: [
           Text('초대 대기 목록'),
@@ -85,31 +87,31 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
         ],
       )),
 
-        body: ListView(
-          children: [
-            Container(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: Column(
-                  children: [
-                    Container(
-                        child: Column(
-                          children:[
-                            for (var i=0; i< _residentList.length; i++)... [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 0),
-                                child: addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date']),
-                              ),
-                              Divider(thickness: 0.5),
-                            ]
-                          ],
-                        )
-                    ),
-                  ],
-                )
+      body: ListView(
+        children: [
+          Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                children: [
+                  Container(
+                      child: Column(
+                        children:[
+                          for (var i=0; i< _residentList.length; i++)... [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 0),
+                              child: addList(_residentList[i]['id'], _residentList[i]['facility_id'], _residentList[i]['name'], _residentList[i]['facility_name'], _residentList[i]['userRole'],_residentList[i]['date']),
+                            ),
+                            Divider(thickness: 0.5),
+                          ]
+                        ],
+                      )
+                  ),
+                ],
+              )
 
-            )
-          ],
-        ),
+          )
+        ],
+      ),
       bottomNavigationBar: Row(
         children: [
           SizedBox(width: 5),
@@ -118,10 +120,10 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                 child: Container(
                     child: Text('시설장이신가요?', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
                 style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.white10),
-                  backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
-                  padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                    overlayColor: MaterialStateProperty.all(Colors.white10),
+                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                 ),
                 onPressed: (){
                   pageAnimation(context, AddFacilities(uid: _uid));
@@ -133,38 +135,38 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
             child: TextButton(
                 child: Container(child: Text('로그아웃', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
                 style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.white10),
-                  backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
-                  padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
+                    overlayColor: MaterialStateProperty.all(Colors.white10),
+                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                 ),
                 onPressed: (){
                   showDialog(
                     context: context,
                     builder: (context) =>
-                      AlertDialog(
-                        content: const Text('로그아웃하시겠습니까?'),
-                        actions: [
-                          TextButton(
-                              child: Text('취소', style: TextStyle(color: themeColor.getMaterialColor())),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
-                          TextButton(
-                              child: Text('확인', style: TextStyle(color: themeColor.getMaterialColor())),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                              onPressed: () {
-                                Provider.of<UserProvider>(context, listen:false) //로그아웃
-                                    .uid = 0;
+                        AlertDialog(
+                          content: const Text('로그아웃하시겠습니까?'),
+                          actions: [
+                            TextButton(
+                                child: Text('취소', style: TextStyle(color: themeColor.getMaterialColor())),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                            TextButton(
+                                child: Text('확인', style: TextStyle(color: themeColor.getMaterialColor())),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                onPressed: () {
+                                  Provider.of<UserProvider>(context, listen:false) //로그아웃
+                                      .uid = 0;
 
-                                Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
-                                    .getData();
-                                Navigator.pop(context);
-                              })
+                                  Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
+                                      .getData();
+                                  Navigator.pop(context);
+                                })
 
-                        ],
-                      ),
+                          ],
+                        ),
                   );
                 }
             ),
@@ -172,7 +174,11 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           SizedBox(width: 5),
         ],
       ),
-    );
+    ),
+      onWillPop: () async {
+        bool result = onWillPop();
+        return await Future.value(result);
+      },);
   }
 
   Container addList(int id, int facilityId, String name, String facility_name, String userRole, String date){
