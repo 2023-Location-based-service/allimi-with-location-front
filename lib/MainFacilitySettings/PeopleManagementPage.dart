@@ -1,16 +1,18 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Allim/WriteAllimPage.dart';
 import 'package:http/http.dart' as http;
-
+import '../Supplementary/CustomWidget.dart';
+import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
-
 import 'package:test_data/Backend.dart';
+import 'UserPeopleManagementPage.dart';
+
+ThemeColor themeColor = ThemeColor();
+
 class PeopleManagementPage extends StatefulWidget {
   const PeopleManagementPage({Key? key}) : super(key: key);
-
   @override
   State<PeopleManagementPage> createState() => _PeopleManagementPageState();
 }
@@ -120,7 +122,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    content: Text("정말 삭제하시겠습니까?"),
+                                    content: Text("삭제하시겠습니까?"),
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
@@ -135,8 +137,13 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                                         child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () async {
                                           try {
+                                            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                              return ;
+                                            }
                                             await deleteEmployee(_employee[index]['user_id'], _employee[index]['id']);
+                                            showToast('삭제가 완료되었습니다');
                                           } catch(e) {
+                                            showToast('삭제 실패! 다시 시도해주세요');
                                           }
 
                                           getFacilityEmployee(residentProvider.facility_id);

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Invite/InvitePage.dart';
@@ -110,9 +112,7 @@ class _InviteListPageState extends State<InviteListPage> {
                     Container(
                       padding: EdgeInsets.all(2),
                       child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: themeColor.getColor(),)
-                          ),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
                           onPressed: () async {
                             showDialog(
                                 context: context,
@@ -123,19 +123,26 @@ class _InviteListPageState extends State<InviteListPage> {
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                         child: Text('취소',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
                                       ),
                                       TextButton(
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                         child: Text('삭제',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () async {
                                           try {
+                                            if (checkClick.isRedundentClick(DateTime.now())) {
+                                              return;
+                                            }
                                             await deleteInvitation(_inviteDatalist[index]['id']);
+                                            showToast('삭제가 완료되었습니다');
                                             Navigator.of(context).pop();
                                             getInvitation(_facilityId);
                                           } catch(e) {
+                                            showToast('삭제 실패! 다시 시도해주세요');
                                           }
                                         },
                                       ),
@@ -144,7 +151,7 @@ class _InviteListPageState extends State<InviteListPage> {
                                 }
                             );
                           },
-                          child: Text('취소하기',style: TextStyle(color: themeColor.getColor(),),)
+                          child: Text('취소하기',style: TextStyle(color: Colors.grey))
                       ),
                     ),
                   ],

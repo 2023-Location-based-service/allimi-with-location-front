@@ -111,6 +111,7 @@ class _InvitePageState extends State<InvitePage> {
                           insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                           actions: [
                             TextButton(
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                               child: Text('다시 작성하기',style: TextStyle(color: themeColor.getColor(),),),
                               onPressed: () {
                                 _phoneNumUsers = [];
@@ -154,6 +155,7 @@ class _InvitePageState extends State<InvitePage> {
                                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                     actions: [
                                                       TextButton(
+                                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                                         child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                                                         onPressed: () {
                                                           Navigator.of(context).pop();
@@ -178,6 +180,7 @@ class _InvitePageState extends State<InvitePage> {
                                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                                   actions: [
                                                     TextButton(
+                                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                                       child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
                                                       onPressed: () {
                                                         Navigator.of(context).pop();
@@ -205,45 +208,9 @@ class _InvitePageState extends State<InvitePage> {
                   setState(() {});
                   if(_phoneNumUsers.length == 0){
                     return showToast('회원가입을 하지 않은 전화번호입니다! 다시 확인해주세요');
-                    // return showDialog(
-                    //     context: context,
-                    //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                    //     builder: (BuildContext context) {
-                    //       return AlertDialog(
-                    //         content: Text("회원가입을 하지 않은 전화번호입니다. \n다시 확인해주세요."),
-                    //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                    //         actions: [
-                    //           TextButton(
-                    //             child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                    //             onPressed: () {
-                    //               Navigator.of(context).pop();
-                    //             },
-                    //           ),
-                    //         ],
-                    //       );
-                    //     }
-                    // );
                   }
                 } catch(e) {
                   showToast('초대 실패! 다시 시도해주세요');
-                  // showDialog(
-                  //     context: context,
-                  //     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                  //     builder: (BuildContext context) {
-                  //       return AlertDialog(
-                  //         content: Text("초대 실패! 다시 시도해주세요"),
-                  //         insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                  //         actions: [
-                  //           TextButton(
-                  //             child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                  //             onPressed: () {
-                  //               Navigator.of(context).pop();
-                  //             },
-                  //           ),
-                  //         ],
-                  //       );
-                  //     }
-                  // );
                 }
               }},
             body: inviteFormat(),
@@ -257,11 +224,9 @@ class _InvitePageState extends State<InvitePage> {
       itemCount: 1,
       itemBuilder: (BuildContext context, int index){
         return Container(
-          //color: Colors.white,
           child: Column(
             children: [
               Container(
-                //color: Colors.white,
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(20),
                   title: const Text('초대하실 유형을 선택해주세요'),

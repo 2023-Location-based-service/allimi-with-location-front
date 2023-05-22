@@ -185,6 +185,7 @@ class _SignupPageState extends State<SignupPage> {
                                   insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                   actions: [
                                     TextButton(
+                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                       child: Text('확인',style: TextStyle(color: themeColor.getColor()),),
                                       onPressed: () {
                                         Navigator.of(context).pop();

@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/AddFacilities.dart';
 import 'package:test_data/provider/UserProvider.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '/LoginPage.dart';
 import '/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -89,30 +90,8 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
             Container(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Row(
-                    //   children: [
-                    //     Text('초대 대기 목록', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                    //     SizedBox(width: 7),
-                    //     Container(
-                    //       //padding: EdgeInsets.all(0),
-                    //       width: 30, height: 30,
-                    //       child: CircleAvatar(
-                    //         backgroundColor: Color(0xfff3727c),
-                    //         child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
-                    //       ),
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () { getResidentList(uid); },
-                    //         icon: Icon(Icons.restart_alt_rounded)
-                    //     )
-                    //   ],
-                    // ),
-                    // SizedBox(height: 5),
                     Container(
-                      //padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Column(
                           children:[
                             for (var i=0; i< _residentList.length; i++)... [
@@ -209,8 +188,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
       userRoleString = '누구세요';
 
     return Container(
-
-      //padding: EdgeInsets.only(right: 8, left: 8, ),
       child: Row(
         children: [
           Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold)),
@@ -218,10 +195,14 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           Spacer(),
           Container(
             child:  OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: themeColor.getColor(),)
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3)),
+                    side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor()))
                 ),
                 onPressed: () async {
+                  if (checkClick.isRedundentClick(DateTime.now())) {
+                    return;
+                  }
                   await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
                       invitationFacilityId: facilityId, invitationFacilityName : facility_name,
                       userId: _uid));
@@ -234,10 +215,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
 
         ],
       ),
-      // decoration: BoxDecoration(
-      //   border: Border.all(color: Colors.grey.shade300, width: 1),
-      //   borderRadius: BorderRadius.circular(5),
-      // ),
     );
   }
 }
