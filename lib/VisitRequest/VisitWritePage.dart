@@ -43,6 +43,8 @@ class _VisitWritePageState extends State<VisitWritePage> {
   void initState() {
     super.initState();
     _residentId = widget.residentId;
+    Provider.of<VisitTempProvider>(context, listen: false).setDate('방문 날짜 선택'); //초기화
+    Provider.of<VisitTempProvider>(context, listen: false).setTime('방문 시간 선택');
   }
 
   // 서버에 면회신청 업로드
@@ -101,6 +103,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
                     actions: [
                       TextButton(
                         child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -120,6 +123,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
                     actions: [
                       TextButton(
                         child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -157,6 +161,8 @@ class _VisitWritePageState extends State<VisitWritePage> {
                                   await addVisit(visitProvider.selectedDate, visitProvider.selectedTime);
 
                                   showToast('작성 완료');
+                                  // Provider.of<VisitTempProvider>(context, listen: false).setDate('방문 날짜 선택'); //초기화
+                                  // Provider.of<VisitTempProvider>(context, listen: false).setTime('방문 시간 선택');
                                   Navigator.of(context).pop();Navigator.of(context).pop();
                                 } catch(e) {
                                   showToast('면회 신청 실패! 다시 시도해주세요');
