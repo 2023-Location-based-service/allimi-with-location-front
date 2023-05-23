@@ -9,6 +9,8 @@ import 'package:test_data/Backend.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -80,7 +82,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
         title: const Text('알림장 내용'),
       ),
@@ -217,32 +218,59 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            color: Colors.white,
-            child: Column(children: [
-              for (int i = 0; i < _imageUrls.length; i++) ...[
-                Image.network(
-                  _imageUrls[i],
-                  fit: BoxFit.fill,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
+          //이미지
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          width: double.infinity,
+          color: Colors.white,
+          child: Column(children: [
+            for (int i = 0; i < _imageUrls.length; i++) ...[
+              CachedNetworkImage(
+                imageUrl: _imageUrls[i],
+                fit: BoxFit.fill,
+                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                  child: SpinKitFadingCircle(
+                    color: Colors.grey,
+                    size: 30,
+                  ),
                 ),
-              ]
-            ]),
-          ),
+                errorWidget: (context, url, error) => const Icon(Icons.error_rounded, color: Colors.grey),
+              ),
+              SizedBox(height: 10),
+            ],
+          ]),
+        ),
+
+        //원래 이미지 코드
+        //   Container(
+        //     width: double.infinity,
+        //     color: Colors.white,
+        //     child: Column(children: [
+        //       for (int i = 0; i < _imageUrls.length; i++) ...[
+        //         Image.network(
+        //           _imageUrls[i],
+        //           fit: BoxFit.fill,
+        //           loadingBuilder: (BuildContext context, Widget child,
+        //               ImageChunkEvent? loadingProgress) {
+        //             if (loadingProgress == null) return child;
+        //             return Center(
+        //               child: CircularProgressIndicator(
+        //                 value: loadingProgress.expectedTotalBytes != null
+        //                     ? loadingProgress.cumulativeBytesLoaded /
+        //                         loadingProgress.expectedTotalBytes!
+        //                     : null,
+        //               ),
+        //             );
+        //           },
+        //         ),
+        //       ]
+        //     ]),
+        //   ),
 
           //알림장 세부 내용
+
+
+
           Container(
             width: double.infinity,
             color: Colors.white,

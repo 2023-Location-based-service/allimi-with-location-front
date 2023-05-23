@@ -197,7 +197,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                               color: Colors.grey,
                               size: 30,
                             ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        errorWidget: (context, url, error) => Icon(Icons.error_rounded, color: Colors.grey),
                       ),
                     )
                         : null,

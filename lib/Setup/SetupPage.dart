@@ -219,7 +219,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appDelete() {
     return ListTile(
-      title: Text('탈퇴하기'),
+      title: Text('계정 탈퇴'),
       leading: Icon(Icons.person_remove_rounded, color: Colors.grey),
       onTap: () {
         pageAnimation(context, UserDeletePage());
