@@ -140,7 +140,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                   ),
                 Positioned(
                   top: -10,
-                  right: 5,
+                  right: -1,
                   child: Row(
                     children: [
                       if (_userRole != 'PROTECTOR')
