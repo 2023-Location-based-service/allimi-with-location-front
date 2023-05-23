@@ -198,97 +198,99 @@ class _InvitePageState extends State<InvitePage> {
 
   }
   Widget inviteFormat(){
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (BuildContext context, int index){
-        return Container(
-          child: Column(
-            children: [
-              Container(
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(20),
-                  title: Text('초대하실 유형을 선택해주세요'),
-                  subtitle: Column(
-                    children: [
-                      SizedBox(height: 25,),
-                      ToggleButtons(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
-                              child: Text('보호자')),
-                          Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
-                              child: Text('직원')),
-                        ],
-                        isSelected: isSelected,
-                        onPressed: toggleSelect,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        selectedBorderColor: themeColor.getColor(),
-                        selectedColor: Colors.white,
-                        fillColor: themeColor.getColor(),
-                        color: themeColor.getColor(),
-                      ),
-                    ],
+    return Container(
+      color: Colors.white,
+      child: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index){
+          return Container(
+            child: Column(
+              children: [
+                Container(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(20),
+                    title: Text('초대하실 유형을 선택해주세요'),
+                    subtitle: Column(
+                      children: [
+                        SizedBox(height: 25,),
+                        ToggleButtons(
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
+                                child: Text('보호자')),
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
+                                child: Text('직원')),
+                          ],
+                          isSelected: isSelected,
+                          onPressed: toggleSelect,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          selectedBorderColor: themeColor.getColor(),
+                          selectedColor: Colors.white,
+                          fillColor: themeColor.getColor(),
+                          color: themeColor.getColor(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                  //color: Colors.white,
-                  padding: EdgeInsets.only(left: 20,top: 12, right: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: 10,),
-                      Text('전화번호'),
-                      SizedBox(height: 5,),
-                      Form(
-                        key: formKey,
-                        child: SizedBox(
-                          child: TextFormField(
-                            controller: _contentEditController,
-                            inputFormatters: [
-                              MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
-                            ],
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return '전화번호를 입력하세요';
-                              } else if (value.length < 12) {
-                                return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
-                              }
-                              return null;
-                            },
-                            onSaved: (value){
-                              _phone_num = value!.replaceAll("-", "");
-                            },
-                            keyboardType: TextInputType.number, //키보드는 숫자
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(width: 2, color: Colors.red),
+                Container(
+                    padding: EdgeInsets.only(left: 20,top: 12, right: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(height: 10,),
+                        Text('전화번호'),
+                        SizedBox(height: 5,),
+                        Form(
+                          key: formKey,
+                          child: SizedBox(
+                            child: TextFormField(
+                              controller: _contentEditController,
+                              inputFormatters: [
+                                MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                              ],
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return '전화번호를 입력하세요';
+                                } else if (value.length < 12) {
+                                  return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                                }
+                                return null;
+                              },
+                              onSaved: (value){
+                                _phone_num = value!.replaceAll("-", "");
+                              },
+                              keyboardType: TextInputType.number, //키보드는 숫자
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(width: 2, color: Colors.red),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 60,),
-                    ],
-                  )
-              ),
-            ],
-          ),
-        );
-      },
+                        SizedBox(height: 60,),
+                      ],
+                    )
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
   void toggleSelect(value) {

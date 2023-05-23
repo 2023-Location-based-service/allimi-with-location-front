@@ -141,7 +141,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                       barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          content: Text("정말 삭제하시겠습니까?"),
+                                          content: Text("삭제하시겠습니까?"),
                                           insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                           actions: [
                                             TextButton(

@@ -321,7 +321,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
       margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       decoration: BoxDecoration(
         color: Color(0xfff2f3f6),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),

@@ -123,12 +123,12 @@ class _InviteListPageState extends State<InviteListPage> {
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                 builder: (BuildContext context3) {
                                   return AlertDialog(
-                                    content: Text("정말 취소하시겠습니까?"),
+                                    content: Text("취소하시겠습니까?"),
                                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
                                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                        child: Text('아니요',style: TextStyle(color: themeColor.getColor(),),),
+                                        child: Text('아니오',style: TextStyle(color: themeColor.getColor(),),),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
