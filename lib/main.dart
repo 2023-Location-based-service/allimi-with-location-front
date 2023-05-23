@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:test_data/LoginPage.dart';
@@ -31,6 +32,14 @@ void main() async {
   );
 }
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -46,9 +55,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child){
+      builder: (context, child) {
         final MediaQueryData data = MediaQuery.of(context);
-        return MediaQuery(data: data.copyWith(textScaleFactor: 1.03), child: child!);
+
+        return MediaQuery(
+          data: data.copyWith(textScaleFactor: 1.03),
+          child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: child!,
+          ),
+        );
       },
       title: '요양원 알리미',
       theme: ThemeData(
@@ -64,6 +80,11 @@ class _MyAppState extends State<MyApp> {
         ),
         textTheme: TextTheme(
           bodyText1: TextStyle(color: Colors.black),
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+            cursorColor: themeColor.getMaterialColor(), //커서 색상
+            selectionColor: const Color(0xffEAEAEA), //드래그 색상
+            selectionHandleColor: themeColor.getMaterialColor() //water drop 색상
         ),
       ),
       debugShowCheckedModeBanner: false,
