@@ -40,6 +40,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
   Widget build(BuildContext context) {
     CheckClick checkClick = new CheckClick();
     List<String> imgList = List<String>.from(widget.noticeList[widget.index]['imageUrl']);
+    final fontSize = 1.15;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,13 +62,13 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                         children: [
                           Text(
                             widget.noticeList[widget.index]['title'],
-                            textScaleFactor: 1.2,
+                            textScaleFactor: fontSize,
                             // style: TextStyle(fontWeight: FontWeight.bold),
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis, // 오버플로우 처리
                           ), //공지 제목
                           Text(widget.noticeList[widget.index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'),
-                            textScaleFactor: 1.15,), //공지 게시한 날짜
+                            textScaleFactor: fontSize), //공지 게시한 날짜
                         ],
                       ),
                     ),
