@@ -135,6 +135,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       } catch(e) {
+                        print('업로드 실패@@@@@@@@@@@@@@@@@@@@@');
                         print(e);
 
                         showToast('공지사항 업로드 실패! 다시 시도해주세요');
