@@ -95,8 +95,8 @@ class _UserDeletePageState extends State<UserDeletePage> {
           child: Column(
             children: [
               Text('🖐️', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
-              SizedBox(height: 10),
-              Text('잠깐만요!', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 7),
+              Text('잠깐만요!', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 7),
               Text('요양원 알리미를 탈퇴하기 전에'),
               Text('아래 내용을 확인해주세요'),

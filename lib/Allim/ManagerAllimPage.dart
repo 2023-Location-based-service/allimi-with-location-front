@@ -7,6 +7,8 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:test_data/Backend.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -147,29 +149,52 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                   ],
                                 ),
                               ),
-                              //이미지
+                              //TODO: 이미지
                               if (imgList.length != 0)
                                 Container(
                                   width: 100,
                                   height: 100,
-                                  child: Container(
-                                    child: Image.network(
-                                      imgList[0], 
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: CachedNetworkImage(
+                                      imageUrl: imgList[0],
                                       fit: BoxFit.fill,
-                                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            value: loadingProgress.expectedTotalBytes != null
-                                                ? loadingProgress.cumulativeBytesLoaded /
-                                                    loadingProgress.expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        );
-                                      },
+                                      progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                                        child: SpinKitFadingCircle(
+                                          color: Colors.grey,
+                                          size: 30,
+                                        ),
                                       ),
-                                  )
+                                      errorWidget: (context, url, error) => const Icon(Icons.error_rounded, color: Colors.grey),
+                                    ),
+                                  ),
                                 ),
+
+                              //원래코드
+                              // Container(
+                              //     width: 100,
+                              //     height: 100,
+                              //     child: Container(
+                              //       child: Image.network(
+                              //         imgList[0],
+                              //         fit: BoxFit.fill,
+                              //         loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                              //           if (loadingProgress == null) return child;
+                              //           return Center(
+                              //             child: CircularProgressIndicator(
+                              //               value: loadingProgress.expectedTotalBytes != null
+                              //                   ? loadingProgress.cumulativeBytesLoaded /
+                              //                       loadingProgress.expectedTotalBytes!
+                              //                   : null,
+                              //             ),
+                              //           );
+                              //         },
+                              //         ),
+                              //     )
+                              //   ),
+
+
+
                             ],
                           ),
                         ),
