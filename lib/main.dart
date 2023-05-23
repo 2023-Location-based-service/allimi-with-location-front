@@ -13,7 +13,7 @@ import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -67,6 +67,16 @@ class _MyAppState extends State<MyApp> {
         );
       },
       title: '요양원 알리미',
+      //앱 자체 언어 설정 함으로써 캘린더를 한국어로 변경
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        // 추가: 필요한 Cupertino 로캘 대리자도 여기에 추가하세요.
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ko', 'KR'),
+      ],
       theme: ThemeData(
         fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white, //기본 배경색Color(0xfff8f8f8)
