@@ -127,6 +127,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
 
   //공지사항 목록
   Widget noticeList() {
+    final fontSize = 0.95;
     return ListView.separated(
       itemCount: _noticeList.length, //공지 목록 출력 개수
       shrinkWrap: true,
@@ -153,8 +154,8 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                         isImportant ? getRedTag() : getGreyTag(), // 중요 여부에 따른 태그 표시
                         SizedBox(height: 5),
 
-                        Text(_noticeList[index]['title'], maxLines: 1, overflow: TextOverflow.ellipsis), //공지 제목
-                        Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: 1.0,), //TODO: 공지사항 날짜
+                        Text(_noticeList[index]['title'], maxLines: 1, overflow: TextOverflow.ellipsis, textScaleFactor: fontSize), //공지 제목
+                        Text(_noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: fontSize), //TODO: 공지사항 날짜
                       ],
                     ),
                   ),

@@ -142,6 +142,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
 
   // 면회 리스트
   Widget RequestList() {
+    final fontSize = 0.95;
     return  ListView.separated(
       itemCount: _visitList.length, //면회 목록 출력 개수
       itemBuilder: (context, index) {
@@ -156,30 +157,30 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * 0.55,
-                          child: Text(_visitList[index]['residentName'].toString() + " 님 (" + _visitList[index]['visitorName'] + " 보호자님)"), //TODO: ㅇㅇㅇ 보호자님 출력
+                          child: Text(_visitList[index]['residentName'].toString() + " 님 (" + _visitList[index]['visitorName'] + " 보호자님)", textScaleFactor: fontSize), //TODO: ㅇㅇㅇ 보호자님 출력
                         ),
                         Row(
                           children: [
-                            Text(_visitList[index]['want_date'].substring(0, 10).replaceAll('-', '.')), //TODO: 면회 날짜
+                            Text(_visitList[index]['want_date'].substring(0, 10).replaceAll('-', '.'), textScaleFactor: fontSize), //TODO: 면회 날짜
                             SizedBox(width: 7),
                             Icon(Icons.schedule_rounded, color: Colors.grey, size: 20),
                             SizedBox(width: 2),
-                            Text(_visitList[index]['want_date'].substring(11, 16)), //TODO: 면회 시간 //"2023-05-08T21:09:00.298Z"
+                            Text(_visitList[index]['want_date'].substring(11, 16), textScaleFactor: fontSize), //TODO: 면회 시간 //"2023-05-08T21:09:00.298Z"
                           ],
                         ),
 
 
                         SizedBox(height: 10),
-                        Text(_visitList[index]['texts']), //TODO: 할 말 출력
+                        Text(_visitList[index]['texts'], textScaleFactor: fontSize), //TODO: 할 말 출력
                         Divider(thickness: 0.5),
                         if (_visitList[index]['state'] == 'WAITING')
-                          Text('면회 수락 대기 중입니다.', style: TextStyle(color: Colors.grey)),
+                          Text('면회 수락 대기 중입니다.', style: TextStyle(color: Colors.grey), textScaleFactor: fontSize),
                         if (_visitList[index]['state'] == 'APPROVED')
-                          Text('면회 수락되었습니다. 제때 방문하세요.', style: TextStyle(color: themeColor.getColor())),
+                          Text('면회 수락되었습니다. 제때 방문하세요.', style: TextStyle(color: themeColor.getColor()), textScaleFactor: fontSize),
                         if (_visitList[index]['state'] == 'REJECTED')
-                          Text("면회 거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: Colors.red)), //TODO: 수락/거절 출력
+                          Text("면회 거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: Colors.red), textScaleFactor: fontSize), //TODO: 수락/거절 출력
                         if (_visitList[index]['state'] == 'COMPLETED')
-                          Text("방문 완료하였습니다.", style: TextStyle(color: Colors.grey)), //TODO: 수락/거절 출력
+                          Text("방문 완료하였습니다.", style: TextStyle(color: Colors.grey), textScaleFactor: fontSize), //TODO: 수락/거절 출력
                       ],
                     )
                 ),
