@@ -106,7 +106,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appFacilityBasicSetting() {
     return ListTile(
-      title: Text('시설 기본 정보 설정'),
+      title: Text('시설 기본 정보'),
       leading: Icon(Icons.home_rounded, color: Colors.grey),
       onTap: () {
         pageAnimation(context, FacilityBasicInfoPage(facilityId: _facilityId));
