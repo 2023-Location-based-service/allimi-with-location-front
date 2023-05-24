@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 ThemeColor themeColor = ThemeColor();
+final fontSize = 1.15;
 
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage(
@@ -112,12 +113,13 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_noticeDetail['target_name'] + ' 님'),
+                        Text(_noticeDetail['target_name'] + ' 님',textScaleFactor: fontSize,),
                         Text(
                           _noticeDetail['create_date']
                               .toString()
                               .substring(0, 10)
                               .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                          textScaleFactor: fontSize
                         ),
                       ],
                     ),
@@ -128,12 +130,13 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_noticeDetail['target_name'] + ' 님'),
+                        Text(_noticeDetail['target_name'] + ' 님',textScaleFactor: fontSize,),
                         Text(
                           _noticeDetail['create_date']
                               .toString()
                               .substring(0, 10)
                               .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                          textScaleFactor: fontSize
                         ),
                       ],
                     ),
@@ -277,7 +280,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
             padding: EdgeInsets.fromLTRB(7, 7, 7, 7),
             margin: EdgeInsets.only(bottom: 10),
             child: Text(
-              _noticeDetail['content'].toString(),
+              _noticeDetail['content'].toString(), textScaleFactor: fontSize
             ),
           ),
 
@@ -322,11 +325,13 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
         Container(
           padding: EdgeInsets.only(right: 30),
           child: Text(
+            textScaleFactor: fontSize,
             '$text1',
             style: TextStyle(color: Colors.black38),
           ),
         ),
         Text(
+          textScaleFactor: fontSize,
           '$text2',
           style: TextStyle(color: Colors.black),
         ),

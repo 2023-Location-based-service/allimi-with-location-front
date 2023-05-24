@@ -105,6 +105,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
 
   // 보호자 한마디 목록
   Widget userCommentList(){
+    final fontSize = 1.1;
     return ListView(
       children: [
          ListView.separated(
@@ -122,12 +123,12 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   children: [
                     if (_userRole != 'PROTECTOR')
                       Container(
-                        child: Text(_CommentList[index]['nhr_name'] + " 님"),
+                        child: Text(_CommentList[index]['nhr_name'] + " 님", textScaleFactor: fontSize),
                       ),
                       Row(
                         children: [
                           Expanded(
-                              child: Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.')),
+                              child: Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.'),textScaleFactor: fontSize),
                           ),
                           Spacer(),
                           if (_userRole == 'PROTECTOR')
@@ -185,6 +186,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                         Text(
                           _CommentList[index]['content'],
                           textAlign: TextAlign.left,
+                          textScaleFactor: fontSize
                         ),
                       ],
                     )

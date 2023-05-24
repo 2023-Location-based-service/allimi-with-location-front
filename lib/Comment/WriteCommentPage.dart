@@ -127,7 +127,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
               ),
               child: Padding(
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
-                child: Text(currentDate),
+                child: Text(currentDate, textScaleFactor: 1.1,),
                 ),
               ),
             ),

@@ -90,6 +90,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
 
 //시설장 및 직원 알림장 목록
   Widget managerlist() {
+    final fontSize = 0.95;
     return ListView(
       children: [
         ListView.separated(
@@ -122,15 +123,13 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                     //어떤 보호자에게 썼는지
                                     Container(
                                       child: Text(
-                                        _noticeList[index]['target_name'] + " 님",
-                                        //textScaleFactor: 0.9,
+                                        _noticeList[index]['target_name'] + " 님", textScaleFactor: fontSize
                                       ),
                                     ),
                                     //언제 썼는지
                                     Container(
                                       child: Text(
-                                        _noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'),
-                                        //textScaleFactor: 0.9,
+                                        _noticeList[index]['create_date'].toString().substring(0, 10).replaceAll('-', '.'), textScaleFactor: fontSize
                                       ),
                                     ),
                                     Spacer(),
@@ -139,7 +138,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                       padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
                                       child: Text(
                                         _noticeList[index]['content'],
-                                        //textScaleFactor: 1.0,
+                                        textScaleFactor: fontSize,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,

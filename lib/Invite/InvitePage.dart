@@ -217,10 +217,10 @@ class _InvitePageState extends State<InvitePage> {
                           children: [
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
-                                child: Text('보호자')),
+                                child: Text('보호자', textScaleFactor: 1.1)),
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
-                                child: Text('직원')),
+                                child: Text('직원', textScaleFactor: 1.1)),
                           ],
                           isSelected: isSelected,
                           onPressed: toggleSelect,
