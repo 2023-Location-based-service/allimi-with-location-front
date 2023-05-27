@@ -209,7 +209,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
           for (Schedule sc in _listOfDayEvents(_selectedDate!)) ...[
             ListTile(
               leading: const Icon(Icons.done_rounded, color: Colors.teal),
-              title: Text('${sc.eventName}'),
+              title: Text('${sc.eventName}', textScaleFactor: 0.95,),
                 trailing: _getFAB(sc)
             )
           ],

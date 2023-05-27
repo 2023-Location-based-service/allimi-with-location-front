@@ -99,8 +99,8 @@ class _ResidentDetailPageState extends State<ResidentDetailPage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
-
-        //textScaleFactor: 1.2,
+        style: TextStyle(fontWeight: FontWeight.bold),
+        textScaleFactor: 1,
       ),
     );
   }
@@ -120,7 +120,7 @@ class _ResidentDetailPageState extends State<ResidentDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('$text', textScaleFactor: 1.2),
+                Text('$text'),
               ],
             )
         )

@@ -1,15 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_data/Setup/ResidentDetailPage.dart';
 import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
-import '../provider/UserProvider.dart';
-import '../provider/ResidentProvider.dart';
-
+import '/Supplementary/ThemeColor.dart';
 import 'package:test_data/Backend.dart';
+
+ThemeColor themeColor = ThemeColor();
 
 class ProtectorInmateProfilePage extends StatefulWidget {
   const ProtectorInmateProfilePage({Key? key, required this.uid}) : super(key: key);
@@ -70,13 +68,20 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
       appBar: AppBar(title: Text('입소자 정보')),
       body: ListView(
         children: [
-          Container(
-            padding: EdgeInsets.all(10),
+          Padding(
+            padding: EdgeInsets.only(right: 10, left: 10),
             child: Row(
               children: [
-                Icon(Icons.info_rounded, color: Colors.grey),
-                SizedBox(width: 5),
-                Text('현재 내가 보호하고 있는 입소자 목록입니다'),
+                Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                Expanded(
+                  child: Text(
+                    ' 현재 내가 보호하고 있는 입소자 목록입니다',
+                    style: TextStyle(color: themeColor.getColor()),
+                    overflow: TextOverflow.visible,
+                    maxLines: null,
+                    textScaleFactor: 1,
+                  ),
+                )
               ],
             ),
           ),
@@ -92,7 +97,7 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
                     leading: Icon(Icons.person_rounded, color: Colors.grey),
                     title: Row(
                       children: [
-                        Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
+                        Text('${_residentList[index]['resident_name']} 님', textScaleFactor: 0.95,), //TODO: 수급자 이름 리스트
                       ],
                     ),
                     onTap: () async{

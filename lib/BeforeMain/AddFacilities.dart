@@ -10,12 +10,12 @@ import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart'; //http 사용
 import 'package:google_fonts/google_fonts.dart';
-import '../Supplementary/ThemeColor.dart';
-import '../Supplementary/CustomClick.dart';
+import '../../Supplementary/ThemeColor.dart';
+import '../../Supplementary/CustomClick.dart';
 
 import 'package:test_data/Backend.dart';
 
-import 'Supplementary/PageRouteWithAnimation.dart';
+import '../Supplementary/PageRouteWithAnimation.dart';
 ThemeColor themeColor = ThemeColor();
 
 class AddFacilities extends StatefulWidget {
@@ -124,8 +124,8 @@ class _AddFacilitiesState extends State<AddFacilities> {
                 children: [
                   Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
                   SizedBox(height: 10),
-                  Text('시설 정보를', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('입력해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('시설 정보를', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('입력해주세요', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 50),
                   Form(
                       key: formKey,

@@ -19,7 +19,7 @@ class MainFacilitySettingsPage extends StatefulWidget {
 }
 
 class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
-
+  final fontSize = 0.95;
   late int _facilityId;
 
     @override
@@ -64,13 +64,14 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
           fontWeight: FontWeight.bold,
           color: themeColor.getColor()
         ),
+        textScaleFactor: 1,
       ),
     );
   }
 
   Widget appResidentManagement() {
     return ListTile(
-        title: Text('입소자 관리'),
+        title: Text('입소자 관리', textScaleFactor: fontSize,),
         leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, UserPeopleManagementPage());
@@ -79,7 +80,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appEmployeeManagement() {
     return ListTile(
-        title: Text('직원 관리'),
+        title: Text('직원 관리', textScaleFactor: fontSize,),
         leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, PeopleManagementPage());
@@ -88,7 +89,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appInvite() {
     return ListTile(
-        title: Text('초대하기'),
+        title: Text('초대하기', textScaleFactor: fontSize),
         leading: Icon(Icons.send_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, InvitePage());
@@ -97,7 +98,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appInviteList() {
     return ListTile(
-        title: Text('초대목록'),
+        title: Text('초대목록', textScaleFactor: fontSize),
         leading: Icon(Icons.favorite_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, InviteListPage());
@@ -106,7 +107,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appFacilityBasicSetting() {
     return ListTile(
-      title: Text('시설 기본 정보'),
+      title: Text('시설 기본 정보', textScaleFactor: fontSize),
       leading: Icon(Icons.home_rounded, color: Colors.grey),
       onTap: () {
         pageAnimation(context, FacilityBasicInfoPage(facilityId: _facilityId));

@@ -2,23 +2,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:test_data/Invite/InvitationListPage.dart';
-import 'package:test_data/Invite/InviteListPage.dart';
-import 'package:test_data/Invite/InviteWaitPage.dart';
-import 'package:test_data/LoginPage.dart';
+import 'package:test_data/Setup/InvitationListPage.dart';
 import 'package:test_data/Setup/AppRulePage.dart';
 import 'package:test_data/Setup/ProtectorInmateProfilePage.dart';
 import 'package:test_data/Setup/MyProfilePage.dart';
 import 'package:test_data/Setup/WorkerInmateProfilePage.dart';
-import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-import '../AddFacilities.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
-import 'package:test_data/provider/UserProvider.dart';
 import 'package:http/http.dart' as http;
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
@@ -45,6 +38,7 @@ class _SetupPageState extends State<SetupPage> {
   late String _userRole;
   late int _userId;
   int _count = 0;
+  final fontSize = 0.95;
 
   Future<void> getResidentList() async {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
@@ -101,7 +95,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appProfile() {
     return ListTile(
-        title: Text('내 정보'),
+        title: Text('내 정보', textScaleFactor: fontSize),
         leading: Icon(Icons.person_rounded, color: Colors.grey),
         onTap: () { pageAnimation(context, MyProfilePage()); });
   }
@@ -109,7 +103,7 @@ class _SetupPageState extends State<SetupPage> {
   //입소자 정보 - 보호자일 때
   Widget appProtectorInmateProfile() {
     return ListTile(
-      title: Text('입소자 정보'),
+      title: Text('입소자 정보', textScaleFactor: fontSize),
       leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
       onTap: () { pageAnimation(context, ProtectorInmateProfilePage(uid: _userId)); }
     );
@@ -120,7 +114,7 @@ class _SetupPageState extends State<SetupPage> {
     return Consumer2<UserProvider, ResidentProvider>(
         builder: (context, userProvider, residentProvider, child) {
           return ListTile(
-              title: Text('입소자 정보'),
+              title: Text('입소자 정보', textScaleFactor: fontSize),
               leading: Icon(Icons.supervisor_account_rounded, color: Colors.grey),
               onTap: () { pageAnimation(context, WorkerInmateProfilePage(uid: userProvider.uid, facilityId: residentProvider.facility_id , residentId: residentProvider.resident_id,)); });
         }
@@ -129,7 +123,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appInvitation() {
     return ListTile(
-        title: Text('초대받기'),
+        title: Text('초대받기', textScaleFactor: fontSize),
         leading: Icon(Icons.favorite_rounded, color: Colors.grey),
         onTap: () { pageAnimation(context, InvitationListPage(uid:_userId)); },
         trailing: inviteCount()
@@ -156,7 +150,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appLogout() {
     return ListTile(
-        title: Text('로그아웃'),
+        title: Text('로그아웃', textScaleFactor: fontSize),
         leading: Icon(Icons.logout_rounded, color: Colors.grey),
         onTap: () {
           showDialog(
@@ -194,7 +188,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appRule() {
     return ListTile(
-        title: Text('앱 이용규칙'),
+        title: Text('앱 이용규칙', textScaleFactor: fontSize),
         leading: Icon(Icons.rule_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, AppRulePage());
@@ -204,7 +198,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appVersion() {
     return ListTile(
-        title: Text('버전 정보'),
+        title: Text('버전 정보', textScaleFactor: fontSize),
         leading: Icon(Icons.info_rounded, color: Colors.grey),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -219,7 +213,7 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appDelete() {
     return ListTile(
-      title: Text('계정 탈퇴'),
+      title: Text('계정 탈퇴', textScaleFactor: fontSize),
       leading: Icon(Icons.person_remove_rounded, color: Colors.grey),
       onTap: () {
         pageAnimation(context, UserDeletePage());

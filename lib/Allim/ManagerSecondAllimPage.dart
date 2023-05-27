@@ -13,7 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 ThemeColor themeColor = ThemeColor();
-final fontSize = 1.15;
+final fontSize = 1.1;
 
 class ManagerSecondAllimPage extends StatefulWidget {
   const ManagerSecondAllimPage(
@@ -102,7 +102,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
           Container(
-            padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             width: double.infinity,
             color: Colors.white,
             child: Stack(
@@ -180,7 +180,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        content: Text("정말 삭제하시겠습니까?"),
+                                        content: Text("삭제하시겠습니까?"),
                                         insetPadding: const EdgeInsets.fromLTRB(
                                             0, 80, 0, 80),
                                         actions: [
@@ -221,9 +221,12 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
               ],
             ),
           ),
+
+          Padding(padding: EdgeInsets.all(10), child: Divider(thickness: 0.5)),
+
           //이미지
         Container(
-          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
           width: double.infinity,
           color: Colors.white,
           child: Column(children: [
@@ -273,16 +276,17 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
           //알림장 세부 내용
 
 
-
+        SizedBox(height: 10),
           Container(
             width: double.infinity,
             color: Colors.white,
-            padding: EdgeInsets.fromLTRB(7, 7, 7, 7),
+            padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
             margin: EdgeInsets.only(bottom: 10),
             child: Text(
               _noticeDetail['content'].toString(), textScaleFactor: fontSize
             ),
           ),
+          SizedBox(height: 30),
 
           //알림장 안에 있는 어르신의 일일정보
           informdata(_noticeDetail['sub_content'].toString())
@@ -297,7 +301,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(7, 7, 7, 7),
+      padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
       child: Column(
         children: [
           inform('아침', result[0]),

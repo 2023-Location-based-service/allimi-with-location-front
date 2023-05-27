@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../Backend.dart';
-import '../LoginPage.dart';
+import '/BeforeMain/LoginPage.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../provider/UserProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 import '../Supplementary/CustomClick.dart';
-ThemeColor themeColor = ThemeColor();
 
+ThemeColor themeColor = ThemeColor();
 
 class UserDeletePage extends StatefulWidget {
   const UserDeletePage({Key? key}) : super(key: key);
@@ -96,10 +96,10 @@ class _UserDeletePageState extends State<UserDeletePage> {
             children: [
               Text('🖐️', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
               SizedBox(height: 7),
-              Text('잠깐만요!', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('잠깐만요!', textScaleFactor: 1.3, style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 7),
-              Text('요양원 알리미를 탈퇴하기 전에'),
-              Text('아래 내용을 확인해주세요'),
+              Text('요양원 알리미를 탈퇴하기 전에', textScaleFactor: 1.1),
+              Text('아래 내용을 확인해주세요', textScaleFactor: 1.1),
               SizedBox(height: 30),
             ],
           ),
@@ -127,9 +127,9 @@ class _UserDeletePageState extends State<UserDeletePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, textScaleFactor: 1.2, style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: 6),
-                Text(subText)
+                Text(title, textScaleFactor: 1.1, style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 3),
+                Text(subText, textScaleFactor: 0.95,)
               ],
             )
         )

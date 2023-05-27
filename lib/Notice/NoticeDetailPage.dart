@@ -40,7 +40,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
   Widget build(BuildContext context) {
     CheckClick checkClick = new CheckClick();
     List<String> imgList = List<String>.from(widget.noticeList[widget.index]['imageUrl']);
-    final fontSize = 1.15;
+    final fontSize = 1.10;
 
     return Scaffold(
       appBar: AppBar(
@@ -176,6 +176,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                 ),
               ),
 
+              Padding(padding: EdgeInsets.all(8), child: Divider(thickness: 0.5)),
               //TODO: 공지사항 본문 사진
               // Container(
               //   margin: EdgeInsets.fromLTRB(0,10,0,0),
@@ -192,7 +193,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
               // ),
 
               Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 width: double.infinity,
                 color: Colors.white,
                 child: Column(
@@ -222,7 +223,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                 color: Colors.white,
                 padding: EdgeInsets.all(10),
 
-                child: Text(widget.noticeList[widget.index]['content'], textScaleFactor: 1.15),
+                child: Text(widget.noticeList[widget.index]['content'], textScaleFactor: fontSize,),
               ),
 
               SizedBox(height: 50),

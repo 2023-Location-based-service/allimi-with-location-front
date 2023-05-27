@@ -1,20 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:test_data/AddFacilities.dart';
+import 'package:test_data/BeforeMain/AddFacilities.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
-import '/LoginPage.dart';
-import '/ResidentInfoInputPage.dart';
+import '/BeforeMain/ResidentInfoInputPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 //사용자의 초대대기 화면

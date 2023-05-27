@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:test_data/exception/LoginIdAlreadyExistsException.dart';
-import 'MainFacilitySettings/UserPeopleManagementPage.dart';
+import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
-import '../Supplementary/ThemeColor.dart';
+import '../../Supplementary/ThemeColor.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -84,8 +84,8 @@ class _SignupPageState extends State<SignupPage> {
                   children: [
                     Text('🥳', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
                     SizedBox(height: 10),
-                    Text('서비스 이용을 위해', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('회원가입을 진행해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('서비스 이용을 위해', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('회원가입을 진행해주세요', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 50),
 
                     getTextFormField(
