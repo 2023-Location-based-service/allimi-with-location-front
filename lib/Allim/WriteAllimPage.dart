@@ -61,7 +61,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   // 앨범
   Future<void> _pickImg() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
     if (images != null) {
       setState(() {
         _pickedImgs.addAll(images);
@@ -71,7 +71,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   // 카메라
   Future<void> _takeImg() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (image != null) {
       setState(() {
         _pickedImgs.add(image);
@@ -178,8 +178,32 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                                 Navigator.of(context).pop();
 
                               } catch(e) {
-                                showToast('알림장 업로드 실패! 다시 시도해주세요');
                                 Navigator.of(context).pop();
+                                print('업로드 실패@@@@@@@@@@@@@@@@@@@@@');
+                                print(e);
+
+                                if (e is DioError && e.response?.statusCode == 413) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  showToast('알림장 업로드 실패! 다시 시도해주세요');
+                                }
+
                               }
                               },
                             );
@@ -211,9 +235,32 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         getDropdown(),
         SizedBox(height: 8),
         //사진
+        getText(' 이미지는 최대 10장까지 업로드할 수 있습니다'),
         getPicture(context),
         SizedBox(height: 20)
       ],
+    );
+  }
+
+  Widget getText(String text) {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+        child: Row(
+          children: [
+            Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(color: themeColor.getColor()),
+                overflow: TextOverflow.visible,
+                maxLines: null,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -355,17 +402,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Row(
-                children: [
-                  Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
-                  Text(' 식사 및 투약 기록 선택', style: TextStyle(color: themeColor.getColor())),
-                ],
-              ),
-            ),
 
-
+            getText(' 식사 및 투약 기록 선택'),
             dropList('아침', AllimFirstDropdown(menu: "아침")),
             dropList('점심', AllimFirstDropdown(menu: "점심")),
             dropList('저녁', AllimFirstDropdown(menu: "저녁")),
