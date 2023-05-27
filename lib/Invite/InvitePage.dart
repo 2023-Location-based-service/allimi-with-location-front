@@ -208,27 +208,56 @@ class _InvitePageState extends State<InvitePage> {
               children: [
                 Container(
                   child: ListTile(
-                    contentPadding: const EdgeInsets.all(20),
-                    title: Text('초대하실 유형을 선택해주세요'),
+                    contentPadding: EdgeInsets.all(20),
+                    title: Text(
+                        '초대하실 유형을 선택해주세요',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        textScaleFactor: 1.1
+                    ),
                     subtitle: Column(
                       children: [
                         SizedBox(height: 25,),
-                        ToggleButtons(
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
-                                child: Text('보호자', textScaleFactor: 1.1)),
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
-                                child: Text('직원', textScaleFactor: 1.1)),
-                          ],
-                          isSelected: isSelected,
-                          onPressed: toggleSelect,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: themeColor.getColor(),
-                          selectedColor: Colors.white,
-                          fillColor: themeColor.getColor(),
-                          color: themeColor.getColor(),
+                        // Container(
+                        //   width: double.infinity,
+                        //   child: FittedBox(
+                        //     fit: BoxFit.fitWidth,
+                        //     child: ToggleButtons(
+                        //       borderWidth: 0.4,
+                        //       children: [
+                        //         Text('보호자', textScaleFactor: 0.4),
+                        //         Text('직원', textScaleFactor: 0.4),
+                        //       ],
+                        //       isSelected: isSelected,
+                        //       onPressed: toggleSelect,
+                        //       borderRadius: BorderRadius.all(Radius.circular(5)),
+                        //       selectedBorderColor: themeColor.getColor(),
+                        //       selectedColor: Colors.white,
+                        //       fillColor: themeColor.getColor(),
+                        //       color: themeColor.getColor(),
+                        //     ),
+                        //   ),
+                        // ),
+                        Container(
+                          width: double.infinity,
+                          child: LayoutBuilder(
+                            builder: (BuildContext context, BoxConstraints constraints) {
+                              final buttonWidth = constraints.maxWidth / 2.02; // 토글 버튼의 너비
+                              return ToggleButtons(
+                                constraints: BoxConstraints.tight(Size(buttonWidth, buttonWidth)),
+                                children: [
+                                  Text('보호자', textScaleFactor: 1.1),
+                                  Text('직원', textScaleFactor: 1.1),
+                                ],
+                                isSelected: isSelected,
+                                onPressed: toggleSelect,
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                selectedBorderColor: themeColor.getColor(),
+                                selectedColor: Colors.white,
+                                fillColor: themeColor.getColor(),
+                                color: themeColor.getColor(),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -241,7 +270,11 @@ class _InvitePageState extends State<InvitePage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SizedBox(height: 10,),
-                        Text('전화번호'),
+                        Text(
+                            '전화번호',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            textScaleFactor: 1.1
+                        ),
                         SizedBox(height: 5,),
                         Form(
                           key: formKey,
