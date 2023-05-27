@@ -98,7 +98,7 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
 
   Widget appInviteList() {
     return ListTile(
-        title: Text('초대목록', textScaleFactor: fontSize),
+        title: Text('초대 목록', textScaleFactor: fontSize),
         leading: Icon(Icons.favorite_rounded, color: Colors.grey),
         onTap: () {
           pageAnimation(context, InviteListPage());

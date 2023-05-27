@@ -61,20 +61,27 @@ class _InvitationListPageState extends State<InvitationListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Row(
-        children: [
-          Text("초대받은 요양원 목록"),
-          SizedBox(width: 7),
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 37, height: 37,
-            child: CircleAvatar(
-              backgroundColor: Color(0xfff3727c),
-              child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
-            ),
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Flexible(child: Text("초대받은 요양원 목록")),
+              SizedBox(width: 7),
+              Container(
+                padding: EdgeInsets.all(5),
+                width: 37,
+                height: 37,
+                child: CircleAvatar(
+                  backgroundColor: Color(0xfff3727c),
+                  child: Text('$_count', style: TextStyle(fontSize: 13, color: Colors.white)),
+                ),
+              ),
+              IconButton(
+                onPressed: () { getResidentList(uid); },
+                icon: Icon(Icons.restart_alt_rounded),
+              ),
+            ],
           ),
-          IconButton(onPressed: () { getResidentList(uid); }, icon: Icon(Icons.restart_alt_rounded))
-      ],)),
+        ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(10)
       ),
@@ -123,32 +130,43 @@ class _InvitationListPageState extends State<InvitationListPage> {
         child: Container(
           child: Row(
             children: [
-              Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(" " + userRoleString),
-              Spacer(),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      child: Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold), maxLines: 5, overflow: TextOverflow.ellipsis,),
+                    ), //요양원 이름
+                    SizedBox(
+                      child: Text(userRoleString, maxLines: 2, overflow: TextOverflow.ellipsis,),
+                    ), // 내역할
+                  ],
+                ),
+              ),
+              //Spacer(),
               Container(
                 child: Consumer<UserProvider>(
-                  builder: (context, userProvider, child) {
-                    return OutlinedButton(
-                      style: ButtonStyle(
-                          side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
-                          overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
-                      ),
-                        onPressed: () async {
-                          if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                            return ;
-                          }
+                    builder: (context, userProvider, child) {
+                      return OutlinedButton(
+                          style: ButtonStyle(
+                              side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
+                              overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
+                          ),
+                          onPressed: () async {
+                            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                              return ;
+                            }
 
-                          await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
-                              invitationFacilityId: facilityId, invitationFacilityName : facility_name,
-                              userId: userProvider.uid));
+                            await awaitPageAnimation(context, ResidentInfoInputPage(invitationId: id, invitationUserRole: userRole,
+                                invitationFacilityId: facilityId, invitationFacilityName : facility_name,
+                                userId: userProvider.uid));
 
-                          getResidentList(uid);
+                            getResidentList(uid);
 
-                        },
-                        child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
-                    );
-                  }
+                          },
+                          child: Text('초대받기',style: TextStyle(color: themeColor.getColor(),),)
+                      );
+                    }
                 ),
               ),
             ],
@@ -156,4 +174,6 @@ class _InvitationListPageState extends State<InvitationListPage> {
         )
     );
   }
+
+
 }

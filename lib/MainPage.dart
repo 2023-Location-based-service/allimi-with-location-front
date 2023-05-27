@@ -98,31 +98,46 @@ class _MainPageState extends State<MainPage> {
         children: [
           Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 50)),
           SizedBox(width: 10),
-            Consumer2<UserProvider, ResidentProvider>(
-            builder: (context, userProvider, residentProvider, child) {
-              _resident_id = residentProvider.resident_id;
-              _facility_id = residentProvider.facility_id;
-              _userId = userProvider.uid;
+          Expanded(
+            child: Consumer2<UserProvider, ResidentProvider>(
+                builder: (context, userProvider, residentProvider, child) {
+                  _resident_id = residentProvider.resident_id;
+                  _facility_id = residentProvider.facility_id;
+                  _userId = userProvider.uid;
 
-              String userRoleString = '';
-              if (userProvider.urole == 'PROTECTOR')
-                userRoleString = '보호자님 ' + '(' + residentProvider.resident_name + ' 님)';
-              else if (userProvider.urole == 'WORKER')
-                userRoleString = '직원';
-              else if (userProvider.urole == 'MANAGER')
-                userRoleString = '시설장님';
+                  String userRoleString = '';
+                  if (userProvider.urole == 'PROTECTOR')
+                    userRoleString = '보호자님 ' + '(' + residentProvider.resident_name + ' 님)';
+                  else if (userProvider.urole == 'WORKER')
+                    userRoleString = '직원';
+                  else if (userProvider.urole == 'MANAGER')
+                    userRoleString = '시설장님';
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(residentProvider.facility_name, textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-                  SizedBox(height: 3,),
-                  Text(userProvider.name + ' ' + userRoleString, textScaleFactor: 1), //TODO: 내 역할
-                ],
-              );
-            }
+                  return Container(
+
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible (
+                          child: Text(residentProvider.facility_name, textScaleFactor: 1.2, style: TextStyle(fontWeight: FontWeight.bold),
+                            softWrap: true,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),), //TODO: 요양원 이름
+                        Flexible(
+                          child: Text(userProvider.name + ' ' + userRoleString, textScaleFactor: 1, softWrap: true,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ), //TODO: 내 역할
+                      ],
+                    ),
+                  );
+                }
+            ),
           ),
+          SizedBox(width: 40)
         ],
       ),
     );

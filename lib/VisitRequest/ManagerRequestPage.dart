@@ -149,25 +149,286 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
         return Container(
             padding: EdgeInsets.only(bottom: 5, top: 5),
             color: Colors.white,
-            child: Stack(
+            child: Column(
               children: [
                 ListTile(
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.55,
-                          child: Text(_visitList[index]['residentName'].toString() + " 님 (" + _visitList[index]['visitorName'] + " 보호자님)", textScaleFactor: fontSize), //TODO: ㅇㅇㅇ 보호자님 출력
+                          child: Row(
+                            children: [
+                              Container(
+                                child: Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(_visitList[index]['residentName'].toString() + " 님 (" + _visitList[index]['visitorName'] + " 보호자님)",
+                                        textScaleFactor: fontSize,), //TODO: ㅇㅇㅇ 보호자님 출력
+                                      Row(
+                                        children: [
+                                          Flexible(    // 면회 날짜를 감싸는 Flexible 위젯 추가
+                                            child: Text(
+                                              _visitList[index]['want_date'].substring(0, 10).replaceAll('-', '.'),
+                                              textScaleFactor: fontSize,
+                                              softWrap: true,  // 글자 수가 많으면 자동으로 2줄로 넘어가게 함
+                                            ),
+                                          ),
+                                          SizedBox(width: 7),
+                                          Icon(Icons.schedule_rounded, color: Colors.grey, size: 20),
+                                          SizedBox(width: 2),
+                                          Flexible(    // 면회 시간을 감싸는 Flexible 위젯 추가
+                                            child: Text(
+                                              _visitList[index]['want_date'].substring(11, 16),
+                                              textScaleFactor: fontSize,
+                                              softWrap: true,  // 글자 수가 많으면 자동으로 2줄로 넘어가게 함
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),),
+                              ),
+
+                              if (_userRole == 'PROTECTOR' && _visitList[index]['state'] == 'WAITING')
+                                OutlinedButton(
+                                  child: Text('취소', style: TextStyle(color: Colors.grey),),
+                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
+                                  onPressed: (){
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            content: const Text('면회 신청을 취소하시겠습니까?'),
+                                            actions: [
+                                              TextButton(child: Text('아니오',
+                                                  style: TextStyle(color: themeColor.getMaterialColor())),
+                                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  }),
+                                              TextButton(child: Text('예',
+                                                  style: TextStyle(color: themeColor.getMaterialColor())),
+                                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                  onPressed: () async{
+                                                    if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                                      return ;
+                                                    }
+                                                    try {
+                                                      // 면회신청 취소(삭제)
+
+                                                      await deleteVisit(_visitList[index]['visit_id']);
+                                                      showToast('면회 신청을 취소하였습니다');
+                                                      Navigator.of(context).pop();
+                                                      getVisitList();
+                                                    } catch(e) {
+                                                      showDialog(
+                                                          context: context,
+                                                          barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                                          builder: (BuildContext context) {
+                                                            return AlertDialog(
+                                                              content: Text("면회 취소 실패! 다시 시도해주세요"),
+                                                              insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                                              actions: [
+                                                                TextButton(
+                                                                  child: const Text('확인'),
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            );
+                                                          }
+                                                      );
+                                                    }
+                                                  }),
+                                            ],
+                                          ),
+                                    );
+                                    getVisitList();
+                                  },
+                                ),
+                              if (_userRole != 'PROTECTOR' && _visitList[index]['state'] == 'WAITING')
+                                Row(
+                                    children: [
+                                      OutlinedButton(
+                                        child: Text('수락', style: TextStyle(color: themeColor.getColor())),
+                                        style: ButtonStyle(
+                                            side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
+                                            overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
+                                        ),
+                                        onPressed: (){
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: Text("면회 신청을 수락하시겠습니까?"),
+                                                  insetPadding:
+                                                  const EdgeInsets.fromLTRB(0, 80, 0, 80),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+                                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                      onPressed: () async {
+                                                        if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                                          return ;
+                                                        }
+                                                        try {
+
+                                                          // visit approve event
+                                                          await approve(_visitList[index]['visit_id']);
+                                                          setState(() {
+                                                            getVisitList();
+                                                          });
+                                                          showToast('면회 신청을 수락하였습니다');
+                                                          Navigator.pop(context);
+                                                        } catch (e) {
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                      ),
+                                      const SizedBox(width: 3),
+                                      OutlinedButton(
+                                        child: const Text('거절', style: TextStyle(color: Colors.grey)),
+                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
+                                        onPressed: (){
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                AlertDialog(
+                                                  title: Text('거절 사유'),
+                                                  content: Form(
+                                                    key: formKey,
+                                                    autovalidateMode: AutovalidateMode.always,
+                                                    child: TextFormField(
+                                                      controller: refusalController,
+                                                      validator: (value) {
+                                                        if(value!.isEmpty) return '면회 거절 사유를 입력하세요';
+                                                      },
+                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                      minLines: 1,
+                                                      maxLines: 10,
+                                                      decoration: const InputDecoration(
+                                                        hintText: '내용을 입력하세요',
+                                                        filled: true,
+                                                        fillColor: Colors.white,
+                                                        enabledBorder: InputBorder.none,
+                                                        focusedBorder: InputBorder.none,
+                                                        //focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                                                      ),
+                                                      onSaved: (value) {
+                                                        _rejectReason = value!;
+                                                      },
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(child: Text('취소',
+                                                        style: TextStyle(color: themeColor.getMaterialColor())),
+                                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                        onPressed: () {
+                                                          Navigator.pop(context);
+                                                        }),
+                                                    TextButton(child: Text('확인',
+                                                        style: TextStyle(color: themeColor.getMaterialColor())),
+                                                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                        onPressed: () async {
+                                                          if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                                            return ;
+                                                          }
+
+                                                          if(this.formKey.currentState!.validate()) {
+                                                            this.formKey.currentState!.save();
+
+                                                            try {
+                                                              await reject(_visitList[index]['visit_id']);
+                                                              setState(() {
+                                                                getVisitList();
+                                                              });
+                                                              Navigator.pop(context);
+                                                            } catch(e) {
+                                                              showToast('실패하였습니다 다시 시도해주세요');
+                                                              Navigator.pop(context);
+                                                            }
+                                                          }
+                                                          Future.delayed(const Duration(milliseconds: 300), () {
+                                                            refusalController.text = '';
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                          );
+                                        },
+                                      ),
+                                    ]
+                                ),
+                              if (_userRole != 'PROTECTOR' && _visitList[index]['state'] == 'APPROVED')
+                                OutlinedButton(
+                                  child: Text('완료', style: TextStyle(color: themeColor.getColor())),
+                                  style: ButtonStyle(
+                                      side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
+                                      overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
+                                  ),
+                                  onPressed: (){
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: Text("해당 보호자의 방문이 완료되었습니까?"),
+                                            insetPadding:
+                                            const EdgeInsets.fromLTRB(0, 80, 0, 80),
+                                            actions: [
+                                              TextButton(
+                                                child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+                                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              TextButton(child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                                onPressed: () async {
+                                                  if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                                                    return ;
+                                                  }
+                                                  try {
+                                                    await complete(_visitList[index]['visit_id']);
+                                                    setState(() {
+                                                      getVisitList();
+                                                    });
+
+                                                    Navigator.of(context).pop();
+                                                  } catch (e) {
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                ),
+
+                            ],
+                          ),
                         ),
-                        Row(
-                          children: [
-                            Text(_visitList[index]['want_date'].substring(0, 10).replaceAll('-', '.'), textScaleFactor: fontSize), //TODO: 면회 날짜
-                            SizedBox(width: 7),
-                            Icon(Icons.schedule_rounded, color: Colors.grey, size: 20),
-                            SizedBox(width: 2),
-                            Text(_visitList[index]['want_date'].substring(11, 16), textScaleFactor: fontSize), //TODO: 면회 시간 //"2023-05-08T21:09:00.298Z"
-                          ],
-                        ),
+
+
+
+
+
 
 
                         SizedBox(height: 10),
@@ -185,246 +446,9 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                     )
                 ),
 
-                if (_userRole == 'PROTECTOR' && _visitList[index]['state'] == 'WAITING')
-                  Positioned(
-                    right: 10,
-                    child: OutlinedButton(
-                      child: Text('취소', style: TextStyle(color: Colors.grey),),
-                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
-                      onPressed: (){
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              AlertDialog(
-                                content: const Text('면회 신청을 취소하시겠습니까?'),
-                                actions: [
-                                  TextButton(child: Text('아니오',
-                                      style: TextStyle(color: themeColor.getMaterialColor())),
-                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      }),
-                                  TextButton(child: Text('예',
-                                      style: TextStyle(color: themeColor.getMaterialColor())),
-                                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                      onPressed: () async{
-                                        if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                          return ;
-                                        }
-                                        try {
-                                          // 면회신청 취소(삭제)
 
-                                          await deleteVisit(_visitList[index]['visit_id']);
-                                          showToast('면회 신청을 취소하였습니다');
-                                          Navigator.of(context).pop();
-                                          getVisitList();
-                                        } catch(e) {
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Text("면회 취소 실패! 다시 시도해주세요"),
-                                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text('확인'),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                          );
-                                        }
-                                      }),
-                                ],
-                              ),
-                        );
-                        getVisitList();
-                      },
-                    ),
-                  ),
 
-                if (_userRole != 'PROTECTOR' && _visitList[index]['state'] == 'WAITING')
-                  Positioned(
-                    right: 10,
-                    child: Row(
-                        children: [
-                          OutlinedButton(
-                            child: Text('수락', style: TextStyle(color: themeColor.getColor())),
-                            style: ButtonStyle(
-                              side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
-                                overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
-                            ),
-                            onPressed: (){
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: Text("면회 신청을 수락하시겠습니까?"),
-                                      insetPadding:
-                                      const EdgeInsets.fromLTRB(0, 80, 0, 80),
-                                      actions: [
-                                        TextButton(
-                                          child: Text('취소', style: TextStyle(color: themeColor.getColor())),
-                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: Text('확인', style: TextStyle(color: themeColor.getColor())),
-                                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                          onPressed: () async {
-                                            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                              return ;
-                                            }
-                                            try {
 
-                                              // visit approve event
-                                              await approve(_visitList[index]['visit_id']);
-                                              setState(() {
-                                                getVisitList();
-                                              });
-                                              showToast('면회 신청을 수락하였습니다');
-                                              Navigator.pop(context);
-                                            } catch (e) {
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            },
-                          ),
-                          const SizedBox(width: 3),
-                          OutlinedButton(
-                            child: const Text('거절', style: TextStyle(color: Colors.grey)),
-                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.grey.withOpacity(0.3))),
-                            onPressed: (){
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    AlertDialog(
-                                      title: Text('거절 사유'),
-                                      content: Form(
-                                        key: formKey,
-                                        autovalidateMode: AutovalidateMode.always,
-                                        child: TextFormField(
-                                          controller: refusalController,
-                                          validator: (value) {
-                                            if(value!.isEmpty) return '면회 거절 사유를 입력하세요';
-                                          },
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          minLines: 1,
-                                          maxLines: 10,
-                                          decoration: const InputDecoration(
-                                            hintText: '내용을 입력하세요',
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            //focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                                          ),
-                                          onSaved: (value) {
-                                            _rejectReason = value!;
-                                          },
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(child: Text('취소',
-                                            style: TextStyle(color: themeColor.getMaterialColor())),
-                                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            }),
-                                        TextButton(child: Text('확인',
-                                            style: TextStyle(color: themeColor.getMaterialColor())),
-                                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                            onPressed: () async {
-                                              if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                                return ;
-                                              }
-
-                                              if(this.formKey.currentState!.validate()) {
-                                                this.formKey.currentState!.save();
-
-                                                try {
-                                                  await reject(_visitList[index]['visit_id']);
-                                                  setState(() {
-                                                    getVisitList();
-                                                  });
-                                                  Navigator.pop(context);
-                                                } catch(e) {
-                                                  showToast('실패하였습니다 다시 시도해주세요');
-                                                  Navigator.pop(context);
-                                                }
-                                              }
-                                              Future.delayed(const Duration(milliseconds: 300), () {
-                                                refusalController.text = '';
-                                              });
-                                            }),
-                                      ],
-                                    ),
-                              );
-                            },
-                          ),
-                        ]
-                    ),
-                ),
-
-                if (_userRole != 'PROTECTOR' && _visitList[index]['state'] == 'APPROVED')
-                  Positioned(
-                    right: 10,
-                  child: OutlinedButton(
-                    child: Text('완료', style: TextStyle(color: themeColor.getColor())),
-                    style: ButtonStyle(
-                        side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
-                        overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))
-                    ),
-                    onPressed: (){
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: Text("해당 보호자의 방문이 완료되었습니까?"),
-                              insetPadding:
-                              const EdgeInsets.fromLTRB(0, 80, 0, 80),
-                              actions: [
-                                TextButton(
-                                  child: Text('취소', style: TextStyle(color: themeColor.getColor())),
-                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(child: Text('확인', style: TextStyle(color: themeColor.getColor())),
-                                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                  onPressed: () async {
-                                    if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                      return ;
-                                    }
-                                    try {
-                                      await complete(_visitList[index]['visit_id']);
-                                      setState(() {
-                                        getVisitList();
-                                      });
-
-                                      Navigator.of(context).pop();
-                                    } catch (e) {
-                                    }
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-                    },
-                  ),
-                ),
               ],
             )
         );
