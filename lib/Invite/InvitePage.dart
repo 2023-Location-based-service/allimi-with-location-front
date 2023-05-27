@@ -212,7 +212,7 @@ class _InvitePageState extends State<InvitePage> {
                     title: Text(
                         '초대하실 유형을 선택해주세요',
                         style: TextStyle(fontWeight: FontWeight.bold),
-                        textScaleFactor: 1.1
+                        textScaleFactor: 0.95
                     ),
                     subtitle: Column(
                       children: [
@@ -237,6 +237,7 @@ class _InvitePageState extends State<InvitePage> {
                         //     ),
                         //   ),
                         // ),
+
                         Container(
                           width: double.infinity,
                           child: LayoutBuilder(
@@ -250,7 +251,7 @@ class _InvitePageState extends State<InvitePage> {
                                 ],
                                 isSelected: isSelected,
                                 onPressed: toggleSelect,
-                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
                                 selectedBorderColor: themeColor.getColor(),
                                 selectedColor: Colors.white,
                                 fillColor: themeColor.getColor(),
