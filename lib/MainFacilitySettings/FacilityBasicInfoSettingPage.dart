@@ -54,76 +54,76 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
     if (_facilityInfo.length == 0) {
       return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
     } else {
-      return Container(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 1,
-          itemBuilder: (BuildContext context, int index) {
-            
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      return ListView(
+        children: [
+
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xfff2f3f6),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      text('시설 정보'),
-                      myDetailBox(_facilityInfo['name']), //시설 이름
-                      myDetailBox(_facilityInfo['tel']),  //전화번호
-                    ],
-                  )
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    text('시설 주소'),
-                    myDetailBox(_facilityInfo['address']), //시설 주소
-                  ],
-                )
-              ),
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    text('시설장 이름'),
-                    myDetailBox(_facilityInfo['fm_name']),  //시설 이름
-                  ],
-                )
-              ),
-            ],
-          );
-        }
-      )
+                text('시설 정보'),
+                myDetailBox(_facilityInfo['name']), //시설 이름
+                myDetailBox(_facilityInfo['address']), //시설 주소
+                myDetailBox(_facilityInfo['tel']),  //전화번호
+              ],
+            ),
+          ),
+
+          SizedBox(height: 10),
+
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xfff2f3f6),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                text('시설장 이름'),
+                myDetailBox(_facilityInfo['fm_name']), //시설장 이름
+              ],
+            ),
+          )
+
+        ],
       );
     }
   }
+
+
   Widget text(String text) {
     return Container(
-      child: Text('$text',style: TextStyle(fontWeight: FontWeight.bold),),
+      child: Text('$text',style: TextStyle(fontWeight: FontWeight.bold), textScaleFactor: 1,),
       padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: Color(0xfff2f3f6),
-          border: Border.all(color: Color(0xfff2f3f6),width: 3)
-      ),
     );
   }
 
   Widget myDetailBox(String text) {
-    return Container(
-      child: Text('$text'),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 57),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Color(0xfff2f3f6),width: 2)
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(text),
+            ],
+          ),
+        ),
       ),
     );
   }
