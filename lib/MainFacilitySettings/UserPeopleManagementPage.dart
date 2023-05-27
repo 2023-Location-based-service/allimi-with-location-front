@@ -162,11 +162,9 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Container(
-                      width: (MediaQuery.of(context).size.width) * 0.36,
+                    Expanded(
                       child: Text('${_residents[index]['name']} 님', textScaleFactor: 0.95,),
                     ),
-                    Spacer(),
                     Row(
                       children: [
                         if (_residents[index]['worker_id'] != residentProvider.resident_id)
@@ -316,24 +314,26 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
   }
 
   Widget myDetailBox(String text) {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      decoration: BoxDecoration(
-        color: Color(0xfff2f3f6),
-        borderRadius: BorderRadius.circular(5),
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 57),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        decoration: BoxDecoration(
+          color: Color(0xfff2f3f6),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(text),
+            ],
+          ),
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text('$text'),
-          ],
-        )
-      )
     );
   }
 }

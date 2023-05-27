@@ -108,11 +108,9 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Container(
-                      width: (MediaQuery.of(context).size.width) * 0.54,
+                    Expanded(
                       child: Text('${_employee[index]['name']} 님 (' + userRole +')', textScaleFactor: 0.95,),
                     ),
-                    Spacer(),
                     Container(
                       padding: EdgeInsets.all(2),
                       child: OutlinedButton(

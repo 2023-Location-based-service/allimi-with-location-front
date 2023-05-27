@@ -130,7 +130,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                           Expanded(
                               child: Text(_CommentList[index]['created_date'].toString().substring(0, 10).replaceAll('-', '.'),textScaleFactor: fontSize),
                           ),
-                          Spacer(),
                           if (_userRole == 'PROTECTOR')
                             Container(
                               child: OutlinedButton(

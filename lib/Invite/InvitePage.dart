@@ -242,7 +242,7 @@ class _InvitePageState extends State<InvitePage> {
                           width: double.infinity,
                           child: LayoutBuilder(
                             builder: (BuildContext context, BoxConstraints constraints) {
-                              final buttonWidth = constraints.maxWidth / 2.02; // 토글 버튼의 너비
+                              final buttonWidth = constraints.maxWidth / 2.03; // 토글 버튼의 너비
                               return ToggleButtons(
                                 constraints: BoxConstraints.tight(Size(buttonWidth, buttonWidth)),
                                 children: [

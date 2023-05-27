@@ -108,11 +108,9 @@ class _InviteListPageState extends State<InviteListPage> {
                 leading: Icon(Icons.person_rounded, color: Colors.grey),
                 title: Row(
                   children: [
-                    Container(
-                      width: (MediaQuery.of(context).size.width) * 0.45,
+                    Expanded(
                       child: Text(_inviteDatalist[index]['name'] + ' 님 (' + userRole +')'), //초대 리스트
                     ),
-                    Spacer(),
                     Container(
                       padding: EdgeInsets.all(2),
                       child: OutlinedButton(
