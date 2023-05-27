@@ -105,11 +105,10 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             width: double.infinity,
             color: Colors.white,
-            child: Stack(
+            child: Row(
               children: [
                 if (_userRole != 'PROTECTOR')
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width) * 0.56,
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -125,8 +124,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                     ),
                   ),
                 if (_userRole == 'PROTECTOR')
-                  SizedBox(
-                    width: double.infinity,
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -141,9 +139,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                       ],
                     ),
                   ),
-                Positioned(
-                  top: -10,
-                  right: -1,
+                Container(
                   child: Row(
                     children: [
                       if (_userRole != 'PROTECTOR')
