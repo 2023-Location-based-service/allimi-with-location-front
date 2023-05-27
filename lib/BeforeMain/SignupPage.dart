@@ -123,7 +123,7 @@ class _SignupPageState extends State<SignupPage> {
                     getTextFormField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                        MultiMaskedTextInputFormatter(masks: ['02-xxxx-xxxx', 'xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
                       ],
                       title: '전화번호',
                       prefixIcon: Icon(Icons.phone_rounded, color: Colors.grey),
@@ -131,7 +131,7 @@ class _SignupPageState extends State<SignupPage> {
                         if (value!.isEmpty) {
                           return '전화번호를 입력하세요';
                         } else if (value.length < 12) {
-                          return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                          return '전화번호를 정확히 입력하세요';
                         }
                         return null;
                       },

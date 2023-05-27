@@ -171,7 +171,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                           SizedBox(height: 7),
                           getTextFormField(
                             keyboardType: TextInputType.number,
-                            inputFormatters: [MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')],
+                            inputFormatters: [MultiMaskedTextInputFormatter(masks: ['02-xxxx-xxxx', 'xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')],
                             icon: Icon(Icons.call_rounded, color: Colors.grey),
                             hintText: '전화번호',
                             controller: numberController,
@@ -179,7 +179,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                               if (value!.isEmpty) {
                                 return '전화번호를 입력하세요';
                               } else if (value.length < 12) {
-                                return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                                return '전화번호를 정확히 입력하세요';
                               }
                               return null;
                             },

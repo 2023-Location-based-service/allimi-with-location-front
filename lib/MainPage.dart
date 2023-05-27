@@ -122,7 +122,7 @@ class _MainPageState extends State<MainPage> {
                         Flexible (
                           child: Text(residentProvider.facility_name, textScaleFactor: 1.2, style: TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),), //TODO: 요양원 이름
                         Flexible(

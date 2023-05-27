@@ -193,9 +193,21 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
     return Container(
       child: Row(
         children: [
-          Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(" " + userRoleString),
-          Spacer(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  child: Text(facility_name, style: TextStyle(fontWeight: FontWeight.bold), maxLines: 5, overflow: TextOverflow.ellipsis,),
+                ),
+                SizedBox(
+                  child: Text(userRoleString, maxLines: 2, overflow: TextOverflow.ellipsis,),
+                ),
+              ],
+            ),
+          ),
+
+
           Container(
             child:  OutlinedButton(
                 style: ButtonStyle(

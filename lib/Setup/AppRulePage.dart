@@ -42,7 +42,7 @@ class AppRulePage extends StatelessWidget {
           Text(
               title,
               style: TextStyle(fontWeight: FontWeight.bold),
-              textScaleFactor: 1.3
+              textScaleFactor: 1.2
           ),
           SizedBox(height: 6),
           Text(content)
