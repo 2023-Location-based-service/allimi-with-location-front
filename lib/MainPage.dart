@@ -117,7 +117,8 @@ class _MainPageState extends State<MainPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(residentProvider.facility_name, textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-                  Text(userProvider.name + ' ' + userRoleString, textScaleFactor: 1.05), //TODO: 내 역할
+                  SizedBox(height: 3,),
+                  Text(userProvider.name + ' ' + userRoleString, textScaleFactor: 1), //TODO: 내 역할
                 ],
               );
             }
@@ -165,8 +166,8 @@ class _MainPageState extends State<MainPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
-                  SizedBox(height: 5),
-                  Text(textMenu[index], textScaleFactor: 1.05,),
+                  SizedBox(height: 10),
+                  Text(textMenu[index], textScaleFactor: 1),
                 ],
               ),
             ),

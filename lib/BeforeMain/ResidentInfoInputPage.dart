@@ -6,9 +6,8 @@ import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-import 'MainPage.dart';
-import 'Supplementary/CustomClick.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
+import '/MainPage.dart';
+import '/Supplementary/CustomClick.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
@@ -155,8 +154,8 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                     children: [
                       Text('🤗', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
                       SizedBox(height: 10),
-                      Text('입소자 정보를', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text('입력해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('입소자 정보를', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('입력해주세요', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 50),
 
                       getTextFeild(

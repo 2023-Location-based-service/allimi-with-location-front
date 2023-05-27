@@ -10,8 +10,10 @@ import '../provider/UserProvider.dart';
 import '../provider/ResidentProvider.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
-
+import '/Supplementary/ThemeColor.dart';
 import 'ResidentDetailPage.dart';
+
+ThemeColor themeColor = ThemeColor();
 
 class WorkerInmateProfilePage extends StatefulWidget {
   const WorkerInmateProfilePage({Key? key, required this.facilityId, required this.uid, required this.residentId}) : super(key: key);
@@ -78,13 +80,20 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
     if (_residentList.length != 0) {
       return ListView(
         children: [
-          Container(
-            padding: EdgeInsets.all(10),
+          Padding(
+            padding: EdgeInsets.only(right: 10, left: 10),
             child: Row(
               children: [
-                Icon(Icons.info_rounded, color: Colors.grey),
-                SizedBox(width: 5),
-                Text('현재 내가 담당하고 있는 입소자 목록입니다'),
+                Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                Expanded(
+                  child: Text(
+                    ' 현재 내가 담당하고 있는 입소자 목록입니다',
+                    style: TextStyle(color: themeColor.getColor()),
+                    overflow: TextOverflow.visible,
+                    maxLines: null,
+                    textScaleFactor: 1,
+                  ),
+                )
               ],
             ),
           ),
@@ -99,7 +108,7 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
                   leading: Icon(Icons.person_rounded, color: Colors.grey),
                   title: Row(
                     children: [
-                      Text('${_residentList[index]['resident_name']} 님'), //TODO: 수급자 이름 리스트
+                      Text('${_residentList[index]['resident_name']} 님', textScaleFactor: 0.95,), //TODO: 수급자 이름 리스트
                     ],
                   ),
                   onTap: () async {

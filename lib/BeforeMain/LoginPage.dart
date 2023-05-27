@@ -6,15 +6,12 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-import 'MainFacilitySettings/UserPeopleManagementPage.dart';
-import 'MainPage.dart';
+import '/MainFacilitySettings/UserPeopleManagementPage.dart';
 import 'SignupPage.dart';
-import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
 import '/Supplementary/CustomWidget.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 ThemeColor themeColor = ThemeColor();
 
@@ -58,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Text('💫', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
                       SizedBox(height: 10),
-                      Text('요양원 알리미', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text('로그인을 진행해주세요', textScaleFactor: 1.6, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('요양원 알리미', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('로그인을 진행해주세요', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 50),
                       TextFormField(
                         keyboardType: TextInputType.text,

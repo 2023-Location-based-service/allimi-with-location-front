@@ -242,7 +242,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         borderRadius: BorderRadius.circular(3),
         color: Color(0xffffe9e9),
       ),
-      child: Text('중요', textScaleFactor: 0.85, style: TextStyle(color: Color(0xffed3939))),
+      child: Text('중요', textScaleFactor: 0.8, style: TextStyle(color: Color(0xffed3939))),
     );
   }
 
@@ -253,7 +253,7 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         borderRadius: BorderRadius.circular(3),
         color: Color(0xfff2f3f5),
       ),
-      child: Text('공지사항', textScaleFactor: 0.85, style: TextStyle(color: Color(0xff6d767f))),
+      child: Text('공지사항', textScaleFactor: 0.8, style: TextStyle(color: Color(0xff6d767f))),
     );
   }
 

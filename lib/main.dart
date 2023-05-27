@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
-import 'package:test_data/LoginPage.dart';
+import '/BeforeMain/LoginPage.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/NoticeTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
         final MediaQueryData data = MediaQuery.of(context);
 
         return MediaQuery(
-          data: data.copyWith(textScaleFactor: 1.03), //기본 글자 크기
+          data: data.copyWith(textScaleFactor: 1.05), //기본 글자 크기
           child: ScrollConfiguration(
             behavior: MyBehavior(),
             child: child!,
@@ -89,7 +89,8 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         textTheme: TextTheme(
-          bodyText1: TextStyle(color: Colors.black),
+          labelLarge: TextStyle(fontSize: 14),
+          //bodyText1: TextStyle(color: Colors.black),
         ),
         textSelectionTheme: TextSelectionThemeData(
             cursorColor: themeColor.getMaterialColor(), //커서 색상

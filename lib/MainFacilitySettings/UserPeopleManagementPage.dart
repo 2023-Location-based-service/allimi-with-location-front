@@ -125,17 +125,18 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             color: Colors.white,
             child: Row(
               children: [
                 Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
                 Expanded(
                     child: Text(
-                      ' 추가를 누르면 입소자 정보에 추가할 수 있습니다',
+                      ' [추가] 누르면 내가 담당하는 입소자로 설정됩니다',
                       style: TextStyle(color: themeColor.getColor()),
                       overflow: TextOverflow.visible,
                       maxLines: null,
+                      textScaleFactor: 1,
                     ),
                 )
               ],
@@ -163,7 +164,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                   children: [
                     Container(
                       width: (MediaQuery.of(context).size.width) * 0.36,
-                      child: Text('${_residents[index]['name']} 님'),
+                      child: Text('${_residents[index]['name']} 님', textScaleFactor: 0.95,),
                     ),
                     Spacer(),
                     Row(
@@ -182,8 +183,8 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    content: Text("내가 담당하는 입소자로 추가하시겠습니까?"),
-                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                    content: Text("내가 담당하는 입소자로 설정하시겠습니까?"),
+                                    //insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
                                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
@@ -309,7 +310,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
         style: TextStyle(fontWeight: FontWeight.bold),
-        //textScaleFactor: 1.2,
+        textScaleFactor: 1,
       ),
     );
   }

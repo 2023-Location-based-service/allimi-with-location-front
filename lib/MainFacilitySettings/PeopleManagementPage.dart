@@ -110,7 +110,7 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
                   children: [
                     Container(
                       width: (MediaQuery.of(context).size.width) * 0.54,
-                      child: Text('${_employee[index]['name']} 님 (' + userRole +')'),
+                      child: Text('${_employee[index]['name']} 님 (' + userRole +')', textScaleFactor: 0.95,),
                     ),
                     Spacer(),
                     Container(
