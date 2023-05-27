@@ -122,7 +122,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
 
   // 앨범
   Future<void> _pickImg() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
     if (images != null) {
       setState(() {
         _pickedImgs.addAll(images);
@@ -132,7 +132,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
 
   // 카메라
   Future<void> _takeImg() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (image != null) {
       setState(() {
         _pickedImgs.add(image);
@@ -244,7 +244,30 @@ class _EditAllimPageState extends State<EditAllimPage> {
                 setState(() {});
                 Navigator.pop(context);
               } catch(e) {
-                showToast('알림장 업로드 실패! 다시 시도해주세요');
+                print('업로드 실패@@@@@@@@@@@@@@@@@@@@@');
+                print(e);
+
+                if (e is DioError && e.response?.statusCode == 413) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                        actions: [
+                          TextButton(
+                            child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  showToast('알림장 업로드 실패! 다시 시도해주세요');
+                }
               }
             }
           },
@@ -269,9 +292,35 @@ class _EditAllimPageState extends State<EditAllimPage> {
         getDropdown(),
         SizedBox(height: 8),
         //사진
+        getText(padding: EdgeInsets.fromLTRB(8, 8, 8, 0), text: ' 이미지는 최대 10장까지 업로드할 수 있습니다'),
         getPicture(context),
         SizedBox(height: 20)
       ],
+    );
+  }
+
+  Widget getText({
+    required EdgeInsetsGeometry padding,
+    String? text
+  }) {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: [
+            Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+            Expanded(
+              child: Text(
+                text!,
+                style: TextStyle(color: themeColor.getColor()),
+                overflow: TextOverflow.visible,
+                maxLines: null,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -315,16 +364,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
       appBar: AppBar(title: Text('수급자 선택')),
       body: ListView(
         children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Icon(Icons.info_rounded, color: Colors.grey),
-                SizedBox(width: 5),
-                Text('알림장을 전송할 수급자를 선택해주세요'),
-              ],
-            ),
-          ),
+          getText(padding: EdgeInsets.fromLTRB(8, 0, 8, 0), text: ' 알림장을 전송할 수급자를 선택하세요'),
           Container(
             color: Colors.white,
             child: ListView.builder(
@@ -408,15 +448,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Row(
-                children: [
-                  Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
-                  Text(' 식사 및 투약 기록 선택', style: TextStyle(color: themeColor.getColor())),
-                ],
-              ),
-            ),
+            getText(padding: EdgeInsets.fromLTRB(8, 8, 8, 0), text: ' 식사 및 투약 기록 선택'),
             dropList('아침', AllimFirstDropdown(menu: "아침", initialVal: subContent[0])),
             dropList('점심', AllimFirstDropdown(menu: "점심", initialVal: subContent[1])),
             dropList('저녁', AllimFirstDropdown(menu: "저녁", initialVal: subContent[2])),

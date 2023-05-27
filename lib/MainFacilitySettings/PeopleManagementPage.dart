@@ -83,7 +83,6 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
 
   Widget approve(){
     return Container(
-      padding: EdgeInsets.only(left: 5, top: 10),
       child: Consumer<ResidentProvider>(
         builder: (context, residentProvider, child){
           return ListView.builder(

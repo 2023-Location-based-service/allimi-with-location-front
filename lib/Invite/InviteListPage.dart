@@ -86,7 +86,6 @@ class _InviteListPageState extends State<InviteListPage> {
   //전체 구성
   Widget appInviteList(){
     return Container(
-      padding: EdgeInsets.only(left: 5, top: 10,),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,7 +108,7 @@ class _InviteListPageState extends State<InviteListPage> {
                 title: Row(
                   children: [
                     Expanded(
-                      child: Text(_inviteDatalist[index]['name'] + ' 님 (' + userRole +')'), //초대 리스트
+                      child: Text(_inviteDatalist[index]['name'] + ' 님 (' + userRole +')', textScaleFactor: 0.95,), //초대 리스트
                     ),
                     Container(
                       padding: EdgeInsets.all(2),

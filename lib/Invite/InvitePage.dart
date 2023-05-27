@@ -216,7 +216,7 @@ class _InvitePageState extends State<InvitePage> {
                     ),
                     subtitle: Column(
                       children: [
-                        SizedBox(height: 25,),
+                        SizedBox(height: 10,),
                         // Container(
                         //   width: double.infinity,
                         //   child: FittedBox(
@@ -276,20 +276,20 @@ class _InvitePageState extends State<InvitePage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                             textScaleFactor: 1.1
                         ),
-                        SizedBox(height: 5,),
+                        SizedBox(height: 10,),
                         Form(
                           key: formKey,
                           child: SizedBox(
                             child: TextFormField(
                               controller: _contentEditController,
                               inputFormatters: [
-                                MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                                MultiMaskedTextInputFormatter(masks: ['02-xxxx-xxxx', 'xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
                               ],
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return '전화번호를 입력하세요';
                                 } else if (value.length < 12) {
-                                  return '전화번호를 정확히 입력하세요\n예시) 000-000-0000 또는 000-0000-0000';
+                                  return '전화번호를 정확히 입력하세요';
                                 }
                                 return null;
                               },

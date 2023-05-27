@@ -150,7 +150,6 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
 
   Widget approve(){
     return Container(
-      padding: EdgeInsets.only(left: 5, top: 10),
       child: Consumer2<ResidentProvider, UserProvider>(
         builder: (context, residentProvider, userProvider, child) {
           return ListView.builder(

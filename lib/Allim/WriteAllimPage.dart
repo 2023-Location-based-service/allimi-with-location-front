@@ -235,24 +235,27 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         getDropdown(),
         SizedBox(height: 8),
         //사진
-        getText(' 이미지는 최대 10장까지 업로드할 수 있습니다'),
+        getText(padding: EdgeInsets.fromLTRB(8, 8, 8, 0), text: ' 이미지는 최대 10장까지 업로드할 수 있습니다'),
         getPicture(context),
         SizedBox(height: 20)
       ],
     );
   }
 
-  Widget getText(String text) {
+  Widget getText({
+    required EdgeInsetsGeometry padding,
+    String? text
+  }) {
     return Container(
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+        padding: padding,
         child: Row(
           children: [
             Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
             Expanded(
               child: Text(
-                text,
+                text!,
                 style: TextStyle(color: themeColor.getColor()),
                 overflow: TextOverflow.visible,
                 maxLines: null,
@@ -301,16 +304,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
       appBar: AppBar(title: Text('수급자 선택')),
       body: ListView(
         children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Icon(Icons.info_rounded, color: Colors.grey),
-                SizedBox(width: 5),
-                Text('알림장을 전송할 수급자를 선택해주세요'),
-              ],
-            ),
-          ),
+          getText(padding: EdgeInsets.fromLTRB(8, 0, 8, 0), text: ' 알림장을 전송할 수급자를 선택하세요'),
           Container(
             color: Colors.white,
             child: Consumer<ResidentProvider>(
@@ -403,7 +397,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            getText(' 식사 및 투약 기록 선택'),
+            getText(padding: EdgeInsets.fromLTRB(8, 8, 8, 0), text: ' 식사 및 투약 기록 선택'),
             dropList('아침', AllimFirstDropdown(menu: "아침")),
             dropList('점심', AllimFirstDropdown(menu: "점심")),
             dropList('저녁', AllimFirstDropdown(menu: "저녁")),
