@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -143,7 +144,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
     );
   
     } else {
-      return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
+      return Scaffold(backgroundColor: Colors.white, body: Center(child: SpinKitFadingCircle(color: Colors.grey, size: 30)));
     }
   }
 }

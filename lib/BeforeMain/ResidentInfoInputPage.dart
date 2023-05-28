@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
@@ -251,7 +252,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
       );
     }
     else {
-      return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
+      return Scaffold(backgroundColor: Colors.white, body: Center(child: SpinKitFadingCircle(color: Colors.grey, size: 30)));
     }
   }
   Future<void> addWorker(int uid) async {
