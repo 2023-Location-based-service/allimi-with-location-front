@@ -97,7 +97,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
 
   Widget text(String text) {
     return Container(
-      child: Text('$text',style: TextStyle(fontWeight: FontWeight.bold), textScaleFactor: 1,),
+      child: Text(text,style: TextStyle(fontWeight: FontWeight.bold)),
       padding: EdgeInsets.all(8),
     );
   }

@@ -114,22 +114,28 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
       child: ListView(
         children: [
           text('날짜'),
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-            child: Container(
-              padding: EdgeInsets.all(10),
+
+          Container(
+              width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey.shade300,
-                ),
-                borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.grey.shade300, width: 1)
               ),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
-                child: Text(currentDate, textScaleFactor: 1.1,),
+                padding: EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(currentDate, textScaleFactor: 1.1,),
+                  ],
                 ),
-              ),
-            ),
+              )
+          ),
+
           SizedBox(height: 10,),
           text('한마디 작성'),
           Padding(
@@ -148,6 +154,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
       child: SizedBox(
         height: 300,
         child: TextFormField(
+          style: TextStyle(fontSize: 16), // 폰트 크기 지정
           validator: (value) {
             if(value!.isEmpty) { return '내용을 입력하세요'; }
             else { return null; }
@@ -155,6 +162,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
           maxLines: 100,
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
+            hintText: '요양보호사님께 간단한 메시지를 전송할 수 있어요',
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),

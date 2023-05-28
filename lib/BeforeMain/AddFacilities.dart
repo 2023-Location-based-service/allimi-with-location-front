@@ -278,7 +278,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
       decoration: InputDecoration(
         prefixIcon: icon,
         hintText: hintText,
-        hintStyle: TextStyle(fontSize: 15),
+        hintStyle: TextStyle(fontSize: 16),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),

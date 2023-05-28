@@ -95,7 +95,7 @@ Widget display({
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('$title', textScaleFactor: 1.2),
+              Text('$title', textScaleFactor: 1.1),
               Icon(Icons.expand_more_rounded, color: Colors.black54),
             ],
           ),

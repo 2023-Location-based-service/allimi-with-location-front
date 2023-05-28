@@ -68,30 +68,31 @@ class _MyProfilePageState extends State<MyProfilePage> {
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
         style: TextStyle(fontWeight: FontWeight.bold),
-        textScaleFactor: 1,
       ),
     );
   }
 
   Widget myProfileBox(String text) {
-    return Container(
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 65),
+      child: Container(
         width: double.infinity,
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 16),
         decoration: BoxDecoration(
           color: Color(0xfff2f3f6),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Padding(
-            padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('$text'),
-              ],
-            )
-        )
+          padding: const EdgeInsets.fromLTRB(11.5, 0, 11.5, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(text, textScaleFactor: 1.1,),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
