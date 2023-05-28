@@ -207,6 +207,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
       child: SizedBox(
         height: 200,
         child: TextFormField(
+          style: TextStyle(fontSize: 16), // 폰트 크기 지정
           controller: bodyController,
           maxLines: 100,
           inputFormatters: [LengthLimitingTextInputFormatter(500)], //최대 500글자까지 작성 가능

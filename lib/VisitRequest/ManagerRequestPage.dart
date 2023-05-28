@@ -140,7 +140,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
       itemCount: _visitList.length, //면회 목록 출력 개수
       itemBuilder: (context, index) {
         return Container(
-            padding: EdgeInsets.only(bottom: 7, top: 7),
+            padding: EdgeInsets.only(bottom: 8, top: 8),
             color: Colors.white,
             child: Column(
               children: [

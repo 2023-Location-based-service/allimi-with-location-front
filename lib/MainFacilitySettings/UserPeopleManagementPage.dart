@@ -306,17 +306,16 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
         style: TextStyle(fontWeight: FontWeight.bold),
-        textScaleFactor: 1,
       ),
     );
   }
 
   Widget myDetailBox(String text) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 57),
+      constraints: BoxConstraints(minHeight: 65),
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 16),
         decoration: BoxDecoration(
           color: Color(0xfff2f3f6),
           borderRadius: BorderRadius.circular(5),
@@ -327,7 +326,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(text),
+              Text(text, textScaleFactor: 1.1,),
             ],
           ),
         ),

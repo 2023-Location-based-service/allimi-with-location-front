@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.person_rounded, color: Colors.grey),
                           hintText: '아이디',
-                          hintStyle: TextStyle(fontSize: 15),
+                          hintStyle: TextStyle(fontSize: 16),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey,),
                           hintText: '비밀번호',
-                          hintStyle: TextStyle(fontSize: 15),
+                          hintStyle: TextStyle(fontSize: 16),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),

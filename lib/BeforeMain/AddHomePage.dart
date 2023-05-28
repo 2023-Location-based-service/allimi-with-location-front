@@ -359,7 +359,7 @@ class _AddHomePageState extends State<AddHomePage> {
                   Text(
                     nursingHomeAddressresult[index3],
                     style: TextStyle(
-                        fontSize: 15
+                        fontSize: 16
                     ),
                   ),
                   Divider(thickness: 0.5,),

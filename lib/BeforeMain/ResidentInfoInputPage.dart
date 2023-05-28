@@ -306,7 +306,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
           borderSide: BorderSide(width: 2, color: Colors.red),
         ),
         hintText: title,
-        hintStyle: TextStyle(fontSize: 15),
+        hintStyle: TextStyle(fontSize: 16),
       ),
       validator: validator,
       onSaved: onSaved,
