@@ -61,9 +61,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   // 앨범
   Future<void> _pickImg() async {
-
     List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
-
 
     if (images != null) {
       if (images.length + _pickedImgs.length > 10) {  
@@ -231,7 +229,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                                       );
                                     },
                                   );
-                                }else {
+                                } else {
                                   showToast('알림장 업로드 실패! 다시 시도해주세요');
                                 }
 

@@ -61,6 +61,8 @@ class _EditAllimPageState extends State<EditAllimPage> {
   late Map<String, dynamic> _noticeDetail;
   late List<String> _imageUrls;
 
+  bool canUpdate = false;
+
   void initState() {
     _noticeId = widget.noticeId;
     _noticeDetail = widget.noticeDetail;
@@ -82,19 +84,30 @@ class _EditAllimPageState extends State<EditAllimPage> {
         _pickedImgs.addAll(filesList);
       });
     }
+    canUpdate = true;
   }
 
   Future<List<XFile>> _fileFromImageUrl(List<String> imageUrls) async {
     List<XFile> xfileList  = [];
 
     for (int i = 0; i<imageUrls.length; i++) {
-      final response = await http.get(Uri.parse(imageUrls[i]));
-      final documentDirectory = await pp.getApplicationDocumentsDirectory();
-      final file = File(ppp.join(documentDirectory.path, i.toString() + ".jpg"));
-      file.writeAsBytesSync(response.bodyBytes);
+      try{
+        final response = await http.get(Uri.parse(imageUrls[i]));
+        final documentDirectory = await pp.getApplicationDocumentsDirectory();
+        final file = File(ppp.join(documentDirectory.path, i.toString() + ".jpg"));
+        file.writeAsBytesSync(response.bodyBytes);
 
-      final xfile = new XFile(file.path);
-      xfileList.add(xfile);
+        final xfile = new XFile(file.path);
+        xfileList.add(xfile);
+      } catch(e) {
+        final response = await http.get(Uri.parse(imageUrls[i]));
+        final documentDirectory = await pp.getApplicationDocumentsDirectory();
+        final file = File(ppp.join(documentDirectory.path, i.toString() + ".jpg"));
+        file.writeAsBytesSync(response.bodyBytes);
+
+        final xfile = new XFile(file.path);
+        xfileList.add(xfile);
+      }
     }
 
     return xfileList;
@@ -122,21 +135,29 @@ class _EditAllimPageState extends State<EditAllimPage> {
 
   // 앨범
   Future<void> _pickImg() async {
-    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
+    List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
+
     if (images != null) {
+      if (images.length + _pickedImgs.length > 10) {  
+        int count = 10 - _pickedImgs.length;
+        images = images.sublist(0, count);
+      }
+
       setState(() {
-        _pickedImgs.addAll(images);
+        _pickedImgs.addAll(images!);
       });
     }
   }
 
   // 카메라
   Future<void> _takeImg() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (image != null) {
-      setState(() {
-        _pickedImgs.add(image);
-      });
+      if (_pickedImgs.length + 1 <= 10) {  
+        setState(() {
+          _pickedImgs.add(image);
+        });
+      }
     }
   }
 
@@ -200,10 +221,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
         return customPage(
           title: '알림장 수정',
           onPressed: () async {
-            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-              return ;
-            }
-
             //수급자 선택 안하면 다이얼로그 띄우기
             if (selectedPersonId == 0) {
               showDialog(
@@ -227,6 +244,35 @@ class _EditAllimPageState extends State<EditAllimPage> {
               );
               return;
             }
+
+            if (!canUpdate){
+              showDialog(
+                context: context,
+                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text("이미지 로딩중입니다. 잠시만 기다려주세요", textScaleFactor: 0.95),
+                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                    actions: [
+                      TextButton(
+                        child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                }
+              );
+              return;
+            }
+
+            if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+              return ;
+            }
+
+            
 
             if(this.formKey.currentState!.validate()) {
               this.formKey.currentState!.save();
@@ -265,6 +311,24 @@ class _EditAllimPageState extends State<EditAllimPage> {
                       );
                     },
                   );
+                } else if (e is DioError) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text("이미지 용량이 너무 큽니다"),
+                          actions: [
+                            TextButton(
+                              child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                 } else {
                   showToast('알림장 업로드 실패! 다시 시도해주세요');
                 }
@@ -576,6 +640,27 @@ class _EditAllimPageState extends State<EditAllimPage> {
   Widget addImages(BuildContext context) {
     return IconButton(
       onPressed: () {
+        if (_pickedImgs.length == 10) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                actions: [
+                  TextButton(
+                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          ); 
+          return;
+        }
+
         showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {

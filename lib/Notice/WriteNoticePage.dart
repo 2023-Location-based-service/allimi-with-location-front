@@ -48,10 +48,15 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
 
   // 앨범
   Future<void> _pickImg() async {
-    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
+    List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
     if (images != null) {
+      if (images.length + _pickedImgs.length > 10) {  
+        int count = 10 - _pickedImgs.length;
+        images = images.sublist(0, count);
+      }
+
       setState(() {
-        _pickedImgs.addAll(images);
+        _pickedImgs.addAll(images!);
       });
     }
   }
@@ -61,7 +66,9 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (image != null) {
       setState(() {
+        if (_pickedImgs.length + 1 <= 10) {  
         _pickedImgs.add(image);
+        }
       });
     }
   }
@@ -148,6 +155,24 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                                actions: [
+                                  TextButton(
+                                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else if (e is DioError) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Text("이미지 용량이 너무 큽니다"),
                                 actions: [
                                   TextButton(
                                     child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
@@ -335,32 +360,52 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   Widget addImages(BuildContext context) {
     return IconButton(
       onPressed: () {
-        showModalBottomSheet(
+        if (_pickedImgs.length == 10) {
+          showDialog(
             context: context,
             builder: (BuildContext context) {
-              return SizedBox(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.camera_alt_rounded, color: Colors.grey), title: const Text('카메라'),
-                      onTap: () async {
-                        Navigator.pop(context);
-                        _takeImg();
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.photo_rounded, color: Colors.grey), title: const Text('갤러리'),
-                      onTap: () async {
-                        Navigator.pop(context);
-                        _pickImg();
-                      },
-                    ),
-                  ],
-                ),
+              return AlertDialog(
+                content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                actions: [
+                  TextButton(
+                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               );
-            }
+            },
+          ); 
+          return;
+        }
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.camera_alt_rounded, color: Colors.grey), title: const Text('카메라'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      _takeImg();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.photo_rounded, color: Colors.grey), title: const Text('갤러리'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      _pickImg();
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
         );
       },
       icon: Container(
