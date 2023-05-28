@@ -147,7 +147,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                                                   return ;
                                                 }
                                                 await widget.deleteNotice(widget.noticeList[widget.index]['allNoticeId']);
-                                                showToast('삭제가 완료되었습니다');
+                                                showToast('삭제 완료');
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
                                                 widget.getNotice(widget.facilityId);

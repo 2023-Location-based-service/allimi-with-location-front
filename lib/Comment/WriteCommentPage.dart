@@ -85,7 +85,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                                     return ;
                                   }
                                   await addComment(userProvider.uid, residentProvider.resident_id, residentProvider.facility_id);
-                                  showToast('작성이 완료되었습니다');
+                                  showToast('작성 완료');
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 } catch(e) {

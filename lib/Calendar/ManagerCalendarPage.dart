@@ -260,7 +260,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
                           getSchedules();
                         });
 
-                        showToast('삭제되었습니다');
+                        showToast('삭제 완료');
                         Navigator.of(context).pop();
 
                       } catch (e) {

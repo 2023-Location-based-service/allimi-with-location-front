@@ -137,7 +137,7 @@ class _MainPageState extends State<MainPage> {
                 }
             ),
           ),
-          SizedBox(width: 40)
+          SizedBox(width: 35)
         ],
       ),
     );

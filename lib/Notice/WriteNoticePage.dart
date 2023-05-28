@@ -140,7 +140,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                         
                         _pickedImgs = [];
 
-                        showToast('작성이 완료되었습니다');
+                        showToast('작성 완료');
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       } catch(e) {

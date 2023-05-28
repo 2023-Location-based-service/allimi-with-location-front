@@ -186,7 +186,7 @@ class _InvitePageState extends State<InvitePage> {
                   await getUserByPhoneNum(_phone_num);
                   setState(() {});
                   if(_phoneNumUsers.length == 0){
-                    return showToast('회원가입을 하지 않은 전화번호입니다! 다시 확인해주세요');
+                    return showToast('회원가입을 하지 않은 전화번호입니다!\n다시 확인해주세요');
                   }
                 } catch(e) {
                   showToast('초대 실패! 다시 시도해주세요');
@@ -277,7 +277,7 @@ class _InvitePageState extends State<InvitePage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                             textScaleFactor: 1.1
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(height: 8,),
                         Form(
                           key: formKey,
                           child: SizedBox(
