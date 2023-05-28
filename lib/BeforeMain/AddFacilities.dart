@@ -1,27 +1,23 @@
 import 'dart:convert';
-
 import 'package:kpostal/kpostal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
-import 'package:test_data/provider/UserProvider.dart'; //http 사용
+import 'package:test_data/provider/UserProvider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Supplementary/ThemeColor.dart';
 import '../../Supplementary/CustomClick.dart';
-
 import 'package:test_data/Backend.dart';
-
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../Supplementary/PhoneTextInputFormatter.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class AddFacilities extends StatefulWidget {
   const AddFacilities({Key? key, required this.uid}) : super(key: key);
-
   final int uid;
 
   @override
@@ -44,7 +40,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   late int _uid;
   int _resident_id = 0;
 
-    @override
+  @override
   void initState() {
     super.initState();
     _uid = widget.uid;
@@ -52,7 +48,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
   Future<void> facilityRequest(int uid) async {
     debugPrint("@@@@ 시설 추가하는 백엔드 url보냄: " + _personName);
-    //입소자추가 psot
+    //입소자추가 post
     http.Response response1 = await http.post(
       Uri.parse(Backend.getUrl() + 'facilities'),
       headers: <String, String>{
@@ -106,7 +102,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
     _resident_id = parsedJson['resident_id'];
   }
 
-
   @override
   Widget build(BuildContext context) {
     return addFacilities();
@@ -159,7 +154,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                   ),);
                                 }
                               ),
-
                             ],
                           ),
                           SizedBox(height: 7),
@@ -253,7 +247,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
                                       }
                                     },
                                   )
-                                    
                                 ],
                               );
                             }
@@ -286,7 +279,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
         prefixIcon: icon,
         hintText: hintText,
         hintStyle: TextStyle(fontSize: 15),
-        //labelStyle: const TextStyle(color: Colors.black54),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),

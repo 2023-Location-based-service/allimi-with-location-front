@@ -148,7 +148,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                   ],
                                 ),
                               ),
-                              //TODO: 이미지
+                              // 이미지
                               if (imgList.length != 0)
                                 Container(
                                   width: 100,
@@ -168,32 +168,6 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                                     ),
                                   ),
                                 ),
-
-                              //원래코드
-                              // Container(
-                              //     width: 100,
-                              //     height: 100,
-                              //     child: Container(
-                              //       child: Image.network(
-                              //         imgList[0],
-                              //         fit: BoxFit.fill,
-                              //         loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                              //           if (loadingProgress == null) return child;
-                              //           return Center(
-                              //             child: CircularProgressIndicator(
-                              //               value: loadingProgress.expectedTotalBytes != null
-                              //                   ? loadingProgress.cumulativeBytesLoaded /
-                              //                       loadingProgress.expectedTotalBytes!
-                              //                   : null,
-                              //             ),
-                              //           );
-                              //         },
-                              //         ),
-                              //     )
-                              //   ),
-
-
-
                             ],
                           ),
                         ),

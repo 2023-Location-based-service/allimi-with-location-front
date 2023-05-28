@@ -5,10 +5,10 @@ import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
-import 'package:http/http.dart' as http; //http 사용
+import 'package:http/http.dart' as http; // http 사용
 import 'package:test_data/Backend.dart';
 
-//초대목록화면
+// 초대 목록 화면
 ThemeColor themeColor = ThemeColor();
 
 class InviteListPage extends StatefulWidget {

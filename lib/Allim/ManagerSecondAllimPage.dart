@@ -117,7 +117,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                           _noticeDetail['create_date']
                               .toString()
                               .substring(0, 10)
-                              .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                              .replaceAll('-', '.'), // 2023-03-30으로 바꾸기
                           textScaleFactor: fontSize
                         ),
                       ],
@@ -133,7 +133,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                           _noticeDetail['create_date']
                               .toString()
                               .substring(0, 10)
-                              .replaceAll('-', '.'), //TODO 2023-03-30으로 바꾸기
+                              .replaceAll('-', '.'), // 2023-03-30으로 바꾸기
                           textScaleFactor: fontSize
                         ),
                       ],
@@ -221,58 +221,28 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
           Padding(padding: EdgeInsets.all(10), child: Divider(thickness: 0.5)),
 
           //이미지
-        Container(
-          // margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          width: double.infinity,
-          color: Colors.white,
-          child: Column(children: [
-            for (int i = 0; i < _imageUrls.length; i++) ...[
-              CachedNetworkImage(
-                imageUrl: _imageUrls[i],
-                fit: BoxFit.fill,
-                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                  child: SpinKitFadingCircle(
-                    color: Colors.grey,
-                    size: 30,
+          Container(
+            width: double.infinity,
+            color: Colors.white,
+            child: Column(children: [
+              for (int i = 0; i < _imageUrls.length; i++) ...[
+                CachedNetworkImage(
+                  imageUrl: _imageUrls[i],
+                  fit: BoxFit.fill,
+                  progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                    child: SpinKitFadingCircle(
+                      color: Colors.grey,
+                      size: 30,
+                    ),
                   ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error_rounded, color: Colors.grey),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error_rounded, color: Colors.grey),
-              ),
-              SizedBox(height: 10),
-            ],
-          ]),
-        ),
-
-        //원래 이미지 코드
-        //   Container(
-        //     width: double.infinity,
-        //     color: Colors.white,
-        //     child: Column(children: [
-        //       for (int i = 0; i < _imageUrls.length; i++) ...[
-        //         Image.network(
-        //           _imageUrls[i],
-        //           fit: BoxFit.fill,
-        //           loadingBuilder: (BuildContext context, Widget child,
-        //               ImageChunkEvent? loadingProgress) {
-        //             if (loadingProgress == null) return child;
-        //             return Center(
-        //               child: CircularProgressIndicator(
-        //                 value: loadingProgress.expectedTotalBytes != null
-        //                     ? loadingProgress.cumulativeBytesLoaded /
-        //                         loadingProgress.expectedTotalBytes!
-        //                     : null,
-        //               ),
-        //             );
-        //           },
-        //         ),
-        //       ]
-        //     ]),
-        //   ),
-
+                SizedBox(height: 10),
+              ],
+            ]),
+          ),
           //알림장 세부 내용
-
-
-        SizedBox(height: 10),
+          SizedBox(height: 10),
           Container(
             width: double.infinity,
             color: Colors.white,
@@ -283,7 +253,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
             ),
           ),
           SizedBox(height: 30),
-
           //알림장 안에 있는 어르신의 일일정보
           informdata(_noticeDetail['sub_content'].toString())
       ],

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/exception/InvitAlreadyExistsException.dart';
 import 'package:test_data/exception/ResidentAlreadyExistsException.dart';
@@ -15,7 +14,6 @@ import 'package:http/http.dart' as http; //http 사용
 import 'package:test_data/Backend.dart';
 
 //초대하기 화면
-
 ThemeColor themeColor = ThemeColor();
 
 class InvitePage extends StatefulWidget {
@@ -81,7 +79,7 @@ class _InvitePageState extends State<InvitePage> {
       print("성공");
     } else if (response.statusCode == 409) { //이미 같은 초대장이 존재
       throw InvitAlreadyExistsException("이미 존재하는 초대장");
-    } else if (response.statusCode == 406) { //이미 존재하는 입소자(초대장 보낼 이유가 없지)
+    } else if (response.statusCode == 406) { //이미 존재하는 입소자
       throw ResidentAlreadyExistsException("이미 존재하는 입소자");
     } else {
       throw Exception();
@@ -181,7 +179,6 @@ class _InvitePageState extends State<InvitePage> {
                       }
                   );
                 }
-
                 try {
                   await getUserByPhoneNum(_phone_num);
                   setState(() {});
@@ -218,27 +215,6 @@ class _InvitePageState extends State<InvitePage> {
                     subtitle: Column(
                       children: [
                         SizedBox(height: 10,),
-                        // Container(
-                        //   width: double.infinity,
-                        //   child: FittedBox(
-                        //     fit: BoxFit.fitWidth,
-                        //     child: ToggleButtons(
-                        //       borderWidth: 0.4,
-                        //       children: [
-                        //         Text('보호자', textScaleFactor: 0.4),
-                        //         Text('직원', textScaleFactor: 0.4),
-                        //       ],
-                        //       isSelected: isSelected,
-                        //       onPressed: toggleSelect,
-                        //       borderRadius: BorderRadius.all(Radius.circular(5)),
-                        //       selectedBorderColor: themeColor.getColor(),
-                        //       selectedColor: Colors.white,
-                        //       fillColor: themeColor.getColor(),
-                        //       color: themeColor.getColor(),
-                        //     ),
-                        //   ),
-                        // ),
-
                         Container(
                           width: double.infinity,
                           child: LayoutBuilder(
