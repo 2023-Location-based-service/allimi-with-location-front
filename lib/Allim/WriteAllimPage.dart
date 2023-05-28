@@ -61,21 +61,32 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   // 앨범
   Future<void> _pickImg() async {
-    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
+
+    List<XFile>? images = await _picker.pickMultiImage(imageQuality: 50);
+
+
     if (images != null) {
+      if (images.length + _pickedImgs.length > 10) {  
+        int count = 10 - _pickedImgs.length;
+        images = images.sublist(0, count);
+      }
+
       setState(() {
-        _pickedImgs.addAll(images);
+        _pickedImgs.addAll(images!);
       });
     }
   }
 
   // 카메라
   Future<void> _takeImg() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (image != null) {
-      setState(() {
-        _pickedImgs.add(image);
-      });
+      if (_pickedImgs.length + 1 <= 10) {  
+        setState(() {
+          _pickedImgs.add(image);
+        });
+        
+      }
     }
   }
 
@@ -95,6 +106,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
     final response = await dio.post(Backend.getUrl() + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+
+    debugPrint("@@@@" + response.statusCode.toString());
 
     if (response.statusCode == 200) {
       print("성공");
@@ -200,7 +213,25 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                                       );
                                     },
                                   );
-                                } else {
+                                } else if (e is DioError) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Text("이미지 용량이 너무 큽니다"),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }else {
                                   showToast('알림장 업로드 실패! 다시 시도해주세요');
                                 }
 
@@ -472,6 +503,26 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
   Widget addImages(BuildContext context) {
     return IconButton(
       onPressed: () {
+        if (_pickedImgs.length == 10) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                actions: [
+                  TextButton(
+                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
+                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          ); 
+          return;
+        }
         showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
