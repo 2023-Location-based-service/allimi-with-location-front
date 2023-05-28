@@ -95,7 +95,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     if (_noticeDetail['notice_id'] == null)
       return Scaffold(
           backgroundColor: Colors.white,
-          body: Center(child: CircularProgressIndicator()));
+          body: Center(child: SpinKitFadingCircle(color: Colors.grey, size: 30)));
 
     return SingleChildScrollView(
         child: Column(

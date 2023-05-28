@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_data/Backend.dart';
 
@@ -51,7 +52,7 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
 
   Widget appSetting(){
     if (_facilityInfo.length == 0) {
-      return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
+      return Scaffold(backgroundColor: Colors.white, body: Center(child: SpinKitFadingCircle(color: Colors.grey, size: 30)));
     } else {
       return ListView(
         children: [

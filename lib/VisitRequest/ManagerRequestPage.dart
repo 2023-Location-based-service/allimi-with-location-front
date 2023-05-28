@@ -140,7 +140,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
       itemCount: _visitList.length, //면회 목록 출력 개수
       itemBuilder: (context, index) {
         return Container(
-            padding: EdgeInsets.only(bottom: 5, top: 5),
+            padding: EdgeInsets.only(bottom: 7, top: 7),
             color: Colors.white,
             child: Column(
               children: [
@@ -427,13 +427,13 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                         Text(_visitList[index]['texts'], textScaleFactor: fontSize), //할 말 출력
                         Divider(thickness: 0.5),
                         if (_visitList[index]['state'] == 'WAITING')
-                          Text('면회 수락 대기 중입니다.', style: TextStyle(color: Colors.grey), textScaleFactor: fontSize),
+                          Text('면회 수락 대기 중', style: TextStyle(color: Colors.grey), textScaleFactor: fontSize),
                         if (_visitList[index]['state'] == 'APPROVED')
-                          Text('면회 수락되었습니다. 제때 방문하세요.', style: TextStyle(color: themeColor.getColor()), textScaleFactor: fontSize),
+                          Text('면회 수락\n제때 방문하세요!', style: TextStyle(color: themeColor.getColor()), textScaleFactor: fontSize),
                         if (_visitList[index]['state'] == 'REJECTED')
-                          Text("면회 거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: Colors.red), textScaleFactor: fontSize), //거절 출력
+                          Text("면회 거절\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: Colors.red), textScaleFactor: fontSize), //거절 출력
                         if (_visitList[index]['state'] == 'COMPLETED')
-                          Text("방문 완료하였습니다.", style: TextStyle(color: Colors.grey), textScaleFactor: fontSize), //방문 완료 출력
+                          Text("방문 완료", style: TextStyle(color: Colors.grey), textScaleFactor: fontSize), //방문 완료 출력
                       ],
                     )
                 ),
