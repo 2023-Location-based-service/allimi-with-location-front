@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_data/Backend.dart';
-//시설 기본정보 설정 화면
 
 class FacilityBasicInfoPage extends StatefulWidget {
   const FacilityBasicInfoPage({Key? key, required this.facilityId}) : super(key: key);
@@ -90,12 +89,10 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
               ],
             ),
           )
-
         ],
       );
     }
   }
-
 
   Widget text(String text) {
     return Container(

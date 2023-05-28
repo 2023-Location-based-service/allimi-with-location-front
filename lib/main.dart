@@ -71,7 +71,6 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        // 추가: 필요한 Cupertino 로캘 대리자도 여기에 추가하세요.
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
@@ -79,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: ThemeData(
         fontFamily: 'NotoSans',
-        scaffoldBackgroundColor: Colors.white, //기본 배경색Color(0xfff8f8f8)
+        scaffoldBackgroundColor: Colors.white, //기본 배경색 Color
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(fontFamily: 'NotoSans', color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18), //앱바 텍스트 색상
           backgroundColor: Colors.white, //앱바 배경색
@@ -89,8 +88,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         textTheme: TextTheme(
-          labelLarge: TextStyle(fontSize: 14),
-          //bodyText1: TextStyle(color: Colors.black),
+          labelLarge: TextStyle(fontSize: 14), //폰트 크기
         ),
         textSelectionTheme: TextSelectionThemeData(
             cursorColor: themeColor.getMaterialColor(), //커서 색상

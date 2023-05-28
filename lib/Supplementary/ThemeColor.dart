@@ -6,21 +6,12 @@ class ThemeColor {
   Color _themeColor = Color(0xff5BB193);
   MaterialColor _themeMaterialColor = createMaterialColor(Color(0xff5BB193));
 
-  // Color _whiteColor = Color(0xffFFFFFF);
-  // MaterialColor _whiteMaterialColor = createMaterialColor(Color(0xffFFFFFF));
-
   Color getColor() {
     return _themeColor;
   }
   MaterialColor getMaterialColor() {
     return _themeMaterialColor;
   }
-  // Color getWhiteColor() {
-  //   return _whiteColor;
-  // }
-  // MaterialColor getWhiteMaterialColor() {
-  //   return _whiteMaterialColor;
-  // }
 
   static MaterialColor createMaterialColor(Color color) {
     List strengths = <double>[.05];

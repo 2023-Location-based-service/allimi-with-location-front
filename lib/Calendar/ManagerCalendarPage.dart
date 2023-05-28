@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
-import 'package:test_data/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:http/http.dart' as http; //http 사용
-
 import 'package:test_data/Backend.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class ManagerCalendarPage extends StatefulWidget {
@@ -47,7 +46,6 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _selectedDate = _focusedDay;
     _facility_id = widget.facility_id;
@@ -99,7 +97,7 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
       mySelectedEvents = {};
 
       for (Map<String, dynamic> schedule in parsedJson) {
-        List<String> result = schedule['date'].split('-');//"2023-05-08",
+        List<String> result = schedule['date'].split('-'); //"2023-05-08"
 
         DateTime date = DateTime.utc(int.parse(result[0]), int.parse(result[1]), int.parse(result[2]));
 
@@ -187,12 +185,10 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
               }
             },
             selectedDayPredicate: (day) {
-              //달 바뀌거나 focus날짜 바뀌면 상당히 많이 호출됨.. 35번? 성능문제
               return isSameDay(_selectedDate, day);
             },
             onFormatChanged: (format) {
               if (_calendarFormat != format) {
-                // Call `setState()` when updating calendar format
                 setState(() {
                   _calendarFormat = format;
                 });

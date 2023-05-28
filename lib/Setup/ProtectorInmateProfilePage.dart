@@ -97,7 +97,7 @@ class _ProtectorInmateProfilePageState extends State<ProtectorInmateProfilePage>
                     leading: Icon(Icons.person_rounded, color: Colors.grey),
                     title: Row(
                       children: [
-                        Text('${_residentList[index]['resident_name']} 님', textScaleFactor: 0.95,), //TODO: 수급자 이름 리스트
+                        Text('${_residentList[index]['resident_name']} 님', textScaleFactor: 0.95,), //수급자 이름 리스트
                       ],
                     ),
                     onTap: () async{

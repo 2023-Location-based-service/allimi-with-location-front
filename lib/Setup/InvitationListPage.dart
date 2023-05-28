@@ -9,7 +9,9 @@ import 'package:http/http.dart' as http;
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
+
 ThemeColor themeColor = ThemeColor();
+
 //사용자의 초대대기 화면
 
 class InvitationListPage extends StatefulWidget {
@@ -139,11 +141,10 @@ class _InvitationListPageState extends State<InvitationListPage> {
                     ), //요양원 이름
                     SizedBox(
                       child: Text(userRoleString, maxLines: 2, overflow: TextOverflow.ellipsis,),
-                    ), // 내역할
+                    ), // 내 역할
                   ],
                 ),
               ),
-              //Spacer(),
               Container(
                 child: Consumer<UserProvider>(
                     builder: (context, userProvider, child) {

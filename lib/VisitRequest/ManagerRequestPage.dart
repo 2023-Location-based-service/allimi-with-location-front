@@ -1,21 +1,14 @@
-// Stack 수정 중
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:test_data/Backend.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
-import 'package:test_data/VisitRequest/SelectedTimePage.dart';
 import 'package:test_data/VisitRequest/VisitWritePage.dart';
-import 'package:test_data/provider/VisitTempProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
-import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import '../Supplementary/CustomClick.dart';
-
 
 ThemeColor themeColor = ThemeColor();
 
@@ -165,7 +158,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(_visitList[index]['residentName'].toString() + " 님 (" + _visitList[index]['visitorName'] + " 보호자님)",
-                                        textScaleFactor: fontSize,), //TODO: ㅇㅇㅇ 보호자님 출력
+                                        textScaleFactor: fontSize,), //ㅇㅇㅇ 보호자님 출력
                                       Row(
                                         children: [
                                           Flexible(    // 면회 날짜를 감싸는 Flexible 위젯 추가
@@ -327,7 +320,6 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                                                         fillColor: Colors.white,
                                                         enabledBorder: InputBorder.none,
                                                         focusedBorder: InputBorder.none,
-                                                        //focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
                                                       ),
                                                       onSaved: (value) {
                                                         _rejectReason = value!;
@@ -432,16 +424,16 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
 
 
                         SizedBox(height: 10),
-                        Text(_visitList[index]['texts'], textScaleFactor: fontSize), //TODO: 할 말 출력
+                        Text(_visitList[index]['texts'], textScaleFactor: fontSize), //할 말 출력
                         Divider(thickness: 0.5),
                         if (_visitList[index]['state'] == 'WAITING')
                           Text('면회 수락 대기 중입니다.', style: TextStyle(color: Colors.grey), textScaleFactor: fontSize),
                         if (_visitList[index]['state'] == 'APPROVED')
                           Text('면회 수락되었습니다. 제때 방문하세요.', style: TextStyle(color: themeColor.getColor()), textScaleFactor: fontSize),
                         if (_visitList[index]['state'] == 'REJECTED')
-                          Text("면회 거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: Colors.red), textScaleFactor: fontSize), //TODO: 수락/거절 출력
+                          Text("면회 거절되었습니다.\n사유: " + _visitList[index]['rejReason'], style: TextStyle(color: Colors.red), textScaleFactor: fontSize), //거절 출력
                         if (_visitList[index]['state'] == 'COMPLETED')
-                          Text("방문 완료하였습니다.", style: TextStyle(color: Colors.grey), textScaleFactor: fontSize), //TODO: 수락/거절 출력
+                          Text("방문 완료하였습니다.", style: TextStyle(color: Colors.grey), textScaleFactor: fontSize), //방문 완료 출력
                       ],
                     )
                 ),
