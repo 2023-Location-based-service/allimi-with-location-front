@@ -7,6 +7,7 @@ import 'package:test_data/exception/InvitAlreadyExistsException.dart';
 import 'package:test_data/exception/ResidentAlreadyExistsException.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
+import '../Supplementary/PhoneTextInputFormatter.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -283,7 +284,7 @@ class _InvitePageState extends State<InvitePage> {
                             child: TextFormField(
                               controller: _contentEditController,
                               inputFormatters: [
-                                MultiMaskedTextInputFormatter(masks: ['02-xxxx-xxxx', 'xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                                PhoneTextInputFormatter()
                               ],
                               validator: (value) {
                                 if (value!.isEmpty) {

@@ -251,7 +251,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    content: Text("이미지 로딩중입니다. 잠시만 기다려주세요", textScaleFactor: 0.95),
+                    content: Text("이미지 로딩 중 잠시만 기다려주세요", textScaleFactor: 0.95),
                     insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                     actions: [
                       TextButton(
