@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Setup/InvitationListPage.dart';
 import 'package:test_data/Setup/AppRulePage.dart';
@@ -40,11 +41,11 @@ class _SetupPageState extends State<SetupPage> {
     debugPrint("@@@@@ 입소자 정보 리스트 받아오는 백앤드 url 보냄");
 
     http.Response response = await http.get(
-        Uri.parse(Backend.getUrl() + "users/invitations/" + _userId.toString()),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept-Charset': 'utf-8'
-        }
+      Uri.parse(Backend.getUrl() + "users/invitations/" + _userId.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      }
     );
 
     var data =  utf8.decode(response.bodyBytes);
@@ -146,79 +147,90 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget appLogout() {
     return ListTile(
-        title: Text('로그아웃', textScaleFactor: fontSize),
-        leading: Icon(Icons.logout_rounded, color: Colors.grey),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) =>
-                AlertDialog(
-                  content: const Text('로그아웃하시겠습니까?'),
-                  actions: [
-                    TextButton(child: Text('아니오',
-                        style: TextStyle(color: themeColor.getMaterialColor())),
-                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
-                    Consumer<UserProvider>(
-                        builder: (context, userProvider, child) {
-                          return TextButton(child: Text('예',
-                              style: TextStyle(color: themeColor.getMaterialColor())),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                              onPressed: () {
-                                if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                                  return ;
-                                }
-                                userProvider.logout();
-                                userProvider.getData();
-                                Navigator.pop(context);
-                              });
+      title: Text('로그아웃', textScaleFactor: fontSize),
+      leading: Icon(Icons.logout_rounded, color: Colors.grey),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) =>
+            AlertDialog(
+              content: const Text('로그아웃하시겠습니까?'),
+              actions: [
+                TextButton(child: Text('아니오',
+                  style: TextStyle(color: themeColor.getMaterialColor())),
+                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                  onPressed: () {
+                    Navigator.pop(context);
+                }),
+                Consumer<UserProvider>(
+                  builder: (context, userProvider, child) {
+                    return TextButton(child: Text('예',
+                      style: TextStyle(color: themeColor.getMaterialColor())),
+                      style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                      onPressed: () {
+                        if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
+                          return ;
                         }
-                    ),
-                  ],
+                        userProvider.logout();
+                        userProvider.getData();
+                        Navigator.pop(context);
+                      });
+                  }
                 ),
-          );
-        });
+              ],
+            ),
+        );
+      });
   }
 
   Widget appRule() {
     return ListTile(
-        title: Text('앱 이용규칙', textScaleFactor: fontSize),
-        leading: Icon(Icons.rule_rounded, color: Colors.grey),
-        onTap: () {
-          pageAnimation(context, AppRulePage());
-        }
+      title: Text('앱 이용규칙', textScaleFactor: fontSize),
+      leading: Icon(Icons.rule_rounded, color: Colors.grey),
+      onTap: () {
+        pageAnimation(context, AppRulePage());
+      }
     );
   }
 
   Widget appVersion() {
     return ListTile(
-        title: Text('버전 정보', textScaleFactor: fontSize),
-        leading: Icon(Icons.info_rounded, color: Colors.grey),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('현재 버전은 $version 입니다'), //내용
-                duration: const Duration(seconds: 2), //올라와 있는 시간
-              )
-          );
-        }
-    );
-  }
-
-  Widget appDelete() {
-    return ListTile(
-      title: Text('계정 탈퇴', textScaleFactor: fontSize),
-      leading: Icon(Icons.person_remove_rounded, color: Colors.grey),
+      title: Text('버전 정보', textScaleFactor: fontSize),
+      leading: Icon(Icons.info_rounded, color: Colors.grey),
       onTap: () {
-        pageAnimation(context, UserDeletePage());
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('현재 버전은 $version 입니다'), //내용
+              duration: const Duration(seconds: 2), //올라와 있는 시간
+            )
+        );
       }
     );
   }
 
-
-
+  Widget appDelete() {
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return ListTile(
+          title: Text('계정 탈퇴', textScaleFactor: fontSize),
+          leading: Icon(Icons.person_remove_rounded, color: Colors.grey),
+          onTap: () async {
+            await awaitPageAnimation(context, UserDeletePage());
+            // Navigator.push(
+            //   context,
+            //   PageTransition(
+            //     type: PageTransitionType.rightToLeft,
+            //     child: UserDeletePage(),
+            //   ),
+            // );
+            if (userProvider.uid == 0) {
+              userProvider.getData();
+            }
+          }
+        );
+      }
+    );
+  }
 }
 
 

@@ -114,33 +114,33 @@ class _MyAppState extends State<MyApp> {
               builder: (BuildContext context, StateSetter setState) {
 
                 return WillPopScope(
-                    child: Scaffold(
-                      body: getPage(),
-                      bottomNavigationBar: Container(
-                        decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
-                        child: BottomNavigationBar(
-                          onTap: (index) {
-                            setState(() {
-                              _curIndex = index;
-                            });
-                          },
-                          currentIndex: _curIndex,
-                          unselectedItemColor: Colors.grey,
-                          selectedItemColor: themeColor.getColor(),
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          selectedFontSize: 12,
-                          items: [
-                            BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-                            BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-                          ],
-                        ),
+                  child: Scaffold(
+                    body: getPage(),
+                    bottomNavigationBar: Container(
+                      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+                      child: BottomNavigationBar(
+                        onTap: (index) {
+                          setState(() {
+                            _curIndex = index;
+                          });
+                        },
+                        currentIndex: _curIndex,
+                        unselectedItemColor: Colors.grey,
+                        selectedItemColor: themeColor.getColor(),
+                        elevation: 0,
+                        backgroundColor: Colors.white,
+                        selectedFontSize: 12,
+                        items: [
+                          BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+                          BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+                        ],
                       ),
                     ),
-                  onWillPop: () async {
-                    bool result = onWillPop();
-                    return await Future.value(result);
-                  },);
+                  ),
+                onWillPop: () async {
+                  bool result = onWillPop();
+                  return await Future.value(result);
+                },);
               }
             );
           }

@@ -55,28 +55,31 @@ class _UserDeletePageState extends State<UserDeletePage> {
                           Navigator.pop(context);
                         }),
                     Consumer<UserProvider>(
-                        builder: (context, userProvider, child) {
-                          return TextButton(child: Text('확인',
-                              style: TextStyle(color: themeColor.getMaterialColor())),
-                              style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                              onPressed: () async {
-                                try {
-                                  if (checkClick.isRedundentClick(DateTime.now())) { // 연타 막기
-                                    return;
-                                  }
+                      builder: (context, userProvider, child) {
+                        return TextButton(
+                          child: Text('확인',
+                          style: TextStyle(color: themeColor.getMaterialColor())),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                          onPressed: () async {
+                            try {
+                              if (checkClick.isRedundentClick(DateTime.now())) { // 연타 막기
+                                return;
+                              }
 
-                                  await deleteUser(userProvider.uid); // 탈퇴
-                                  Navigator.pop(context);
+                              await deleteUser(userProvider.uid); // 탈퇴
+                              
+                              Navigator.pop(context);
+                              Navigator.pop(context);
 
-                                  userProvider.init();
-                                  userProvider.getData;
-                                } catch (e) {
-                                  showToast('탈퇴 처리 중 오류가 발생하였습니다');
-                                  Navigator.pop(context);
-                                  print("탈퇴 처리 오류: $e");
-                                }
-                              });
-                        }
+                              userProvider.init();
+                            } catch (e) {
+                              showToast('탈퇴 처리 중 오류가 발생하였습니다');
+                              Navigator.pop(context);
+                              print("탈퇴 처리 오류: $e");
+                            }
+                          }
+                        );
+                      }
                     ),
                   ],
                 ),
@@ -147,6 +150,7 @@ class _UserDeletePageState extends State<UserDeletePage> {
 
   // 탈퇴 요청
   Future<void> deleteUser(int user_id) async {
+    debugPrint("@@@탈퇴요청하는 백엔드");
     var url = Uri.parse(Backend.getUrl() + 'users');
     var headers = {'Content-type': 'application/json'};
     var body = json.encode({
