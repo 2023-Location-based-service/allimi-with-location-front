@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
-import 'package:test_data/provider/UserProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/DropdownWidget.dart';
@@ -103,7 +102,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
-    final response = await dio.post(Backend.getUrl() + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+    final response = await dio.post(Backend.getUrl() + 'notices', data: formData); // ipConfig -> IPv4 주소(실제 주소로 변경)
 
     debugPrint("@@@@" + response.statusCode.toString());
 
@@ -113,7 +112,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
       throw Exception();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +230,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                                 } else {
                                   showToast('알림장 업로드 실패! 다시 시도해주세요');
                                 }
-
                               }
                               },
                             );
@@ -242,13 +239,10 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                     );
                   }
               );
-
             }
           },
           body: writePost(),
         );
-      
-
   }
 
   Widget writePost() {
@@ -310,8 +304,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
               children: [
                 Icon(Icons.account_circle_rounded, color: Colors.grey, size: 50),
                 SizedBox(width: 8),
-
-                //TODO: 수급자 선택하기 글자가 바뀌어야 함
                 // 수급자 선택시 ex. 삼족오 님
                 Text('$selectedPerson', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500))
               ],
@@ -321,9 +313,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         ),
       ),
       onTap: () {
-        //TODO: 수급자 선택 화면
+        //수급자 선택 화면
         pageAnimation(context, selectedPersonPage());
-
       },
     );
   }
@@ -350,18 +341,16 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                           leading: Icon(Icons.person_rounded, color: Colors.grey),
                           title: Row(
                             children: [
-                              Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
+                              Text('${_residents[index]['name']} 님'), // 수급자 이름 리스트
                             ],
                           ),
                           onTap: () {
-                            // TODO: 수급자 선택 시 처리할 이벤트
+                            // 수급자 선택 시 처리할 이벤트
                             setState(() {
                               selectedPerson = '${_residents[index]['name']} 님'; 
                               selectedPersonId = _residents[index]['id'];
                             });
-
                             Navigator.pop(context);
-
                           },
                         );
                       },
@@ -370,7 +359,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                 );
               }
             )
-              
           ),
         ],
       ),
@@ -425,7 +413,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             getText(padding: EdgeInsets.fromLTRB(8, 8, 8, 0), text: ' 식사 및 투약 기록 선택'),
             dropList('아침', AllimFirstDropdown(menu: "아침")),
             dropList('점심', AllimFirstDropdown(menu: "점심")),
@@ -443,7 +430,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
       color: Colors.white,
       child: ListView.builder(
         shrinkWrap: true,
-
         scrollDirection: Axis.horizontal,
         itemCount: _pickedImgs.length + 1,
         itemBuilder: (BuildContext context, int index) {
@@ -555,5 +541,4 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
       ),
     );
   }
-
 }

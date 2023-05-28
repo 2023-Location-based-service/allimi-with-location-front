@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:test_data/exception/LoginIdAlreadyExistsException.dart';
 import '../MainFacilitySettings/UserPeopleManagementPage.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -9,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
 import '../../Supplementary/ThemeColor.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
-
 import '../Supplementary/PhoneTextInputFormatter.dart';
 
 ThemeColor themeColor = ThemeColor();
@@ -41,7 +39,6 @@ Future<String> signUpRequest(String id, String password, String name, String pho
   else if (response.statusCode == 409) {
     throw LoginIdAlreadyExistsException("이미 존재하는 id입니다");
   }
-  
   return response.body;
 }
 
@@ -52,7 +49,6 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final formKey = new GlobalKey<FormState>();
-
   late String _id;
   late String _password;
   late String _username;
@@ -89,7 +85,6 @@ class _SignupPageState extends State<SignupPage> {
                     Text('서비스 이용을 위해', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                     Text('회원가입을 진행해주세요', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 50),
-
                     getTextFormField(
                       keyboardType: TextInputType.text,
                       inputFormatters: [
@@ -100,7 +95,6 @@ class _SignupPageState extends State<SignupPage> {
                       validator: (value) => value!.isEmpty ? '아이디를 입력하세요' : null,
                       onSaved: (value) => _id = value!,
                     ),
-
                     SizedBox(height: 7),
                     getTextFormField(
                       obscureText: true,
@@ -168,7 +162,6 @@ class _SignupPageState extends State<SignupPage> {
                                 errorMessage = '잘못된 요청입니다';
                               else
                                 errorMessage = '회원가입에 실패하였습니다';
-                          
 
                               showToast(errorMessage);
                               return;
@@ -200,7 +193,7 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
-      obscureText: obscureText ?? false, // 수정된 코드
+      obscureText: obscureText ?? false,
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),

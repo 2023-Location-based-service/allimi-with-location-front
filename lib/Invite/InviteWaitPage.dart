@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/BeforeMain/AddFacilities.dart';
@@ -12,9 +11,8 @@ import 'package:http/http.dart' as http;
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
 
+// 사용자의 초대대기 화면
 ThemeColor themeColor = ThemeColor();
-
-//사용자의 초대대기 화면
 
 class InviteWaitPage extends StatefulWidget {
   @override
@@ -70,7 +68,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           Text('초대 대기 목록'),
           SizedBox(width: 7),
           Container(
-            //padding: EdgeInsets.all(0),
             width: 30, height: 30,
             child: CircleAvatar(
               backgroundColor: Color(0xfff3727c),
@@ -83,7 +80,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           )
         ],
       )),
-
       body: ListView(
         children: [
           Container(
@@ -105,7 +101,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                   ),
                 ],
               )
-
           )
         ],
       ),
@@ -156,7 +151,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                                 onPressed: () {
                                   Provider.of<UserProvider>(context, listen:false) //로그아웃
                                       .uid = 0;
-
                                   Provider.of<UserProvider>(context, listen:false) //Provider에게 값이 바뀌었다고 알려줌 -> 화면 재로딩
                                       .getData();
                                   Navigator.pop(context);
@@ -227,7 +221,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
             )
               
           )
-
         ],
       ),
     );

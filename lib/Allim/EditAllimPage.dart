@@ -50,17 +50,13 @@ class _EditAllimPageState extends State<EditAllimPage> {
   String _contents = '';
   String _subContents = '';
   CheckClick checkClick = new CheckClick();
-
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
   List<Map<String, dynamic>> _residents = []; // 수정된 부분
-
   late int _noticeId;
-    late int _residentId;
-
+  late int _residentId;
   late Map<String, dynamic> _noticeDetail;
   late List<String> _imageUrls;
-
   bool canUpdate = false;
 
   void initState() {
@@ -69,10 +65,8 @@ class _EditAllimPageState extends State<EditAllimPage> {
     _imageUrls = widget.imageUrls;
     _facility_id = widget.facility_id;
     _residentId = widget.residentId;
-
     _contents = _noticeDetail['content'];
     getFacilityResident(_facility_id);
-
     getFile();
   }
 
@@ -109,7 +103,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
         xfileList.add(xfile);
       }
     }
-
     return xfileList;
   }
 
@@ -161,8 +154,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
     }
   }
 
-
-  
   // 서버에 알림장 업로드 + 사진 업로드
   Future<void> editAllim(userId, facilityId) async {
     debugPrint("@@@@ 알림장 수정 백엔드 요청 보냄");
@@ -199,7 +190,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
 
     var response = null;
     try {
-     response = await dio.patch(Backend.getUrl() + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+     response = await dio.patch(Backend.getUrl() + 'notices', data: formData); // ipConfig -> IPv4 주소(실제 주소로 변경)
     }catch(e) {
       debugPrint("@@response .. : " + e.toString());
       throw new Exception();
@@ -212,7 +203,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
       throw Exception();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -272,8 +262,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
               return ;
             }
 
-            
-
             if(this.formKey.currentState!.validate()) {
               this.formKey.currentState!.save();
 
@@ -284,7 +272,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
               _subContents += allimTempProvider.medication;
 
               try {
-
                 await editAllim(userProvider.uid, residentProvider.facility_id);
                 _pickedImgs = [];
                 setState(() {});
@@ -340,7 +327,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
         );
       }
     );
-
   }
 
   Widget writePost() {
@@ -402,8 +388,6 @@ class _EditAllimPageState extends State<EditAllimPage> {
               children: [
                 Icon(Icons.account_circle_rounded, color: Colors.grey, size: 50),
                 SizedBox(width: 8),
-
-                //TODO: 수급자 선택하기 글자가 바뀌어야 함
                 // 수급자 선택시 ex. 삼족오 님
                 Text('$selectedPerson', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500))
               ],
@@ -413,12 +397,9 @@ class _EditAllimPageState extends State<EditAllimPage> {
         ),
       ),
       onTap: () {
-
         print('수급자 선택하기 Tap');
-
-        //TODO: 수급자 선택 화면
+        // 수급자 선택 화면
         pageAnimation(context, selectedPersonPage());
-
       },
     );
   }
@@ -440,18 +421,16 @@ class _EditAllimPageState extends State<EditAllimPage> {
                   leading: Icon(Icons.person_rounded, color: Colors.grey),
                   title: Row(
                     children: [
-                      Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
+                      Text('${_residents[index]['name']} 님'), // 수급자 이름 리스트
                     ],
                   ),
                   onTap: () {
-                    // TODO: 수급자 선택 시 처리할 이벤트
+                    // 수급자 선택 시 처리할 이벤트
                     setState(() {
                       selectedPerson = '${_residents[index]['name']} 님'; 
                       selectedPersonId = _residents[index]['id'];
                     });
-
                     Navigator.pop(context);
-
                   },
                 );
               },
@@ -543,7 +522,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
             ),
             onTap: () {
 
-              //TODO: 사진 추가 기능
+              // 사진 추가 기능
               print('사진 추가하기 Tap');
               showModalBottomSheet(
                   context: context,
@@ -552,19 +531,18 @@ class _EditAllimPageState extends State<EditAllimPage> {
                       children: [
                         ListTile(leading: Icon(Icons.camera_alt, color: Colors.grey), title: Text('카메라'),
                           onTap: () {
-                            //TODO: 카메라 누르면 실행되어야 할 부분
+                            // 카메라 누르면 실행되어야 할 부분
                           },
                         ),
                         ListTile(leading: Icon(Icons.photo_library, color: Colors.grey), title: Text('갤러리'),
                           onTap: () {
-                            //TODO: 갤러리 누르면 실행되어야 할 부분
+                            // 갤러리 누르면 실행되어야 할 부분
                           },
                         ),
                       ],
                     );
                   }
               );
-
             },
           ),
         ],
@@ -695,5 +673,4 @@ class _EditAllimPageState extends State<EditAllimPage> {
       ),
     );
   }
-
 }

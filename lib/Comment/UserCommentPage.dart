@@ -165,7 +165,6 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                                 } catch(e) {
                                                   showToast('한마디 삭제 실패! 다시 시도해주세요');
                                                 }
-
                                                 },
                                               ),
                                             ],

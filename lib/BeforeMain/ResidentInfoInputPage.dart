@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_masked_formatter/multi_masked_formatter.dart';
@@ -11,6 +10,7 @@ import '/Supplementary/CustomClick.dart';
 import 'package:http/http.dart' as http; //http 사용
 import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
+
 //입소자 정보 입력 화면
 
 class ResidentInfoInputPage extends StatefulWidget {
@@ -49,7 +49,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   bool _isDiabetes = false;
   bool _isHeartAttack = false;
   bool _isHeartDisease = false;
-  bool _isEtc = false;
 
   CheckClick checkClick = new CheckClick();
   String healthInfo = '';
@@ -64,7 +63,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     if (invitationUserRole != 'PROTECTOR') {
       addWorker(_userId);
     }
-      
   }
 
   bool validateAndSave() {
@@ -91,11 +89,10 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
     
     if (_isHeartDisease) 
       healthInfo += "심장병";
-    
-     //TODO 기타저장 안됨
+
     debugPrint("@@@@@ 입소자 추가하는 백앤드 url 보냄");
 
-    //입소자추가 psot
+    //입소자추가 post
     http.Response response1 = await http.post(
       
       Uri.parse(Backend.getUrl()+ 'nhResidents'),
@@ -157,7 +154,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                       Text('입소자 정보를', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                       Text('입력해주세요', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 50),
-
                       getTextFeild(
                         keyboardType: TextInputType.text,
                         title: '이름',
@@ -166,7 +162,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                         onSaved: (value) => _residentname = value!,
                       ),
                       SizedBox(height: 7),
-
                       getTextFeild(
                         keyboardType: TextInputType.number,
                         title: '생년월일 8자리',
@@ -182,28 +177,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                         },
                         onSaved: (value) => _birthdate = value!,
                       ),
-
-                      // Container(
-                      //   padding: EdgeInsets.only(left: 20, right: 20),
-                      //   child: Column(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                      //     children: [
-                      //       TextFormField(
-                      //         keyboardType: TextInputType.text,
-                      //         decoration: InputDecoration(labelText: '이름'),
-                      //         validator: (value) => value!.isEmpty ? '이름을 입력하세요' : null,
-                      //         onSaved: (value) => _residentname = value!,
-                      //       ),
-                      //       TextFormField(
-                      //         decoration: InputDecoration(labelText: '생년월일 8자리'),
-                      //         inputFormatters: [MultiMaskedTextInputFormatter(masks: ['xxxx.xx.xx'], separator: '.')],
-                      //         validator: (value) => value!.isEmpty ? '생년월일을 입력하세요' : null,
-                      //         onSaved: (value) => _birthdate = value!,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       SizedBox(height: 100),
                       TextButton(
                         child: Container(
@@ -246,7 +219,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                                 else
                                   errorMessage = '회원가입에 실패하였습니다';
 
-
                                 showDialog(
                                     context: context,
                                     barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
@@ -266,11 +238,9 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                                     }
                                 );
                               }
-
                             }
                           }
                       )
-                         
                     ],
                   ),
                 ),
@@ -280,12 +250,9 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
         )
       );
     }
-
     else {
       return Scaffold(backgroundColor: Colors.white, body: Center(child: CircularProgressIndicator()));
-        //Center(child: CircularProgressIndicator())
     }
-      
   }
   Future<void> addWorker(int uid) async {
     debugPrint("@@요양보호사 추가 백엔드 요청 보냄");

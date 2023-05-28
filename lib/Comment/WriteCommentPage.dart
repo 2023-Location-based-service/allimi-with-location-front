@@ -8,13 +8,12 @@ import '../Supplementary/CustomWidget.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http; //http 사용
-
 import 'package:test_data/Backend.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class WriteCommentPage extends StatefulWidget {
   const WriteCommentPage({Key? key}) : super(key: key);
-
 
   @override
   State<WriteCommentPage> createState() => _WriteCommentPageState();
@@ -184,7 +183,6 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
         style: TextStyle(fontWeight: FontWeight.bold),
-        //textScaleFactor: 1.2,
       ),
     );
   }
