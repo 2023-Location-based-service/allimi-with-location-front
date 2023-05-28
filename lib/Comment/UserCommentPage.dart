@@ -161,7 +161,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                                                 try {
                                                   await deleteComment(_letterId);
                                                   Navigator.of(context).pop();
-                                                  showToast('삭제가 완료되었습니다');
+                                                  showToast('삭제 완료');
                                                 } catch(e) {
                                                   showToast('한마디 삭제 실패! 다시 시도해주세요');
                                                 }

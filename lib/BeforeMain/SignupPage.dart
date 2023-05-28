@@ -10,6 +10,8 @@ import 'package:test_data/Backend.dart';
 import '../../Supplementary/ThemeColor.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 
+import '../Supplementary/PhoneTextInputFormatter.dart';
+
 ThemeColor themeColor = ThemeColor();
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
     debugPrint("@@@@@ 회원가입 백앤드 url 보냄");
@@ -123,7 +125,7 @@ class _SignupPageState extends State<SignupPage> {
                     getTextFormField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        MultiMaskedTextInputFormatter(masks: ['02-xxxx-xxxx', 'xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                        PhoneTextInputFormatter()
                       ],
                       title: '전화번호',
                       prefixIcon: Icon(Icons.phone_rounded, color: Colors.grey),

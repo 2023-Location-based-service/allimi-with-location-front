@@ -146,13 +146,13 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                           actions: [
                             TextButton(
                                 child: Text('취소', style: TextStyle(color: themeColor.getMaterialColor())),
-                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 }),
                             TextButton(
                                 child: Text('확인', style: TextStyle(color: themeColor.getMaterialColor())),
-                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                                 onPressed: () {
                                   Provider.of<UserProvider>(context, listen:false) //로그아웃
                                       .uid = 0;

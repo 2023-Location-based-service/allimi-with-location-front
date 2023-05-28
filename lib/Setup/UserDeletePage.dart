@@ -41,7 +41,7 @@ class _UserDeletePageState extends State<UserDeletePage> {
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
             ),
             onPressed: () {
-              //탈퇴 쇼다이얼로그
+              //탈퇴 창
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(

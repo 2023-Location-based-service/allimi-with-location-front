@@ -12,11 +12,10 @@ import 'package:test_data/Backend.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/Supplementary/DropdownWidget.dart';
 import 'package:test_data/provider/NoticeTempProvider.dart';
-import 'package:test_data/provider/ResidentProvider.dart';
-import 'package:test_data/provider/UserProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '../Supplementary/CustomClick.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class WriteNoticePage extends StatefulWidget {
@@ -92,7 +91,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
 
     var dio = Dio();
     dio.options.contentType = 'multipart/form-data';
-    final response = await dio.post(Backend.getUrl() + 'all-notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+    final response = await dio.post(Backend.getUrl() + 'all-notices', data: formData); // ipConfig -> IPv4 주소
 
     if (response.statusCode == 200) {
       print("성공");
@@ -140,7 +139,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                         
                         _pickedImgs = [];
 
-                        showToast('작성이 완료되었습니다');
+                        showToast('작성 완료');
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       } catch(e) {

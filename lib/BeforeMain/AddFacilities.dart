@@ -16,6 +16,7 @@ import '../../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 
 import '../Supplementary/PageRouteWithAnimation.dart';
+import '../Supplementary/PhoneTextInputFormatter.dart';
 ThemeColor themeColor = ThemeColor();
 
 class AddFacilities extends StatefulWidget {
@@ -171,7 +172,9 @@ class _AddFacilitiesState extends State<AddFacilities> {
                           SizedBox(height: 7),
                           getTextFormField(
                             keyboardType: TextInputType.number,
-                            inputFormatters: [MultiMaskedTextInputFormatter(masks: ['02-xxxx-xxxx', 'xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')],
+                            inputFormatters: [
+                              PhoneTextInputFormatter()
+                            ],
                             icon: Icon(Icons.call_rounded, color: Colors.grey),
                             hintText: '전화번호',
                             controller: numberController,

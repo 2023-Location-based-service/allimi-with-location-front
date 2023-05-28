@@ -152,7 +152,7 @@ class _AddHomePageState extends State<AddHomePage> {
               child: TextField(
                 decoration: InputDecoration(
                     helperText: '요양원 이름, 주소로 검색 가능',
-                    hintText: '입력해주세요.',  //글자를 입력하면 사라진다.
+                    hintText: '입력해주세요',  //글자를 입력하면 사라진다.
                     icon: Icon(Icons.search),
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(3)

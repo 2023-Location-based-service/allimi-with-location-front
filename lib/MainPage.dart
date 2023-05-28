@@ -48,8 +48,7 @@ class _MainPageState extends State<MainPage> {
       ),
       body: ListView(
         children: [
-          //TODO: 위젯 작성
-
+          //본문
           myCard(),
           menuList(context),
         ],
@@ -57,7 +56,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  //소속추가 버튼
+  //등록된 요양원 버튼
   Widget addGroup() {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
@@ -69,13 +68,12 @@ class _MainPageState extends State<MainPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.menu_rounded, color: themeColor.getColor()),
-                //Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
               ],
             ),
           ),
           onTap: () {
-            print('소속추가 Tap');
-            //TODO: 요양원 이름, 입소자 이름 나오는 페이지
+            print('등록된 요양원 목록 Tap');
+            //등록된 요양원 목록 나오는 페이지
             pageAnimation(context, AddPersonPage(uid: userProvider.uid));
           },
         );
@@ -124,20 +122,20 @@ class _MainPageState extends State<MainPage> {
                             softWrap: true,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                          ),), //TODO: 요양원 이름
+                          ),), //요양원 이름
                         Flexible(
                           child: Text(userProvider.name + ' ' + userRoleString, textScaleFactor: 1, softWrap: true,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        ), //TODO: 내 역할
+                        ), //내 역할
                       ],
                     ),
                   );
                 }
             ),
           ),
-          SizedBox(width: 40)
+          SizedBox(width: 35)
         ],
       ),
     );

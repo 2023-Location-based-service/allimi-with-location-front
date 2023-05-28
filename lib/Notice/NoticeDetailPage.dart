@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:test_data/Notice/ModificationNoticePage.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
-import '../provider/NoticeTempProvider.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/ThemeColor.dart';
-import 'WriteNoticePage.dart';
-import 'package:http/http.dart' as http; //http 사용
-import 'package:test_data/Backend.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class NoticeDetailPage extends StatefulWidget {
@@ -63,7 +59,6 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                           Text(
                             widget.noticeList[widget.index]['title'],
                             textScaleFactor: fontSize,
-                            // style: TextStyle(fontWeight: FontWeight.bold),
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis, // 오버플로우 처리
                           ), //공지 제목
@@ -147,7 +142,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                                                   return ;
                                                 }
                                                 await widget.deleteNotice(widget.noticeList[widget.index]['allNoticeId']);
-                                                showToast('삭제가 완료되었습니다');
+                                                showToast('삭제 완료');
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
                                                 widget.getNotice(widget.facilityId);
@@ -177,23 +172,8 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
               ),
 
               Padding(padding: EdgeInsets.all(8), child: Divider(thickness: 0.5)),
-              //TODO: 공지사항 본문 사진
-              // Container(
-              //   margin: EdgeInsets.fromLTRB(0,10,0,0),
-              //   width: double.infinity,
-              //   color: Colors.white,
-              //   child: Column(
-              //       children: [
-              //         for (int i =0; i< imgList.length; i++ ) ...[
-              //           Image.network(imgList[i], fit: BoxFit.fill,),
-              //           SizedBox(height: 10), // 사진 위에 간격 추가
-              //         ]
-              //       ]
-              //   ),
-              // ),
 
               Container(
-                //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 width: double.infinity,
                 color: Colors.white,
                 child: Column(
@@ -217,7 +197,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
 
 
               SizedBox(height: 10),
-              //TODO: 공지사항 세부 내용
+              //공지사항 세부 내용
               Container(
                 width: double.infinity,
                 color: Colors.white,

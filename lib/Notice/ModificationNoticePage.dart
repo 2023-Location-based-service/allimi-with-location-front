@@ -50,7 +50,6 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
   late List<String> _imageUrls;
   String _title = '';
   String _contents = '';
-  //List<Map<String, dynamic>> _noticeList = [];
   late Map<String, dynamic> _noticeList;
 
   final ImagePicker _picker = ImagePicker();
@@ -65,7 +64,6 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
     _title = _noticeList['title'];
     _contents = _noticeList['content'];
     _residentId = widget.residentId;
-    //getFacilityResident(_facility_id);
     getFile();
   }
 
@@ -166,7 +164,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
 
     var response = null;
     try {
-      response = await dio.patch(Backend.getUrl() + 'all-notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+      response = await dio.patch(Backend.getUrl() + 'all-notices', data: formData); // ipConfig -> IPv4 주소
     }catch(e) {
       debugPrint("@@response .. : " + e.toString());
       throw new Exception();
@@ -196,7 +194,7 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
                       barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          content: Text("이미지 로딩중입니다. 잠시만 기다려주세요", textScaleFactor: 0.95),
+                          content: Text("이미지 로딩 중 잠시만 기다려주세요", textScaleFactor: 0.95),
                           insetPadding: const  EdgeInsets.fromLTRB(10,80,10, 80),
                           actions: [
                             TextButton(
@@ -275,7 +273,6 @@ class _ModificationNoticePageState extends State<ModificationNoticePage> {
 
 
   Widget writePost() {
-    //bool important = _noticeList['important']; //TODO: 드롭다운
     return ListView(
       children: [
 
