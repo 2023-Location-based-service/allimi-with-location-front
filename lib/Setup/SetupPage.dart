@@ -1,4 +1,3 @@
-//SetupPage
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,12 +14,9 @@ import '/Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http;
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
-
 import 'UserDeletePage.dart';
 
-
 ThemeColor themeColor = ThemeColor();
-
 
 class SetupPage extends StatefulWidget {
   const SetupPage({Key? key, required this.userRole, required this.userId}) : super(key: key);

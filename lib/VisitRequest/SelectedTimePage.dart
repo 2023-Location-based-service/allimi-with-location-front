@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '../Supplementary/ThemeColor.dart';
+
 ThemeColor themeColor = ThemeColor();
 
 class SelectedTimePage extends StatefulWidget {
@@ -67,7 +68,6 @@ class _SelectedTimePageState extends State<SelectedTimePage> {
         title: selectedTime,
         onTap: () async {
           await _showTimePicker(context);
-          //Provider.of<VisitTempProvider>(context, listen: false).setDate(selectedTime);
         }
     );
   }

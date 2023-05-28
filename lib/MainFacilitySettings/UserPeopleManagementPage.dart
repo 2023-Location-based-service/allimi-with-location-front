@@ -181,7 +181,6 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     content: Text("내가 담당하는 입소자로 설정하시겠습니까?"),
-                                    //insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
                                     actions: [
                                       TextButton(
                                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),

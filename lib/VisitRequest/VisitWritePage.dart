@@ -12,12 +12,8 @@ import 'SelectedDatePage.dart';
 import 'package:http/http.dart' as http; //http 사용
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
+
 ThemeColor themeColor = ThemeColor();
-// List<String> dateList =['2022.12.23','2022.12.24','2022.12.25'];
-// List<String> timeList =['16:00', '13:00', '11:00'];
-// List<String> personList =['삼족오 보호자님', '사족오 보호자님', '오족오 보호자님'];
-// List<String> textList =['면회 신청합니다.', '면회 신청합니다. 동생이 갑니다.', '면회 신청합니다.'];
-// List<String> subtextList =[' ', '거절하였습니다. (면회 시간이 아님)', ' 수락하였습니다.'];
 
 class VisitWritePage extends StatefulWidget {
   const VisitWritePage({
@@ -161,8 +157,7 @@ class _VisitWritePageState extends State<VisitWritePage> {
                                   await addVisit(visitProvider.selectedDate, visitProvider.selectedTime);
 
                                   showToast('작성 완료');
-                                  // Provider.of<VisitTempProvider>(context, listen: false).setDate('방문 날짜 선택'); //초기화
-                                  // Provider.of<VisitTempProvider>(context, listen: false).setTime('방문 시간 선택');
+
                                   Navigator.of(context).pop();Navigator.of(context).pop();
                                 } catch(e) {
                                   showToast('면회 신청 실패! 다시 시도해주세요');
@@ -187,7 +182,6 @@ class _VisitWritePageState extends State<VisitWritePage> {
         color: Colors.white,
         child: ListView(
           children: [
-            //TODO: 날짜, 할말(메모) 만들기
             text('방문 날짜'),
             SelectedDatePage(),
             SizedBox(height: 10,),
@@ -199,7 +193,6 @@ class _VisitWritePageState extends State<VisitWritePage> {
               padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: textFormField(),
             ),
-
           ],
         ),
       )
@@ -210,7 +203,6 @@ class _VisitWritePageState extends State<VisitWritePage> {
   //할 말
   Widget textFormField() {
     return Form(
-      // padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       key: formKey,
       child: SizedBox(
         height: 200,
@@ -252,7 +244,6 @@ class _VisitWritePageState extends State<VisitWritePage> {
       padding: EdgeInsets.fromLTRB(10, 5, 10, 8),
       child: Text('$text',
         style: TextStyle(fontWeight: FontWeight.bold),
-        //textScaleFactor: 1.2,
       ),
     );
   }

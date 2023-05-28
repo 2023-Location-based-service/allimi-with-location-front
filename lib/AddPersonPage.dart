@@ -4,16 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-
 import 'package:test_data/Backend.dart';
-
-// List<String> home =['금오요양원', '빛나요양원', '강아지요양원'];
-// List<String> person =['구현진 님', '주효림 님', '권태연 님'];
-
-
 
 class AddPersonPage extends StatefulWidget {
   const AddPersonPage({Key? key, required this.uid}) : super(key: key);

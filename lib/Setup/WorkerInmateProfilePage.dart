@@ -1,13 +1,8 @@
-//WorkerInmatePage
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../Supplementary/PageRouteWithAnimation.dart';
-import '../provider/UserProvider.dart';
-import '../provider/ResidentProvider.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
 import '/Supplementary/ThemeColor.dart';
@@ -108,7 +103,7 @@ class _WorkerInmateProfilePageState extends State<WorkerInmateProfilePage> {
                   leading: Icon(Icons.person_rounded, color: Colors.grey),
                   title: Row(
                     children: [
-                      Text('${_residentList[index]['resident_name']} 님', textScaleFactor: 0.95,), //TODO: 수급자 이름 리스트
+                      Text('${_residentList[index]['resident_name']} 님', textScaleFactor: 0.95,), //수급자 이름 리스트
                     ],
                   ),
                   onTap: () async {

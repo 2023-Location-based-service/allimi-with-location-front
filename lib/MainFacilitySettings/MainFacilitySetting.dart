@@ -112,6 +112,5 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
       onTap: () {
         pageAnimation(context, FacilityBasicInfoPage(facilityId: _facilityId));
       });
-      
   }
 }
