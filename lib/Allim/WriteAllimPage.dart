@@ -184,7 +184,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                                 await addAllim(residentProvider.resident_id);
                                 _pickedImgs = [];
 
-                                showToast('작성이 완료되었습니다');
+                                showToast('작성 완료');
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
 

@@ -196,7 +196,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                                   return;
                                                 }
                                                 await deleteNotice(_noticeId);
-                                                showToast('삭제가 완료되었습니다');
+                                                showToast('삭제 완료');
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
                                               } catch (e) {

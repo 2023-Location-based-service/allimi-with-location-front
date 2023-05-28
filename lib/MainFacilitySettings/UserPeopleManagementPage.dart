@@ -243,7 +243,7 @@ class _UserPeopleManagementPageState extends State<UserPeopleManagementPage> wit
                                                 return ;
                                               }
                                               await deleteresident(_residents[index]['user_id'], _residents[index]['id']);
-                                              showToast('삭제되었습니다');
+                                              showToast('삭제 완료');
                                             } catch(e) {
                                               showToast('삭제 실패! 다시 시도해주세요');
                                             }

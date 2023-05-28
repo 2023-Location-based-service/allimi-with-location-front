@@ -113,7 +113,8 @@ class _AddPersonPageState extends State<AddPersonPage> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_residentList[index]['facility_name']!= null?_residentList[index]['facility_name']:"null", textScaleFactor: 0.95,), //요양원
+                  Text(_residentList[index]['facility_name']!= null?_residentList[index]['facility_name']:"null", textScaleFactor: 0.95,
+                      style: TextStyle(fontWeight: FontWeight.bold)), //요양원
                   Row(
                     children: [
                       if (_residentList[index]['user_role'] == 'PROTECTOR')
