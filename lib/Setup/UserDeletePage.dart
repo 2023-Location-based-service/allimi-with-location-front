@@ -68,7 +68,8 @@ class _UserDeletePageState extends State<UserDeletePage> {
                                   await deleteUser(userProvider.uid); // 탈퇴
                                   Navigator.pop(context);
 
-                                  return redirectToLoginPage(context);
+                                  userProvider.init();
+                                  userProvider.getData;
                                 } catch (e) {
                                   showToast('탈퇴 처리 중 오류가 발생하였습니다');
                                   Navigator.pop(context);

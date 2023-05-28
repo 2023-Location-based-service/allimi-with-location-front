@@ -15,6 +15,14 @@ class UserProvider with ChangeNotifier {
     this.name = name;
   }
 
+  void init() {
+    this.uid = 0;
+    this.urole = '';
+    this.loginid = '';
+    this.phone_num = '';
+    this.name = '';
+  }
+
   void getData() {
     notifyListeners();
   }
