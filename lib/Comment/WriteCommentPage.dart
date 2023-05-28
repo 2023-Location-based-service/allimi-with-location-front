@@ -162,7 +162,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
           maxLines: 100,
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
-            hintText: '요양보호사님께 간단한 메시지를 전송할 수 있어요',
+            hintText: '요양보호사님께 간단한 메시지를 전송할 수 있어요\n\n예시) 필요한 물품을 택배로 보냈습니다',
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
