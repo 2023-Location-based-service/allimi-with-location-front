@@ -18,6 +18,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 ThemeColor themeColor = ThemeColor();
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   await initializeDateFormatting();
   runApp(
     //Provider 등록
