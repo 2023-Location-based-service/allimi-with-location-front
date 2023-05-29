@@ -216,13 +216,6 @@ class _SetupPageState extends State<SetupPage> {
           leading: Icon(Icons.person_remove_rounded, color: Colors.grey),
           onTap: () async {
             await awaitPageAnimation(context, UserDeletePage());
-            // Navigator.push(
-            //   context,
-            //   PageTransition(
-            //     type: PageTransitionType.rightToLeft,
-            //     child: UserDeletePage(),
-            //   ),
-            // );
             if (userProvider.uid == 0) {
               userProvider.getData();
             }

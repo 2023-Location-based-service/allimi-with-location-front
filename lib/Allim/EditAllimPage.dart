@@ -28,6 +28,8 @@ class EditAllimPage extends StatefulWidget {
     required this.noticeDetail,
     required this.imageUrls,
     required this.facility_id,
+    required this.targetId,
+    required this.targetName,
     required this.residentId
   }) : super(key: key);
 
@@ -37,6 +39,8 @@ class EditAllimPage extends StatefulWidget {
   final int noticeId;
   final int facility_id;
   final int residentId;
+  final int targetId;
+  final String targetName;
 
   @override
   State<EditAllimPage> createState() => _EditAllimPageState();
@@ -65,6 +69,8 @@ class _EditAllimPageState extends State<EditAllimPage> {
     _imageUrls = widget.imageUrls;
     _facility_id = widget.facility_id;
     _residentId = widget.residentId;
+    selectedPersonId = widget.targetId;
+    selectedPerson = widget.targetName;
     _contents = _noticeDetail['content'];
     getFacilityResident(_facility_id);
     getFile();
@@ -167,7 +173,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
       formData = FormData.fromMap({
         "notice": MultipartFile.fromString(
           jsonEncode(
-            {"notice_id": _noticeId, "writer_id": _residentId, "target_id": selectedPersonId, 
+            {"notice_id": _noticeId, "writer_id": _residentId, "target_id": selectedPersonId,
             "content": _contents, "sub_content": _subContents}),
           contentType: MediaType.parse('application/json'),
         ),
@@ -177,7 +183,7 @@ class _EditAllimPageState extends State<EditAllimPage> {
       formData = FormData.fromMap({
         "notice": MultipartFile.fromString(
           jsonEncode(
-            {"notice_id": _noticeId, "writer_id": _residentId, "target_id": selectedPersonId, 
+            {"notice_id": _noticeId, "writer_id": _residentId, "target_id": selectedPersonId,
             "content": _contents, "sub_content": _subContents}),
           contentType: MediaType.parse('application/json'),
         ),

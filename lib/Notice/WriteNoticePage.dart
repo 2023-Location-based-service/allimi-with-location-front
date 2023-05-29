@@ -12,6 +12,7 @@ import 'package:test_data/Backend.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
 import 'package:test_data/Supplementary/DropdownWidget.dart';
 import 'package:test_data/provider/NoticeTempProvider.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '../Supplementary/CustomClick.dart';
@@ -40,7 +41,6 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   @override
   void initState() {
     super.initState();
-    _residentId = widget.residentId;
   }
 
 
@@ -73,14 +73,14 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
   }
 
   // 서버에 이미지, 공지사항 업로드
-  Future<void> addNotice(importantTest) async {
+  Future<void> addNotice(importantTest, int residentId) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path,
         contentType: MediaType("image", "jpg"))).toList();
 
     var formData = FormData.fromMap({
       "allnotice": MultipartFile.fromString(
         jsonEncode({
-          "writer_id": _residentId,
+          "writer_id": residentId,
           "title": _title,
           "contents": _contents,
           "important": importantTest}),
@@ -125,74 +125,108 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                  ),
-                  TextButton(
-                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                    onPressed: () async {
-                      if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
-                        return ;
-                      }
-                      try {
-                        bool _importantTest = Provider.of<NoticeTempProvider>(context, listen: false).isImportant;
-                        await addNotice(_importantTest);
-                        
-                        _pickedImgs = [];
+                      ),
+                      Consumer<ResidentProvider>(
+                          builder: (context, residentProvider, child) {
+                        return TextButton(
+                          child: Text(
+                            '확인',
+                            style: TextStyle(
+                              color: themeColor.getColor(),
+                            ),
+                          ),
+                          style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all(
+                                  themeColor.getColor().withOpacity(0.3))),
+                          onPressed: () async {
+                            if (checkClick.isRedundentClick(DateTime.now())) {
+                              //연타 막기
+                              return;
+                            }
+                            try {
+                              bool _importantTest =
+                                  Provider.of<NoticeTempProvider>(context,
+                                          listen: false)
+                                      .isImportant;
+                              await addNotice(_importantTest, residentProvider.resident_id);
 
-                        showToast('작성 완료');
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      } catch(e) {
-                        Navigator.of(context).pop();
-                        print('업로드 실패@@@@@@@@@@@@@@@@@@@@@');
-                        print(e);
+                              _pickedImgs = [];
 
+                              showToast('작성 완료');
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              Navigator.of(context).pop();
+                              print('업로드 실패@@@@@@@@@@@@@@@@@@@@@');
+                              print(e);
 
-                        if (e is DioError && e.response?.statusCode == 413) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
-                                actions: [
-                                  TextButton(
-                                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else if (e is DioError) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Text("이미지 용량이 너무 큽니다"),
-                                actions: [
-                                  TextButton(
-                                    child: Text('확인',style: TextStyle(color: themeColor.getColor(),),),
-                                    style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          showToast('공지사항 업로드 실패! 다시 시도해주세요');
-                        }
-                        
-                      }
-                    },
-                  ),
-                ],
-              );
+                              if (e is DioError &&
+                                  e.response?.statusCode == 413) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content:
+                                          Text("이미지는 최대 10장까지 업로드할 수 있습니다"),
+                                      actions: [
+                                        TextButton(
+                                          child: Text(
+                                            '확인',
+                                            style: TextStyle(
+                                              color: themeColor.getColor(),
+                                            ),
+                                          ),
+                                          style: ButtonStyle(
+                                              overlayColor:
+                                                  MaterialStateProperty.all(
+                                                      themeColor
+                                                          .getColor()
+                                                          .withOpacity(0.3))),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else if (e is DioError) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: Text("이미지 용량이 너무 큽니다"),
+                                      actions: [
+                                        TextButton(
+                                          child: Text(
+                                            '확인',
+                                            style: TextStyle(
+                                              color: themeColor.getColor(),
+                                            ),
+                                          ),
+                                          style: ButtonStyle(
+                                              overlayColor:
+                                                  MaterialStateProperty.all(
+                                                      themeColor
+                                                          .getColor()
+                                                          .withOpacity(0.3))),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                showToast('공지사항 업로드 실패! 다시 시도해주세요');
+                              }
+                            }
+                          },
+                        );
+                      })
+                    ],
+                  );
             }
           );
         }

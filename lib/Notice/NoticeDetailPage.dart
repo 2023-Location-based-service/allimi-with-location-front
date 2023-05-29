@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Notice/ModificationNoticePage.dart';
 import 'package:test_data/Supplementary/CustomWidget.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '../provider/ResidentProvider.dart';
 import '/Supplementary/ThemeColor.dart';
@@ -34,6 +35,7 @@ class NoticeDetailPage extends StatefulWidget {
 class _NoticeDetailPageState extends State<NoticeDetailPage> {
   @override
   Widget build(BuildContext context) {
+    int residentId = Provider.of<ResidentProvider>(context, listen: false).resident_id;
     CheckClick checkClick = new CheckClick();
     List<String> imgList = List<String>.from(widget.noticeList[widget.index]['imageUrl']);
     final fontSize = 1.10;
@@ -68,7 +70,8 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                       ),
                     ),
 
-                    if (widget.userRole != 'PROTECTOR')
+
+                    if (widget.userRole != 'PROTECTOR' && widget.noticeList[widget.index]['writer_id'] == residentId)
                       Container(
                         child: Row(
                           children: [
@@ -82,6 +85,10 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                                     if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
                                       return ;
                                     }
+
+                                    debugPrint('@@@@@@@1 : ' + widget.noticeList[widget.index]['writer_id'].toString());
+                                    debugPrint('@@@@@@@2 : ' + residentProvider.resident_id.toString());
+
                                     int facility_id = Provider.of<ResidentProvider>(context, listen: false).facility_id;
 
                                     await awaitPageAnimation(context, ModificationNoticePage(
@@ -95,6 +102,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                                       widget.getNotice(facility_id); // 추가된 부분
                                     });
                                     Navigator.of(context).pop(); //목록으로 감
+                                    showToast('수정 완료');
 
                                   },
                                 );
@@ -104,7 +112,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                         ),
                       ),
 
-                    if (widget.userRole != 'PROTECTOR')
+                    if (widget.userRole != 'PROTECTOR' && widget.noticeList[widget.index]['writer_id'] == residentId)
                       Container(
                         child: Row(
                           children: [

@@ -142,7 +142,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                 Container(
                   child: Row(
                     children: [
-                      if (_userRole != 'PROTECTOR')
+                      if (_userRole != 'PROTECTOR'&& _noticeDetail['writer_id'] == Provider.of<ResidentProvider>(context, listen: false).resident_id)
                         Container(
                           child: Consumer<ResidentProvider>(
                               builder: (context, residentProvider, child) {
@@ -152,20 +152,22 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                                   //수정 화면으로 이동
                                   await awaitPageAnimation(context, EditAllimPage(
                                     noticeId: _noticeId,
-                                    residentId:
-                                    residentProvider.resident_id,
+                                    residentId: residentProvider.resident_id,
+                                    targetName: _noticeDetail['target_name'],
+                                    targetId: _noticeDetail['target_id'],
                                     noticeDetail: _noticeDetail,
                                     imageUrls: _imageUrls,
                                     facility_id:
                                     residentProvider.facility_id,
                                   ));
                                   getNoticeDetail();
+                                  showToast('수정 완료');
                                 },
                                 child: Text('수정',
                                     style: TextStyle(color: Colors.grey)));
                           }),
                         ),
-                      if (_userRole != 'PROTECTOR')
+                      if (_userRole != 'PROTECTOR'&& _noticeDetail['writer_id'] == Provider.of<ResidentProvider>(context, listen: false).resident_id)
                         Container(
                           padding: EdgeInsets.all(5),
                           child: OutlinedButton(
