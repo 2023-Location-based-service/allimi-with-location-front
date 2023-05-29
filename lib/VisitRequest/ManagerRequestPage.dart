@@ -128,9 +128,19 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
     return Scaffold(
         appBar: AppBar(title: Text('면회 목록')),
         backgroundColor: Color(0xfff8f8f8), //배경색
-        body: RequestList(),
+        body: RefreshIndicator(
+          child: RequestList(),
+          onRefresh: _onRefresh,
+          color: themeColor.getColor(),
+        ),
         floatingActionButton: getButton()
     );
+  }
+
+  // 새로 고침 기능 구현
+  Future<void> _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    await getVisitList();
   }
 
   // 면회 리스트
@@ -448,6 +458,7 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
       separatorBuilder: (context, index) {
         return const SizedBox(height: 8);
       },
+      physics: const AlwaysScrollableScrollPhysics(), // 여기에서 physics 속성을 추가
     );
   }
 

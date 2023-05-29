@@ -83,9 +83,19 @@ class _UserCommentPageState extends State<UserCommentPage> {
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(title: Text('한마디')),
-      body: userCommentList(),
+      body: RefreshIndicator(
+        child: userCommentList(),
+        onRefresh: _onRefresh,
+        color: themeColor.getColor(),
+      ),
       floatingActionButton: _getFAB()
     );
+  }
+
+  // 새로 고침 기능 구현
+  Future<void> _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    await getComment(_residentId);
   }
 
   Widget _getFAB() {
@@ -192,8 +202,9 @@ class _UserCommentPageState extends State<UserCommentPage> {
                 ),
               );
             }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
-          ),
+         ),
       ],
+      physics: const AlwaysScrollableScrollPhysics(), // 여기에서 physics 속성을 추가
     );
   }
 }

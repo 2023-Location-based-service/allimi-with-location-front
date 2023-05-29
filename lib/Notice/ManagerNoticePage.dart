@@ -95,13 +95,23 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
     return Scaffold(
       appBar: AppBar(title: Text('공지사항')),
       backgroundColor: Color(0xfff8f8f8), //배경색
-      body: ListView(
-        children: [
-          noticeList(),
-        ],
+      body: RefreshIndicator(
+        color: themeColor.getColor(),
+        onRefresh: _onRefresh,
+        child: ListView(
+          children: [
+            noticeList(),
+          ],
+        ),
       ),
       floatingActionButton: _getFAB(),
     );
+  }
+
+  // 새로 고침 기능 구현
+  Future<void> _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    await getNotice(_facilityId);
   }
 
   //플로팅액션 버튼
