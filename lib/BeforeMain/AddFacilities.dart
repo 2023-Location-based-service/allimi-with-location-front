@@ -68,7 +68,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
   @override
   Widget build(BuildContext context) {
-    // return ChooseFacility();
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -254,23 +253,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
       throw Exception('POST request failed');
     }
 
-    http.Response response2 = await http.post(
-        Uri.parse(Backend.getUrl() + 'change'),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Accept-Charset': 'utf-8'
-        },
-        body: jsonEncode({
-          "name": _facilityName,
-          "address": _location,
-        })
-    );
-    debugPrint("@@@@ statusCode: " + response2.statusCode.toString());
-
-    if (response2.statusCode != 200) {
-      throw Exception('POST request failed');
-    }
-
     var data = utf8.decode(response1.bodyBytes);
     dynamic decodedJson = json.decode(data);
     Map<String, dynamic> parsedJson = Map<String, dynamic>.from(decodedJson);
@@ -278,7 +260,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
     debugPrint("@@@@ 시설장 resident 추가하는 백엔드 url보냄");
 
-    http.Response response3 = await http.post(
+    http.Response response2 = await http.post(
         Uri.parse(Backend.getUrl() + 'nhResidents'),
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -294,11 +276,11 @@ class _AddFacilitiesState extends State<AddFacilities> {
         })
     );
 
-    if (response3.statusCode != 200) {
+    if (response2.statusCode != 200) {
       throw Exception('POST');
     }
 
-    data = utf8.decode(response3.bodyBytes);
+    data = utf8.decode(response2.bodyBytes);
     decodedJson = json.decode(data);
     parsedJson = Map<String, dynamic>.from(decodedJson);
     _resident_id = parsedJson['resident_id'];
