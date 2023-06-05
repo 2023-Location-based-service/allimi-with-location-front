@@ -1,10 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.ac.kumoh.test_data">
+
+    <!-- 위치 정보 엑세스 권한 요청 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
    <application
         android:label="요양원 알리미"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+
+       <!-- Google Map API KEY -->
+       <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyAMGh5-F_doU_fTq0DpFFdqz4rKKKy8to8"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

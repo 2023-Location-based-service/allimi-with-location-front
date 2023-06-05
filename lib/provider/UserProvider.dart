@@ -23,6 +23,10 @@ class UserProvider with ChangeNotifier {
     this.name = '';
   }
 
+  String getName() {
+    return name;
+  }
+
   void getData() {
     notifyListeners();
   }

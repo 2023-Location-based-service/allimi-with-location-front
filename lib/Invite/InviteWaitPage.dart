@@ -119,6 +119,7 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                 ),
                 onPressed: (){
                   pageAnimation(context, AddFacilities(uid: _uid));
+                  // pageAnimation(context, ChooseFacility(uid: _uid));
                 }
             ),
           ),

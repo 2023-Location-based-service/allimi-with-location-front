@@ -6,6 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
+import '../location/searchFacility.dart';
 import '/MainFacilitySettings/UserPeopleManagementPage.dart';
 import 'SignupPage.dart';
 import 'package:http/http.dart' as http;
@@ -177,6 +178,26 @@ class _LoginPageState extends State<LoginPage> {
                                 PageTransition(
                                   type: PageTransitionType.rightToLeft,
                                   child: SignupPage(),
+                                ),
+                              );
+                            },
+                          ),
+                          Icon(Icons.chevron_right_rounded, color: Colors.grey,),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text('등록된 요양원이 궁금하신가요?', style: TextStyle(color: Colors.grey)),
+                          Spacer(),
+                          TextButton (
+                            child: Text('둘러보기', style: TextStyle(color: Colors.grey)),
+                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                            onPressed: () async {
+                              await Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: SearchFacility(),
                                 ),
                               );
                             },
