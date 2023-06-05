@@ -35,6 +35,11 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_spinkit: ^5.2.0
 
+  google_maps_flutter: ^2.2.5
+  geocoding: ^2.1.0
+  location: ^4.4.0
+  http: ^0.13.6
+
 dependency_overrides:
   # 추가: 의존성 충돌 문제를 해결하기 위해 강제적으로 intl 패키지의 버전을 0.18.1로 설정합니다.
   intl: ^0.18.1
