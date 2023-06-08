@@ -6,7 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-import '../location/searchFacility.dart';
+import '../location/SearchFacility.dart';
 import '/UI/MainSetup/ResidentManagementPage.dart';
 import 'SignupPage.dart';
 import 'package:http/http.dart' as http;

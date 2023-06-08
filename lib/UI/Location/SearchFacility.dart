@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../Supplementary/CustomClick.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import '../../Backend.dart';
 import '../Supplementary/ThemeColor.dart';
-import 'changeCity.dart';
-import 'localData.dart';
+import 'ChangeCity.dart';
+import 'LocalData.dart';
 import 'package:http/http.dart' as http;
 
 const API_KEY = 'AIzaSyAMGh5-F_doU_fTq0DpFFdqz4rKKKy8to8';
@@ -25,6 +25,9 @@ class SearchFacility extends StatefulWidget {
 }
 
 class _SearchFacilityState extends State<SearchFacility> {
+  final GlobalKey scrollKey = GlobalKey(); // 스크롤 키 생성
+  final formKey = new GlobalKey<FormState>();
+  CheckClick checkClick = new CheckClick();
   late GoogleMapController _controller;
   TextEditingController _textController = TextEditingController();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
@@ -45,157 +48,158 @@ class _SearchFacilityState extends State<SearchFacility> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(10),
+      appBar: AppBar(
+        title: Text('요양원 둘러보기', style: TextStyle(color: Colors.white),),
+        automaticallyImplyLeading: false,
+        backgroundColor: themeColor.getColor()),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+
+            Container(
+              key: scrollKey,
+              margin: EdgeInsets.all(10),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
-                  SizedBox(height: 10),
-                  Text('요양원 둘러보기', textScaleFactor: 1.5, style: TextStyle(fontWeight: FontWeight.bold)),
-                  Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 15,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              _searchCity(context);
-                            },
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.white)),
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              //버튼 테두리와 텍스트 사이에 공백
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //텍스트와 아이콘 배치
-                                children: [
-                                  Text(
-                                    // '시/도 선택',
-                                    text1,
-                                    textScaleFactor: 1.1,
-                                    style: TextStyle(color: Colors.black,),
-                                  ),
-                                  Icon(Icons.keyboard_arrow_down_sharp, size: 18,
-                                    color: Colors.black,)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        Expanded(
-                          flex: 15,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (check == 0) {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext ctx) {
-                                      return AlertDialog(
-                                        content: Text('시/도를 먼저 선택해주세요!'),
-                                        actions: [
-                                          Center(
-                                            child: TextButton(
-                                                child: Text("확인", style: TextStyle(color: themeColor.getMaterialColor())),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                }
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                );
-                              }
-                              else {
-                                _searchRegion(context);
-                              }
-                            },
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(Colors.white)
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    // '지역 선택',
-                                    text2,
-                                    textScaleFactor: 1.1,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  Icon(Icons.keyboard_arrow_down_sharp, size: 18,
-                                    color: Colors.black,)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: '요양원 이름, 주소로 검색',
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
-                              ),
-                            ),
-                            controller: _textController,
-                          ),
-                        ),
-                        Container(
-                          child: Center(
-                            child: IconButton(
-                              icon: Icon(Icons.search, size: 35, color: Colors.grey,),
-                              onPressed: () {
-                                setState(() {
-                                  nursingHomeNameresult = [];
-                                  nursingHomeAddressresult = [];
-                                  nursingHomeSupportresult = [];
-                                  markers = {};
-                                  searchText = _textController.text;
-                                });
-                                getSearchInfo(searchText);
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  map(context),
-                  Divider(),
-                  list()
+                  pickButton(), // 시도, 지역 선택 버튼
+                  SizedBox(height: 5,),
+                  textSearch(), // 검색
                 ],
               ),
             ),
+
+            map(context), // 지도
+            SizedBox(height: 10),
+            list() // 리스트 출력
+
+          ],
+        ),
+      ),
+      floatingActionButton: upButton(),
+    );
+  }
+
+  //시·도 선택, 지역 선택 버튼
+  Widget pickButton() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 15,
+            child: OutlinedButton(
+              onPressed: () {
+                _searchCity(context);
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)
+              ),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10), //버튼 테두리와 텍스트 사이에 공백
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(text1, textScaleFactor: 1.1, style: TextStyle(color: Colors.black), overflow: TextOverflow.ellipsis),
+                    ), // 시/도 선택
+                    Icon(Icons.keyboard_arrow_down_sharp, size: 18, color: Colors.black,),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Spacer(),
+          Expanded(
+            flex: 15,
+            child: OutlinedButton(
+              onPressed: () {
+                if (check == 0) {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext ctx) {
+                        return AlertDialog(
+                          content: Text('시/도를 먼저 선택해주세요!'),
+                          actions: [
+                            TextButton(
+                                child: Text("확인", style: TextStyle(color: themeColor.getMaterialColor())),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                }
+                else {
+                  _searchRegion(context);
+                }
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)
+              ),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(text2, textScaleFactor: 1.1, style: TextStyle(color: Colors.black)), // '지역 선택'
+                    Icon(Icons.keyboard_arrow_down_sharp, size: 18, color: Colors.black,)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+  }
+
+  //검색
+  Widget textSearch() {
+    return Form(
+      key: formKey,
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: '요양원 이름, 주소로 검색',
+          hintStyle: TextStyle(fontSize: 15),
+          contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 10),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.search_rounded, size: 30, color: Colors.grey),
+            onPressed: () {
+              if (checkClick.isRedundentClick(DateTime.now())) {
+                return;
+              }
+
+
+              if(this.formKey.currentState!.validate()) {
+
+                setState(() {
+                  nursingHomeNameresult = [];
+                  nursingHomeAddressresult = [];
+                  nursingHomeSupportresult = [];
+                  markers = {};
+                  searchText = _textController.text;
+                });
+                getSearchInfo(searchText);
+              }
+
+            },
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
         ),
+        controller: _textController,
+        validator: (value) => value!.isEmpty ? '내용을 입력하세요' : null,
       ),
     );
   }
@@ -223,7 +227,7 @@ class _SearchFacilityState extends State<SearchFacility> {
     }
   }
 
-  // 시/도 선택
+  // 시·도 선택
   Future _searchCity(BuildContext context) {
     return showDialog(
         context: context,
@@ -303,7 +307,7 @@ class _SearchFacilityState extends State<SearchFacility> {
     );
   }
 
-  // 선택한 지역의 요양원 지도에 출력
+  // 선택한 지역의 요양원을 지도에 출력 / 청: 시청이나 군청 기준
   Future<void> getInfo(String city, String region) async {
     http.Response response = await http.post(
       Uri.parse(Backend.getUrl() + 'find'),
@@ -478,7 +482,7 @@ class _SearchFacilityState extends State<SearchFacility> {
             target: LatLng(37.566678, 126.978411),
             zoom: 15.0
         ),
-        myLocationButtonEnabled: false,
+        myLocationButtonEnabled: true,
         myLocationEnabled: true,
         onMapCreated: (controller) {
           setState(() {
@@ -496,52 +500,98 @@ class _SearchFacilityState extends State<SearchFacility> {
     );
   }
 
-  //리스트
+  //리스트 TODO: 지역 선택 후 주소 검색하면 빈 컨테이너가 나옴;
   Widget list() {
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: nursingHomeNameresult.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index3) {
-          return nursingHomeSupportresult[index3]? Column(
-            children: [
-              Row(
+    if (nursingHomeNameresult.length == 0) {
+      return Column(
+        children: [
+          Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
+          Text('검색된 결과가 없습니다', style: TextStyle(color: Colors.grey),),
+        ],
+      );
+    } else {
+      return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: nursingHomeNameresult.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index3) {
+            return nursingHomeSupportresult[index3]
+                ? Padding(
+              padding: EdgeInsets.only(right: 5, left: 5),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 8,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ' ' + nursingHomeNameresult[index3],
-                          style: TextStyle(
-                              fontSize: 18
-                          ),
-                        ),
-                        Text(
-                          nursingHomeAddressresult[index3],
-                          style: TextStyle(
-                              fontSize: 15
-                          ),
-                          maxLines: 2,
-                        ),
-                        Text(
-                          ' ' + nursingHomePhone[index3],
-                          style: TextStyle(
-                              fontSize: 15
-                          ),
-                          maxLines: 2,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                      SizedBox(width: 5,),
+                      Flexible(
+                        child: Text('현재 요양원 알리미를 이용 중인 곳만 표시됩니다', style: TextStyle(color: themeColor.getColor(), fontWeight: FontWeight.w500))
+                      )
+                    ],
                   ),
+                  SizedBox(height: 3),
+                  Divider(thickness: 0.5),
+                  Row(
+                    children: [
+                      SizedBox(width: 5,),
+                      Text(nursingHomeNameresult[index3], style: TextStyle(fontWeight: FontWeight.w500),), //요양원 이름
+                    ],
+                  ),
+                  Text(nursingHomeAddressresult[index3],maxLines: 2), //요양원 주소
+                  Row(
+                    children: [
+                      SizedBox(width: 5,),
+                      Text(nursingHomePhone[index3], maxLines: 2), //요양원 전화번호
+                    ],
+                  ),
+                  Divider(thickness: 0.5),
+                  
                 ],
               ),
-              Divider(),
-            ],
-          ) : Container();
-        }
+            )
+                : Container();
+          }
+      );
+    }
+  }
+
+  // 상단으로 가는 버튼
+  Widget upButton() {
+    return Stack(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black12, width: 1)
+                ),
+                child: FloatingActionButton(
+                  heroTag: "upper",
+                  tooltip: "맨 위로",
+                  onPressed: () {
+                    Scrollable.ensureVisible(
+                        scrollKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut);
+                  },
+                  focusColor: Colors.white54,
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  hoverElevation: 0,
+                  focusElevation: 0,
+                  highlightElevation: 0,
+                  child: const Icon(Icons.arrow_upward_rounded, color: Colors.black,),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
