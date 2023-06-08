@@ -14,8 +14,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
-import '../location/changeCity.dart';
-import '../location/localData.dart';
+import '../location/ChangeCity.dart';
+import '../location/LocalData.dart';
 
 const API_KEY = 'AIzaSyAMGh5-F_doU_fTq0DpFFdqz4rKKKy8to8';
 
