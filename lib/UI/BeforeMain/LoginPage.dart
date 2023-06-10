@@ -205,9 +205,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Row(
                         children: [
-                          Text('요양원 알리미를 이용 중인 곳', style: TextStyle(color: Colors.grey)),
-                          Spacer(),
-
+                          Expanded(
+                            child: Text('요양원 알리미를 이용 중인 곳', style: TextStyle(color: Colors.grey)),
+                          ),
                           GestureDetector(
                             child: Container(
                               margin: EdgeInsets.all(7),
