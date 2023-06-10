@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../Supplementary/CustomClick.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import '../../Backend.dart';
@@ -503,55 +502,62 @@ class _SearchFacilityState extends State<SearchFacility> {
   //리스트 TODO: 지역 선택 후 주소 검색하면 빈 컨테이너가 나옴;
   Widget list() {
     if (nursingHomeNameresult.length == 0) {
-      return Column(
-        children: [
-          Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
-          Text('검색된 결과가 없습니다', style: TextStyle(color: Colors.grey),),
-        ],
-      );
+      return Container();
+
+      //   Column(
+      //   children: [
+      //     Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
+      //     Text('검색된 결과가 없습니다', style: TextStyle(color: Colors.grey),),
+      //   ],
+      // );
     } else {
-      return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: nursingHomeNameresult.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index3) {
-            return nursingHomeSupportresult[index3]
-                ? Padding(
-              padding: EdgeInsets.only(right: 5, left: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+      return Padding(
+        padding: EdgeInsets.only(right: 5, left: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
+                SizedBox(width: 5,),
+                Flexible(
+                    child: Text('현재 요양원 알리미를 이용 중인 곳만 표시됩니다', style: TextStyle(color: themeColor.getColor(), fontWeight: FontWeight.w500))
+                ),
+              ],
+            ),
+            SizedBox(height: 3),
+            Divider(thickness: 0.5),
+            ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: nursingHomeNameresult.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index3) {
+                  return nursingHomeSupportresult[index3]
+                      ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.info_rounded, size: 18, color: themeColor.getColor()),
-                      SizedBox(width: 5,),
-                      Flexible(
-                        child: Text('현재 요양원 알리미를 이용 중인 곳만 표시됩니다', style: TextStyle(color: themeColor.getColor(), fontWeight: FontWeight.w500))
-                      )
+                      Row(
+                        children: [
+                          SizedBox(width: 5,),
+                          Flexible(child: Text(nursingHomeNameresult[index3], style: TextStyle(fontWeight: FontWeight.w500), maxLines: 2)) //요양원 이름
+                        ],
+                      ),
+                      Text(nursingHomeAddressresult[index3],maxLines: 2), //요양원 주소
+                      Row(
+                        children: [
+                          SizedBox(width: 5,),
+                          Flexible(child: Text(nursingHomePhone[index3], maxLines: 2)) //요양원 전화번호
+                        ],
+                      ),
+                      Divider(thickness: 0.5,)
+
                     ],
-                  ),
-                  SizedBox(height: 3),
-                  Divider(thickness: 0.5),
-                  Row(
-                    children: [
-                      SizedBox(width: 5,),
-                      Text(nursingHomeNameresult[index3], style: TextStyle(fontWeight: FontWeight.w500),), //요양원 이름
-                    ],
-                  ),
-                  Text(nursingHomeAddressresult[index3],maxLines: 2), //요양원 주소
-                  Row(
-                    children: [
-                      SizedBox(width: 5,),
-                      Text(nursingHomePhone[index3], maxLines: 2), //요양원 전화번호
-                    ],
-                  ),
-                  Divider(thickness: 0.5),
-                  
-                ],
-              ),
-            )
-                : Container();
-          }
+                  )
+                      : Container();
+                }
+            ),
+          ],
+        ),
       );
     }
   }

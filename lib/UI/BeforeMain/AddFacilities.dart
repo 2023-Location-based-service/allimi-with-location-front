@@ -34,7 +34,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   late GoogleMapController _controller;
   TextEditingController _textController = TextEditingController();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
+  final GlobalKey scrollKey = GlobalKey(); // 스크롤 키 생성
   CheckClick checkClick = new CheckClick();
 
   List<String> result = [];
@@ -69,165 +69,163 @@ class _AddFacilitiesState extends State<AddFacilities> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('시설 등록', style: TextStyle(color: Colors.white)),
+        automaticallyImplyLeading: false,
+        backgroundColor: themeColor.getColor()
+      ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              
+              Container(
+                key: scrollKey,
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    pickButton(), // 시도, 지역 선택 버튼
+                    SizedBox(height: 5,),
+                    textSearch(), // 검색
+                  ],
+                ),
+              ),
+
+              
+
+              map(context), //지도
+              SizedBox(height: 10),
+              list() //리스트
+            ],
+          ),
+        )
+      ),
+      floatingActionButton: upButton(),
+    );
+  }
+
+  Widget textSearch() {
+    return Form(
+      key: formKey,
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: '요양원 이름, 주소로 검색',
+          hintStyle: TextStyle(fontSize: 15),
+          contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 10),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.search_rounded, size: 30, color: Colors.grey),
+            onPressed: () {
+              if (checkClick.isRedundentClick(DateTime.now())) {
+                return;
+              }
+
+              if(this.formKey.currentState!.validate()) {
+
+                setState(() {
+                  nursingHomeNameresult = [];
+                  nursingHomeAddressresult = [];
+                  nursingHomeSupportresult = [];
+                  markers = {};
+                  searchText = _textController.text;
+                });
+                getSearchInfo(searchText);
+
+              }
+
+            },
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+        ),
+        controller: _textController,
+        validator: (value) => value!.isEmpty ? '내용을 입력하세요' : null,
+      ),
+    );
+  }
+
+  Widget pickButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          flex: 15,
+          child: OutlinedButton(
+            onPressed: () {
+              _searchCity(context);
+            },
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                overlayColor: MaterialStateProperty.all(Colors.transparent)
+            ),
             child: Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 55)),
-                  SizedBox(height: 10),
-                  Text('시설을 등록해주세요', textScaleFactor: 1.5,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 20,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              _searchCity(context);
-                            },
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.white)),
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Text(
-                                    // '시/도 선택',
-                                    text1,
-                                    textScaleFactor: 1.1,
-                                    style: TextStyle(color: Colors.black,),
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_down_sharp, size: 18,
-                                    color: Colors.black,)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        Expanded(
-                          flex: 20,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (check == 0) {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext ctx) {
-                                      return AlertDialog(
-                                        content: Text('시/도를 먼저 선택해주세요!'),
-                                        actions: [
-                                          Center(
-                                            child: TextButton(
-                                                child: Text("확인",
-                                                    style: TextStyle(
-                                                        color: themeColor
-                                                            .getMaterialColor())),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                }
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                );
-                              }
-                              else {
-                                _searchRegion(context);
-                              }
-                            },
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.white)),
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Text(
-                                    // '지역 선택',
-                                    text2,
-                                    textScaleFactor: 1.1,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_down_sharp, size: 18,
-                                    color: Colors.black,)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: '요양원 이름, 주소로 검색',
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: Colors.grey.shade300),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: Colors.grey.shade300),
-                              ),
-                            ),
-                            controller: _textController,
-                          ),
-                        ),
-                        Container(
-                          child: IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              setState(() {
-                                nursingHomeNameresult = [];
-                                nursingHomeAddressresult = [];
-                                nursingHomeSupportresult = [];
-                                markers = {};
-                                searchText = _textController.text;
-                              });
-                              getSearchInfo(searchText);
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  map(context),
-                  Divider(),
-                  list()
+                  Flexible(
+                    child: Text(text1, textScaleFactor: 1.1, style: TextStyle(color: Colors.black), overflow: TextOverflow.ellipsis),
+                  ), // 시/도 선택
+                  Icon(Icons.keyboard_arrow_down_sharp, size: 18, color: Colors.black,),
                 ],
               ),
             ),
           ),
         ),
-      ),
+        Spacer(),
+        Expanded(
+          flex: 15,
+          child: OutlinedButton(
+            onPressed: () {
+              if (check == 0) {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext ctx) {
+                      return AlertDialog(
+                        content: Text('시/도를 먼저 선택해주세요!'),
+                        actions: [
+                          Center(
+                            child: TextButton(
+                                child: Text("확인", style: TextStyle(color: themeColor.getMaterialColor())),
+                                style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }
+                            ),
+                          )
+                        ],
+                      );
+                    }
+                );
+              }
+              else {
+                _searchRegion(context);
+              }
+            },
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                overlayColor: MaterialStateProperty.all(Colors.transparent)
+            ),
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(text2, textScaleFactor: 1.1, style: TextStyle(color: Colors.black)), // '지역 선택'
+                  Icon(Icons.keyboard_arrow_down_sharp, size: 18, color: Colors.black,)
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -614,7 +612,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
             target: LatLng(37.566678, 126.978411),
             zoom: 15.0
         ),
-        myLocationButtonEnabled: false,
+        myLocationButtonEnabled: true,
         myLocationEnabled: true,
         onMapCreated: (controller) {
           setState(() {
@@ -632,8 +630,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
     );
   }
 
-  Future<dynamic> supportService(BuildContext context, bool isSupport,
-      int index) {
+  Future<dynamic> supportService(BuildContext context, bool isSupport, int index) {
     if (isSupport) {
       return showDialog(
           context: context,
@@ -643,10 +640,8 @@ class _AddFacilitiesState extends State<AddFacilities> {
               insetPadding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
               actions: [
                 TextButton(
-                  child: Text(
-                      '확인', style: TextStyle(color: themeColor.getColor())),
-                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(
-                      themeColor.getColor().withOpacity(0.3))),
+                  child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -666,34 +661,28 @@ class _AddFacilitiesState extends State<AddFacilities> {
               insetPadding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
               actions: [
                 TextButton(
-                  child: Text(
-                      '취소', style: TextStyle(color: themeColor.getColor())),
-                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(
-                      themeColor.getColor().withOpacity(0.3))),
+                  child: Text('취소', style: TextStyle(color: themeColor.getColor())),
+                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: Text(
-                      '확인', style: TextStyle(color: themeColor.getColor())),
-                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(
-                      themeColor.getColor().withOpacity(0.3))),
+                  child: Text('확인', style: TextStyle(color: themeColor.getColor())),
+                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3))),
                   onPressed: () async {
                     if (checkClick.isRedundentClick(DateTime.now())) { //연타 막기
                       return;
                     }
+
                     try {
                       _facilityName = nursingHomeNameresult[index];
                       _location = nursingHomeAddressresult[index];
                       _number = nursingHomePhone[index];
-                      _personName =
-                          Provider.of<UserProvider>(context, listen: false)
-                              .getName();
+                      _personName = Provider.of<UserProvider>(context, listen: false).getName();
                       await facilityRequest(_uid);
                       showToast('시설 등록에 성공하였습니다');
-                      Provider.of<ResidentProvider>(context, listen: false)
-                          .setInfo(
+                      Provider.of<ResidentProvider>(context, listen: false).setInfo(
                           _resident_id,
                           _facilityId,
                           _facilityName,
@@ -702,11 +691,9 @@ class _AddFacilitiesState extends State<AddFacilities> {
                           '',
                           '');
 
-                      Provider.of<UserProvider>(context, listen: false)
-                          .setRole('MANAGER');
+                      Provider.of<UserProvider>(context, listen: false).setRole('MANAGER');
 
-                      Provider.of<UserProvider>(context, listen: false)
-                          .getData();
+                      Provider.of<UserProvider>(context, listen: false).getData();
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
                     } catch (e) {
@@ -724,55 +711,89 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
   //리스트
   Widget list() {
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: nursingHomeNameresult.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index3) {
-          return InkWell(
+    return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: nursingHomeNameresult.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index3) {
+        return Padding(
+          padding: EdgeInsets.only(right: 5, left: 5),
+          child: InkWell(
             onTap: () {
               supportService(context, nursingHomeSupportresult[index3], index3);
             },
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      flex: 8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ' ' + nursingHomeNameresult[index3],
-                            style: TextStyle(
-                                fontSize: 18
-                            ),
-                          ),
-                          Text(
-                            nursingHomeAddressresult[index3],
-                            style: TextStyle(
-                                fontSize: 15
-                            ),
-                            maxLines: 2,
-                          ),
-                          Text(
-                            ' ' + nursingHomePhone[index3],
-                            style: TextStyle(
-                                fontSize: 15
-                            ),
-                            maxLines: 2,
-                          ),
-                        ],
+                    SizedBox(width: 5,),
+                    Flexible(
+                      child: Text(
+                        nursingHomeNameresult[index3],
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                        maxLines: 2,
                       ),
-                    ),
+                    ), //요양원 이름
                   ],
                 ),
-                Divider(),
+                Text(nursingHomeAddressresult[index3],maxLines: 2), //요양원 주소
+                Row(
+                  children: [
+                    SizedBox(width: 5,),
+                    Flexible(
+                      child: Text(nursingHomePhone[index3], maxLines: 2), //요양원 전화번호
+                    )
+                  ],
+                ),
               ],
             ),
-          );
-        }
+          ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Divider(thickness: 0.5);
+      },
     );
   }
+
+  // 상단으로 가는 버튼
+  Widget upButton() {
+    return Stack(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black12, width: 1)
+                ),
+                child: FloatingActionButton(
+                  heroTag: "upper",
+                  tooltip: "맨 위로",
+                  onPressed: () {
+                    Scrollable.ensureVisible(
+                        scrollKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut);
+                  },
+                  focusColor: Colors.white54,
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  hoverElevation: 0,
+                  focusElevation: 0,
+                  highlightElevation: 0,
+                  child: const Icon(Icons.arrow_upward_rounded, color: Colors.black,),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
 }
