@@ -165,14 +165,18 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           }
                       ),
+                      SizedBox(height: 10,),
                       Row(
                         children: [
                           Text('처음 오셨나요?', style: TextStyle(color: Colors.grey)),
                           Spacer(),
-                          TextButton (
-                            child: Text('회원가입', style: TextStyle(color: Colors.grey)),
-                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                            onPressed: () async {
+
+                          GestureDetector(
+                            child: Container(
+                              margin: EdgeInsets.all(7),
+                              child: Text('회원가입', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500)),
+                            ),
+                            onTap: () async {
                               await Navigator.push(
                                 context,
                                 PageTransition(
@@ -182,17 +186,34 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             },
                           ),
+                          
+                          // TextButton (
+                          //   child: Text('회원가입', style: TextStyle(color: Colors.grey)),
+                          //   style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                          //   onPressed: () async {
+                          //     await Navigator.push(
+                          //       context,
+                          //       PageTransition(
+                          //         type: PageTransitionType.rightToLeft,
+                          //         child: SignupPage(),
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
                           Icon(Icons.chevron_right_rounded, color: Colors.grey,),
                         ],
                       ),
                       Row(
                         children: [
-                          Text('등록된 요양원이 궁금하신가요?', style: TextStyle(color: Colors.grey)),
+                          Text('요양원 알리미를 이용 중인 곳', style: TextStyle(color: Colors.grey)),
                           Spacer(),
-                          TextButton (
-                            child: Text('둘러보기', style: TextStyle(color: Colors.grey)),
-                            style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                            onPressed: () async {
+
+                          GestureDetector(
+                            child: Container(
+                              margin: EdgeInsets.all(7),
+                              child: Text('둘러보기', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500)),
+                            ),
+                            onTap: () async {
                               await Navigator.push(
                                 context,
                                 PageTransition(
@@ -202,6 +223,23 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             },
                           ),
+
+                          // TextButton (
+                          //   child: Text('둘러보기', style: TextStyle(color: Colors.grey)),
+                          //   style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                          //   onPressed: () async {
+                          //     await Navigator.push(
+                          //       context,
+                          //       PageTransition(
+                          //         type: PageTransitionType.rightToLeft,
+                          //         child: SearchFacility(),
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+
+
+
                           Icon(Icons.chevron_right_rounded, color: Colors.grey,),
                         ],
                       ),
