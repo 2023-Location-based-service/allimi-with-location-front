@@ -34,7 +34,7 @@ class _SearchFacilityState extends State<SearchFacility> {
   List<String> result = [];
   List<String> nursingHomeNameresult = [];
   List<String> nursingHomeAddressresult = [];
-  List<String> nursingHomePhone = [];
+  List<String> nursingHomePhoneresult = [];
   List<bool> nursingHomeSupportresult = [];
 
   int check = 0; //시/도가 선택되었는지 확인하는 변수
@@ -43,6 +43,7 @@ class _SearchFacilityState extends State<SearchFacility> {
   String text2 = '지역 선택';
   String searchText = "";
   late var curLat, curLng;
+  int loding = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,6 @@ class _SearchFacilityState extends State<SearchFacility> {
             map(context), // 지도
             SizedBox(height: 10),
             list() // 리스트 출력
-
           ],
         ),
       ),
@@ -172,15 +172,16 @@ class _SearchFacilityState extends State<SearchFacility> {
                 return;
               }
 
-
               if(this.formKey.currentState!.validate()) {
 
                 setState(() {
                   nursingHomeNameresult = [];
                   nursingHomeAddressresult = [];
                   nursingHomeSupportresult = [];
+                  nursingHomePhoneresult = [];
                   markers = {};
                   searchText = _textController.text;
+                  loding = 1;
                 });
                 getSearchInfo(searchText);
               }
@@ -248,10 +249,10 @@ class _SearchFacilityState extends State<SearchFacility> {
                       onWhereTap(index);
                       Navigator.of(context, rootNavigator: true).pop();
                       setState(() {
-                        nursingHomeNameresult = [];
-                        nursingHomeAddressresult = [];
-                        nursingHomeSupportresult = [];
-                        nursingHomePhone = [];
+                        // nursingHomeNameresult = [];
+                        // nursingHomeAddressresult = [];
+                        // nursingHomeSupportresult = [];
+                        // nursingHomePhoneresult = [];
                         city_id = index;
                         text1 = data.placedata[index];
                         text2 = '지역 선택';
@@ -285,14 +286,16 @@ class _SearchFacilityState extends State<SearchFacility> {
                       title: Text(result[index2]),
                       onTap: () {
                         print(index2);
-                        Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
                         setState(() {
                           text2 = result[index2];
                           nursingHomeNameresult = [];
                           nursingHomeAddressresult = [];
                           nursingHomeSupportresult = [];
-                          nursingHomePhone = [];
+                          nursingHomePhoneresult = [];
                           markers = {};
+                          _textController.clear();
+                          loding = 1;
                         });
                         var city = changeCity().change(city_id);
                         getInfo(city!, result[index2]);
@@ -309,8 +312,8 @@ class _SearchFacilityState extends State<SearchFacility> {
   // 선택한 지역의 요양원을 지도에 출력 / 청: 시청이나 군청 기준
   Future<void> getInfo(String city, String region) async {
     http.Response response = await http.post(
-      Uri.parse(Backend.getUrl() + 'find'),
-      headers: <String, String> {
+        Uri.parse(Backend.getUrl() + 'find'),
+        headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept-Charset': 'utf-8'
         },
@@ -319,25 +322,12 @@ class _SearchFacilityState extends State<SearchFacility> {
           "region": region
         })
     );
-    String viewPoint = '$city $region청';
-    String geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=${viewPoint}&key=${API_KEY}&language=ko';
-    http.Response viewResponse = await http.get(
-        Uri.parse(geocodeUrl),
-        headers:  <String, String> {
-          'Content-Type': 'application/json',
-          'Accept-Charset': 'utf-8'
-        }
-    );
 
     if (response.statusCode == 200) {
-      var viewResponseBody = utf8.decode(viewResponse.bodyBytes);
-      var viewLat = jsonDecode(viewResponseBody)['results'][0]['geometry']['location']['lat'];
-      var viewLng = jsonDecode(viewResponseBody)['results'][0]['geometry']['location']['lng'];
-
       String responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
       var name, address, lat, lng, support, phone;
-      for (int i=0; i< list.length; i++) {
+      for (int i = 0; i < list.length; i++) {
         support = list[i]['support'];
         if (!support)
           continue;
@@ -347,21 +337,43 @@ class _SearchFacilityState extends State<SearchFacility> {
         nursingHomeNameresult.add(name);
         nursingHomeAddressresult.add(address);
         nursingHomeSupportresult.add(support);
-        nursingHomePhone.add(phone);
+        nursingHomePhoneresult.add(phone);
         lat = list[i]['latitude'];
         lng = list[i]['longitude'];
         final MarkerId markerId = MarkerId(name);
         markers[markerId] = Marker(
           markerId: markerId,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueAzure),
           position: LatLng(lat, lng),
           infoWindow: InfoWindow(
             title: name,
           ),
         );
       }
+      loding = 0;
 
       setState(() {});
+
+      var viewLat, viewLng;
+      if (list.isEmpty) {
+        String viewPoint = '$city $region청';
+        String geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=${viewPoint}&key=${API_KEY}&language=ko';
+        http.Response viewResponse = await http.get(
+            Uri.parse(geocodeUrl),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Accept-Charset': 'utf-8'
+            }
+        );
+
+        var viewResponseBody = utf8.decode(viewResponse.bodyBytes);
+        viewLat = jsonDecode(viewResponseBody)['results'][0]['geometry']['location']['lat'];
+        viewLng = jsonDecode(viewResponseBody)['results'][0]['geometry']['location']['lng'];
+      } else {
+        viewLat = list[0]['latitude'];
+        viewLng = list[0]['longitude'];
+      }
 
       _controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -390,14 +402,19 @@ class _SearchFacilityState extends State<SearchFacility> {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
-      var name, address, lat, lng, support;
+      var name, address, lat, lng, support, phone, count = 0;
       for (int i=0; i< list.length; i++) {
+        support = list[i]['support'];
+        if (!support)
+          continue;
+        count++;
         name = list[i]['name'];
         address = list[i]['address'];
-        support = list[i]['support'];
+        phone = list[i]['phone'];
         nursingHomeNameresult.add(name);
         nursingHomeAddressresult.add(address);
         nursingHomeSupportresult.add(support);
+        nursingHomePhoneresult.add(phone);
         lat = list[i]['latitude'];
         lng = list[i]['longitude'];
         final MarkerId markerId = MarkerId(name);
@@ -410,17 +427,20 @@ class _SearchFacilityState extends State<SearchFacility> {
           ),
         );
       }
+      loding = 0;
 
       setState(() {});
 
-      _controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-          bearing: 0,
-          target: LatLng(list[0]['latitude'], list[0]['longitude']),
-          tilt: 0,
-          zoom: 13.0,
-        ),
-      ));
+      if (count != 0) {
+        _controller.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+            bearing: 0,
+            target: LatLng(list[0]['latitude'], list[0]['longitude']),
+            tilt: 0,
+            zoom: 13.0,
+          ),
+        ));
+      }
     }
   }
 
@@ -478,8 +498,8 @@ class _SearchFacilityState extends State<SearchFacility> {
       child: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
-            target: LatLng(37.566678, 126.978411),
-            zoom: 15.0
+            target: LatLng(36.571703, 128.093457),
+            zoom: 6.5
         ),
         myLocationButtonEnabled: true,
         myLocationEnabled: true,
@@ -501,15 +521,20 @@ class _SearchFacilityState extends State<SearchFacility> {
 
   //리스트 TODO: 지역 선택 후 주소 검색하면 빈 컨테이너가 나옴;
   Widget list() {
-    if (nursingHomeNameresult.length == 0) {
-      return Container();
-
-      //   Column(
-      //   children: [
-      //     Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
-      //     Text('검색된 결과가 없습니다', style: TextStyle(color: Colors.grey),),
-      //   ],
-      // );
+    if (loding == 1) {
+      return CircularProgressIndicator(
+        // color: themeColor.getMaterialColor(),
+        color: Colors.grey,
+      );
+    }
+    else if (nursingHomeNameresult.length == 0) {
+      // return Container();
+      return Column(
+        children: [
+          Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
+          Text('검색된 결과가 없습니다', style: TextStyle(color: Colors.grey),),
+        ],
+      );
     } else {
       return Padding(
         padding: EdgeInsets.only(right: 5, left: 5),
@@ -546,7 +571,7 @@ class _SearchFacilityState extends State<SearchFacility> {
                       Row(
                         children: [
                           SizedBox(width: 5,),
-                          Flexible(child: Text(nursingHomePhone[index3], maxLines: 2)) //요양원 전화번호
+                          Flexible(child: Text(nursingHomePhoneresult[index3], maxLines: 2)) //요양원 전화번호
                         ],
                       ),
                       Divider(thickness: 0.5,)

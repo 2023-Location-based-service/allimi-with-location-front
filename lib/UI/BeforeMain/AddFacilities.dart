@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:test_data/UI/Supplementary/CustomWidget.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../Supplementary/ThemeColor.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:test_data/Backend.dart';
@@ -40,7 +39,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   List<String> result = [];
   List<String> nursingHomeNameresult = [];
   List<String> nursingHomeAddressresult = [];
-  List<String> nursingHomePhone = [];
+  List<String> nursingHomePhoneresult = [];
   List<bool> nursingHomeSupportresult = [];
 
   int check = 0; //시/도가 선택되었는지 확인하는 변수
@@ -91,8 +90,6 @@ class _AddFacilitiesState extends State<AddFacilities> {
                 ),
               ),
 
-              
-
               map(context), //지도
               SizedBox(height: 10),
               list() //리스트
@@ -125,6 +122,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                   nursingHomeNameresult = [];
                   nursingHomeAddressresult = [];
                   nursingHomeSupportresult = [];
+                  nursingHomePhoneresult = [];
                   markers = {};
                   searchText = _textController.text;
                 });
@@ -364,10 +362,10 @@ class _AddFacilitiesState extends State<AddFacilities> {
                         onWhereTap(index);
                         Navigator.of(context, rootNavigator: true).pop();
                         setState(() {
-                          nursingHomeNameresult = [];
-                          nursingHomeAddressresult = [];
-                          nursingHomeSupportresult = [];
-                          nursingHomePhone = [];
+                          // nursingHomeNameresult = [];
+                          // nursingHomeAddressresult = [];
+                          // nursingHomeSupportresult = [];
+                          // nursingHomePhoneresult = [];
                           city_id = index;
                           text1 = data.placedata[index];
                           text2 = '지역 선택';
@@ -408,8 +406,9 @@ class _AddFacilitiesState extends State<AddFacilities> {
                             nursingHomeNameresult = [];
                             nursingHomeAddressresult = [];
                             nursingHomeSupportresult = [];
-                            nursingHomePhone = [];
+                            nursingHomePhoneresult = [];
                             markers = {};
+                            _textController.clear();
                           });
                           var city = changeCity().change(city_id);
                           getInfo(city!, result[index2]);
@@ -436,23 +435,9 @@ class _AddFacilitiesState extends State<AddFacilities> {
           "region": region
         })
     );
-    String viewPoint = '$city $region청';
-    String geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=${viewPoint}&key=${API_KEY}&language=ko';
-    http.Response viewResponse = await http.get(
-        Uri.parse(geocodeUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept-Charset': 'utf-8'
-        }
-    );
+
 
     if (response.statusCode == 200) {
-      var viewResponseBody = utf8.decode(viewResponse.bodyBytes);
-      var viewLat = jsonDecode(
-          viewResponseBody)['results'][0]['geometry']['location']['lat'];
-      var viewLng = jsonDecode(
-          viewResponseBody)['results'][0]['geometry']['location']['lng'];
-
       String responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
       var name, address, lat, lng, support, phone;
@@ -464,7 +449,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
         nursingHomeNameresult.add(name);
         nursingHomeAddressresult.add(address);
         nursingHomeSupportresult.add(support);
-        nursingHomePhone.add(phone);
+        nursingHomePhoneresult.add(phone);
         lat = list[i]['latitude'];
         lng = list[i]['longitude'];
         final MarkerId markerId = MarkerId(name);
@@ -484,6 +469,26 @@ class _AddFacilitiesState extends State<AddFacilities> {
       }
 
       setState(() {});
+
+      var viewLat, viewLng;
+      if (list.isEmpty) {
+        String viewPoint = '$city $region청';
+        String geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=${viewPoint}&key=${API_KEY}&language=ko';
+        http.Response viewResponse = await http.get(
+            Uri.parse(geocodeUrl),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Accept-Charset': 'utf-8'
+            }
+        );
+
+        var viewResponseBody = utf8.decode(viewResponse.bodyBytes);
+        viewLat = jsonDecode(viewResponseBody)['results'][0]['geometry']['location']['lat'];
+        viewLng = jsonDecode(viewResponseBody)['results'][0]['geometry']['location']['lng'];
+      } else {
+        viewLat = list[0]['latitude'];
+        viewLng = list[0]['longitude'];
+      }
 
       _controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -512,14 +517,16 @@ class _AddFacilitiesState extends State<AddFacilities> {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
-      var name, address, lat, lng, support;
+      var name, address, lat, lng, support, phone;
       for (int i = 0; i < list.length; i++) {
         name = list[i]['name'];
         address = list[i]['address'];
         support = list[i]['support'];
+        phone = list[i]['phone'];
         nursingHomeNameresult.add(name);
         nursingHomeAddressresult.add(address);
         nursingHomeSupportresult.add(support);
+        nursingHomePhoneresult.add(phone);
         lat = list[i]['latitude'];
         lng = list[i]['longitude'];
         final MarkerId markerId = MarkerId(name);
@@ -540,14 +547,16 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
       setState(() {});
 
-      _controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-          bearing: 0,
-          target: LatLng(list[0]['latitude'], list[0]['longitude']),
-          tilt: 0,
-          zoom: 13.0,
-        ),
-      ));
+      if (!list.isEmpty) {
+        _controller.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+            bearing: 0,
+            target: LatLng(list[0]['latitude'], list[0]['longitude']),
+            tilt: 0,
+            zoom: 13.0,
+          ),
+        ));
+      }
     }
   }
 
@@ -609,8 +618,8 @@ class _AddFacilitiesState extends State<AddFacilities> {
       child: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
-            target: LatLng(37.566678, 126.978411),
-            zoom: 15.0
+            target: LatLng(36.571703, 128.093457),
+            zoom: 6.5
         ),
         myLocationButtonEnabled: true,
         myLocationEnabled: true,
@@ -678,7 +687,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                     try {
                       _facilityName = nursingHomeNameresult[index];
                       _location = nursingHomeAddressresult[index];
-                      _number = nursingHomePhone[index];
+                      _number = nursingHomePhoneresult[index];
                       _personName = Provider.of<UserProvider>(context, listen: false).getName();
                       await facilityRequest(_uid);
                       showToast('시설 등록에 성공하였습니다');
@@ -742,7 +751,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                   children: [
                     SizedBox(width: 5,),
                     Flexible(
-                      child: Text(nursingHomePhone[index3], maxLines: 2), //요양원 전화번호
+                      child: Text(nursingHomePhoneresult[index3], maxLines: 2), //요양원 전화번호
                     )
                   ],
                 ),
