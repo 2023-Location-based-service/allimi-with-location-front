@@ -23,7 +23,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = new GlobalKey<FormState>();
-
+  TextEditingController passController = TextEditingController();
+  bool passVisible = true;
   late String _id;
   late String _password;
 
@@ -88,13 +89,23 @@ class _LoginPageState extends State<LoginPage> {
                       ), //아이디
                       SizedBox(height: 7),
                       TextFormField(
-                        obscureText: true,
+                        controller: passController,
+                        obscureText: passVisible,
                         keyboardType: TextInputType.text,
                         inputFormatters: [
                           FilteringTextInputFormatter.deny(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')), //한글 빼고 전부 입력 가능
                         ],
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey,),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              print('passVisible 누름');
+                              setState(() {
+                                passVisible = ! passVisible;
+                              });
+                            },
+                            child: Icon(passVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: Colors.grey.shade400, size: 22),
+                          ),
                           hintText: '비밀번호',
                           hintStyle: TextStyle(fontSize: 16),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
@@ -186,23 +197,11 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             },
                           ),
-                          
-                          // TextButton (
-                          //   child: Text('회원가입', style: TextStyle(color: Colors.grey)),
-                          //   style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                          //   onPressed: () async {
-                          //     await Navigator.push(
-                          //       context,
-                          //       PageTransition(
-                          //         type: PageTransitionType.rightToLeft,
-                          //         child: SignupPage(),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
+
                           Icon(Icons.chevron_right_rounded, color: Colors.grey,),
                         ],
                       ),
+                      SizedBox(height: 5),
                       Row(
                         children: [
                           Expanded(
@@ -223,22 +222,6 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             },
                           ),
-
-                          // TextButton (
-                          //   child: Text('둘러보기', style: TextStyle(color: Colors.grey)),
-                          //   style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                          //   onPressed: () async {
-                          //     await Navigator.push(
-                          //       context,
-                          //       PageTransition(
-                          //         type: PageTransitionType.rightToLeft,
-                          //         child: SearchFacility(),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-
-
 
                           Icon(Icons.chevron_right_rounded, color: Colors.grey,),
                         ],

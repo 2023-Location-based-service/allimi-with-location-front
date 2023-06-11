@@ -49,6 +49,8 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final formKey = new GlobalKey<FormState>();
+  TextEditingController passController = TextEditingController();
+  bool passVisible = true;
   late String _id;
   late String _password;
   late String _username;
@@ -97,13 +99,23 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     SizedBox(height: 7),
                     getTextFormField(
-                      obscureText: true,
+                      controller: passController,
+                      obscureText: passVisible,
                       keyboardType: TextInputType.text,
                       inputFormatters: [
                         FilteringTextInputFormatter.deny(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')), //한글 빼고 전부 입력 가능
                       ],
                       title: '비밀번호',
                       prefixIcon: Icon(Icons.lock_rounded, color: Colors.grey),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          print('passVisible 누름');
+                          setState(() {
+                            passVisible = ! passVisible;
+                          });
+                        },
+                        child: Icon(passVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: Colors.grey.shade400, size: 22),
+                      ),
                       validator: (value) => value!.isEmpty ? '비밀번호를 입력하세요' : null,
                       onSaved: (value) => _password = value!,
                     ),
@@ -184,6 +196,8 @@ class _SignupPageState extends State<SignupPage> {
   Widget getTextFormField({
     required String title,
     required Widget prefixIcon,
+    Widget? suffixIcon,
+    TextEditingController? controller,
     TextInputType? keyboardType,
     List<TextInputFormatter>? inputFormatters,
     String? Function(String?)? validator,
@@ -191,11 +205,13 @@ class _SignupPageState extends State<SignupPage> {
     bool? obscureText
 }) {
     return TextFormField(
+      controller: controller,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
       obscureText: obscureText ?? false,
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
