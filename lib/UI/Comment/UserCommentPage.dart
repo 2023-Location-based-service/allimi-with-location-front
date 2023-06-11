@@ -133,7 +133,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   children: [
                     if (_userRole != 'PROTECTOR')
                       Container(
-                        child: Text(_CommentList[index]['nhr_name']!=null?_CommentList[index]['nhr_name'] + ' 님':'(탈퇴회원)', textScaleFactor: fontSize),
+                        child: Text(_CommentList[index]['nhr_name']!=null?_CommentList[index]['nhr_name'] + ' 보호자님':'(탈퇴회원)', textScaleFactor: fontSize),
                       ),
                       Row(
                         children: [
