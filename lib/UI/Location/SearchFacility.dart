@@ -44,7 +44,7 @@ class _SearchFacilityState extends State<SearchFacility> {
   String text2 = '지역 선택';
   String searchText = "";
   late var curLat, curLng;
-  int loding = 1;
+  int loading = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +182,7 @@ class _SearchFacilityState extends State<SearchFacility> {
                   nursingHomePhoneresult = [];
                   markers = {};
                   searchText = _textController.text;
-                  loding = 1;
+                  loading = 1;
                 });
                 getSearchInfo(searchText);
               }
@@ -296,7 +296,7 @@ class _SearchFacilityState extends State<SearchFacility> {
                           nursingHomePhoneresult = [];
                           markers = {};
                           _textController.clear();
-                          loding = 1;
+                          loading = 1;
                         });
                         var city = changeCity().change(city_id);
                         getInfo(city!, result[index2]);
@@ -352,7 +352,7 @@ class _SearchFacilityState extends State<SearchFacility> {
           ),
         );
       }
-      loding = 0;
+      loading = 0;
 
       setState(() {});
 
@@ -428,7 +428,7 @@ class _SearchFacilityState extends State<SearchFacility> {
           ),
         );
       }
-      loding = 0;
+      loading = 0;
 
       setState(() {});
 
@@ -522,11 +522,10 @@ class _SearchFacilityState extends State<SearchFacility> {
 
   //리스트
   Widget list() {
-    if (loding == 1) {
+    if (loading == 1) {
       return SpinKitFadingCircle(color: Colors.grey, size: 30);
     }
     else if (nursingHomeNameresult.length == 0) {
-      // return Container();
       return Column(
         children: [
           Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
