@@ -201,7 +201,6 @@ class _LoginPageState extends State<LoginPage> {
                           Icon(Icons.chevron_right_rounded, color: Colors.grey,),
                         ],
                       ),
-                      SizedBox(height: 5),
                       Row(
                         children: [
                           Expanded(
