@@ -45,6 +45,7 @@ class _UserDeletePageState extends State<UserDeletePage> {
                 context: context,
                 builder: (context) => AlertDialog(
                   content: Text('그동안 이용해주셔서 감사합니다'),
+                  insetPadding: const  EdgeInsets.fromLTRB(0, 80, 0, 80),
                   actions: [
                     TextButton(
                         child: Text('취소',

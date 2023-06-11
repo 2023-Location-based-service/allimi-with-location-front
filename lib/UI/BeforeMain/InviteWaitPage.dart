@@ -126,10 +126,11 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           SizedBox(width: 5),
           Expanded(
             child: TextButton(
-                child: Container(child: Text('로그아웃', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),)),
+                child: Container(child: Text('로그아웃', textScaleFactor: 1.2, textAlign: TextAlign.center, style: TextStyle(color: themeColor.getColor()),)),
                 style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.white10),
-                    backgroundColor: MaterialStateProperty.all(themeColor.getColor()),
+                    overlayColor: MaterialStateProperty.all(themeColor.getColor().withOpacity(0.3)),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    side: MaterialStateProperty.all(BorderSide(color: themeColor.getColor())),
                     padding: MaterialStateProperty.all(EdgeInsets.all(10)),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
                 ),
