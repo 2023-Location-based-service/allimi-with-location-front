@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,6 +59,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
   int _facilityId = 0;
   late int _uid;
   int _resident_id = 0;
+  int loading = 1;
 
   @override
   void initState() {
@@ -125,6 +127,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                   nursingHomePhoneresult = [];
                   markers = {};
                   searchText = _textController.text;
+                  loading = 1;
                 });
                 getSearchInfo(searchText);
 
@@ -409,6 +412,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
                             nursingHomePhoneresult = [];
                             markers = {};
                             _textController.clear();
+                            loading = 1;
                           });
                           var city = changeCity().change(city_id);
                           getInfo(city!, result[index2]);
@@ -467,6 +471,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
           ),
         );
       }
+      loading = 0;
 
       setState(() {});
 
@@ -544,6 +549,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
           ),
         );
       }
+      loading = 0;
 
       setState(() {});
 
@@ -720,6 +726,17 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
   //리스트
   Widget list() {
+    if (loading == 1) {
+      return SpinKitFadingCircle(color: Colors.grey, size: 30);
+    }
+    else if (nursingHomeNameresult.length == 0) {
+      return Column(
+        children: [
+          Icon(Icons.error_outline_rounded, color: Colors.grey, size: 40,),
+          Text('검색된 결과가 없습니다', style: TextStyle(color: Colors.grey),),
+        ],
+      );
+    } else
     return ListView.separated(
       physics: const NeverScrollableScrollPhysics(),
       itemCount: nursingHomeNameresult.length,
