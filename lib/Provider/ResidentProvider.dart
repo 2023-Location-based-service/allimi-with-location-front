@@ -29,5 +29,5 @@ class ResidentProvider  with ChangeNotifier {
 
 
 
-//TODO 로그아웃
+//로그아웃
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../Supplementary/CustomClick.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -519,13 +520,10 @@ class _SearchFacilityState extends State<SearchFacility> {
     );
   }
 
-  //리스트 TODO: 지역 선택 후 주소 검색하면 빈 컨테이너가 나옴;
+  //리스트
   Widget list() {
     if (loding == 1) {
-      return CircularProgressIndicator(
-        // color: themeColor.getMaterialColor(),
-        color: Colors.grey,
-      );
+      return SpinKitFadingCircle(color: Colors.grey, size: 30);
     }
     else if (nursingHomeNameresult.length == 0) {
       // return Container();
