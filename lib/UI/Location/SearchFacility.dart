@@ -400,6 +400,7 @@ class _SearchFacilityState extends State<SearchFacility> {
         })
     );
 
+    double viewLat = 0, viewLng = 0;
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       List<dynamic> list = jsonDecode(responseBody);
@@ -409,6 +410,7 @@ class _SearchFacilityState extends State<SearchFacility> {
         if (!support)
           continue;
         count++;
+
         name = list[i]['name'];
         address = list[i]['address'];
         phone = list[i]['phone'];
@@ -418,6 +420,10 @@ class _SearchFacilityState extends State<SearchFacility> {
         nursingHomePhoneresult.add(phone);
         lat = list[i]['latitude'];
         lng = list[i]['longitude'];
+        if (viewLat ==0 && viewLng == 0) {
+          viewLat = lat;
+          viewLng = lng;
+        }
         final MarkerId markerId = MarkerId(name);
         markers[markerId] = Marker(
           markerId: markerId,
@@ -436,7 +442,7 @@ class _SearchFacilityState extends State<SearchFacility> {
         _controller.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(
             bearing: 0,
-            target: LatLng(list[0]['latitude'], list[0]['longitude']),
+            target: LatLng(viewLat, viewLng),
             tilt: 0,
             zoom: 13.0,
           ),
