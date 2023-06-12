@@ -6,7 +6,7 @@ import 'package:test_data/exception/InvitAlreadyExistsException.dart';
 import 'package:test_data/exception/ResidentAlreadyExistsException.dart';
 import 'ResidentManagementPage.dart';
 import '../Supplementary/CustomWidget.dart';
-import '../Supplementary/PhoneTextInputFormatter.dart';
+import '../Supplementary/NumberFormatter.dart';
 import '../Supplementary/ThemeColor.dart';
 import '/provider/ResidentProvider.dart';
 import '/UI/Supplementary/PageRouteWithAnimation.dart';
