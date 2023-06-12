@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_data/Backend.dart';
-import 'PhoneNumberFormatter.dart';
-
-//시설 기본정보 설정 화면
+import '../Supplementary/NumberFormatter.dart';
 
 class ResidentDetailPage extends StatefulWidget {
   const ResidentDetailPage({Key? key, required this.residentId}) : super(key: key);

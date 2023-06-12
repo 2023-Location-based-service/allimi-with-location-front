@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/UI/Supplementary/ThemeColor.dart';
 import 'package:http/http.dart' as http;
-import '../Setup/PhoneNumberFormatter.dart';
 import '../Supplementary/CustomClick.dart';
 import '../Supplementary/CustomWidget.dart';
+import '../Supplementary/NumberFormatter.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '/provider/ResidentProvider.dart'; //http 사용
 import 'package:test_data/Backend.dart';

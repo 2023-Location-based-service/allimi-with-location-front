@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:test_data/Backend.dart';
 import '../Supplementary/ThemeColor.dart';
 import 'package:test_data/UI/Supplementary/CustomWidget.dart';
-import '../Supplementary/PhoneTextInputFormatter.dart';
+import '../Supplementary/NumberFormatter.dart';
 
 ThemeColor themeColor = ThemeColor();
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
