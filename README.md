@@ -21,11 +21,10 @@ https://github.com/2023-CreativeDesignProject-clover/care-allimi-front
 
 ## 요양원 알리미 서비스 사용 영상
 <div align="center">
-    
 
+[![Video Label](http://img.youtube.com/vi/QbvObXaFJps/sddefault.jpg)](https://youtu.be/QbvObXaFJps)
 
 </div>
-
 ## 개요
 ### 목적
 요양원에서의 요양보호사와 보호자 간 의사소통 및 상호작용 향상을 목적으로 한다.
