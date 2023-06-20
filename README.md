@@ -22,7 +22,7 @@ https://github.com/2023-CreativeDesignProject-clover/care-allimi-front
 ## 요양원 알리미 서비스 사용 영상
 <div align="center">
     
-[![Video Label](http://img.youtube.com/vi/QbvObXaFJps/0.jpg)](https://youtu.be/QbvObXaFJps)
+
 
 </div>
 
